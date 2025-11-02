@@ -72,6 +72,7 @@ TP Final
 
     -- Inicio
         ¿Que contiene el inicio?
+            bienvenida(pagina temporal)
             barra de busqueda
             Dropdown de filtros
             Subastas recientes
@@ -79,21 +80,72 @@ TP Final
     -- Perfil
         ¿Que contiene el perfil?
             Datos de usuario
-                Nombre completo
+                nombre completo
                 username
-                Foto de perfil
+                foto de perfil
                 correo electronico
                 numero de telefono
                 ubicacion aproximada
-    -- Mis subastas
+            Mis ofertas
+                grilla con tus ofertas
+                botón de eliminar 
+                imagen
+                título
+                tipo de oferta
+                monto/canje
+                categoria
+                filtro
+    
+    -- Mis subastas (dentro de Perfil)
         Grilla con tus subastas (activas e inactivas)
-    -- Subasta
-        
-    -- Crear subasta
+            título
+            botón de editar(cambiar estado, precio base)
+            botón de eliminar 
+            imagen
+            tipo de oferta
+            precio inicial
+            categoria
+            filtro
 
+    -- Subasta
+        título
+        Imagen 
+        descripción
+        precio inicial (solo en opción dinero o mixto)
+        categoria 
+        tipo de canje (dinero, objeto y mixto)
+        botón ofertar
+        botón eliminar 
+
+    -- Crear subasta
+        va a contener un formulario
+            -título
+            -precio inicial
+            -categoria
+            -dropdown (condición)
+            -descripción
+            -imagenes
+            -dropdown (tipo de canje)
+            -botón de crear subasta
+    
     -- Inicio de sesion
+        formulario
+            -correo electronico
+            -contraseña
+            -botoón de Iniciar Sesión
+        botón de "Registrarme"
 
     -- Registro
+        formulario
+            -nombre completo
+            -username
+            -foto de perfil
+            -correo electronico
+            -numero de telefono
+            -ubicacion aproximada 
+            -contraseña
+
+        
 
 
 
