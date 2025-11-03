@@ -4,9 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CameBastas</title>
-    <link type="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    
+    <div class="index">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
+
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+            </div>
+            
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                        <!-- Boton de crear subasta -->
+                        <a class="button crear_subasta is-primary" href="crear_subasta.html">
+                            <strong>Crear Subasta</strong>
+                        </a>
+                        </div>
+                    </div>
+
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                            </figure>
+                        
+                        <div class="dropdown-trigger">
+                            
+                            <!-- Imagen -->
+                            <span>
+
+                            </span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                            <a href="pages/perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="pages/mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="pages/mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Bienvenida-->
+        <div class="titulo pt-5 pb-5">
+            <h1 class="title has-text-centered">Bienvenido a Camebastas</h1>
+            <h2 class="subtitle has-text-centered">El mejor lugar para subastar tus productos.</h2>
+        </div>
+    </div>
 </body>
 </html>

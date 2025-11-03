@@ -1,0 +1,21 @@
+/* Fondo del navbar */
+.navbar{
+    background-color: var(--navbar-bg-color);
+}
+
+/*Cambio de color de letra en el logo*/
+a strong {
+    color: white
+}
+.navbar-item:hover strong {
+    color: var(--primary-text-color);
+}
+
+/*boton crear subasta*/
+.buttons .is-primary {
+    background-color: var(--button-bg-color-1);
+}
+
+.buttons:hover .is-primary {
+    background-color: var(--button-bg-color-2) ;
+}

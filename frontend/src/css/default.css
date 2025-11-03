@@ -1,0 +1,9 @@
+:root{
+    --primary-text-color: black;
+    --secondary-text-color: gray;
+    --primary-bg-color: white;
+    --secondary-bg-color: #ebf7eb;
+    --navbar-bg-color: darkolivegreen;
+    --button-bg-color-1: white;
+    --button-bg-color-2:rgba(255, 255, 255, 0.8);
+}
