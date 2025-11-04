@@ -1,0 +1,25 @@
+:root {
+    /*Cambio en el color primario de bulma*/
+    --bulma-primary-h: 82deg;
+    --bulma-primary-s: 39%;
+    --bulma-primary-l: 30%;
+
+
+}
+/*searchbar*/
+.searchbar {
+    /*margin-left: 300px;   */
+    /*margin-right: 300px;  */
+    /*margin-bottom:30px;   */
+    justify-content:center;
+    align-items: center;
+    display:inline-flex;
+}
+.control .button {
+    margin-left: 10px;
+}
+.index{
+    display:grid ;
+    justify-content: center;
+    align-items: center;
+}
