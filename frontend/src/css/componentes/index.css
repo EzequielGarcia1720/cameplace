@@ -6,6 +6,12 @@
 
 
 }
+.titulo{
+    color: black;
+}
+.subtitle{
+    color: black;
+}
 /*searchbar*/
 .searchbar {
     /*margin-left: 300px; */
@@ -13,10 +19,18 @@
     margin-bottom:30px;
     display:inline-flex;
 }
+.input{
+    background-color: var(--primary-bg-color);
+}
+.input::placeholder {
+    color: var(--text-placeholder-color);
+}
 .control .button {
+    color: white;
     margin-left: 10px;
 }
 .index{
+    background-color: var(--primary-bg-color);
     display:grid ;
     justify-content: center;
     align-items: center;
