@@ -48,3 +48,9 @@
         color: white;
         margin-left: 10px;
     }
+
+    .pagination-previous, .pagination-next {
+        color: white;
+        background-color: var(--button-bg-color-3);
+    
+    }
