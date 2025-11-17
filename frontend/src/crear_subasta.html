@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
+
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                            </figure>
+                        
+                        <div class="dropdown-trigger">
+
+                            <!-- Imagen -->
+                            <span>
+
+                            </span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                            <a href="pages/perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="pages/mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="pages/mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </body>
+    <!--Index-->
+    <div class="index container">
+        <!-- Título -->
+        <div class="titulo pt-5 pb-5">
+            <h1 class="title has-text-centered">CREAR SUBASTA</h1>
+        </div>
+        <!-- Formulario de creación de subasta -->
+        <div class="field">
+            <label class="label">Título</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Escriba el título de la subasta">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Precio Inicial</label>
+            <div class="control">
+                <input class="input" type="number" placeholder="Ingrese el precio inicial" min="0" step="0.01">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Categoría</label>
+            <div class="control">
+                <div class="select">
+                    <select>
+                        <option value="" disabled selected>Selecciona una Categoría</option>
+                        <option>Electrónica, Audio y Video</option>
+                        <option>Computación</option>
+                        <option>Celulares y Telefonía</option>
+                        <option>Electrodomésticos</option>
+                        <option>Hogar y Muebles</option>
+                        <option>Indumentaria y Accesorios / Moda</option>
+                        <option>Deportes y Fitness</option>
+                        <option>Juegos, Juguetes y Bebés</option>
+                        <option>Libros y Revistas</option>
+                        <option>Arte y Antigüedades</option>
+                        <option>Coleccionables y Hobbies</option>
+                        <option>Delicatessen y Vinos</option>
+                        <option>Vehículos</option>
+                        <option>Motos y Otros</option>
+                        <option>Maquinaria y Equipos (Industrial, Construcción, Agrícola)</option>
+                        <option>Inmuebles (Bienes Raíces)</option>
+                        <option>Embarcaciones y Aeronaves</option>
+                        <option>Herramientas</option>
+                        <option>Industrias y Oficinas</option>
+                        <option>Materiales y Residuos</option>
+                        <option>Derechos y Acciones</option>
+                        <option>Agrícola, Rural y Campo</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Condición</label>
+            <div class="control">
+                <div class="select">
+                <select>
+                    <option value="" disabled selected>Selecciona una Condición</option>
+                    <option>Nuevo</option>
+                    <option>Usado</option>
+                </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Tipo de canje</label>
+            <div class="control">
+                <div class="select">
+                <select>
+                    <option value="" disabled selected>Selecciona un Tipo de canje</option>
+                    <option>Solo Dinero</option>
+                    <option>Solo Artículos</option>
+                    <option>Dinero y Artículos</option>
+                </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Imagen</label>
+            <div class="control">
+                <input class="input" type="link" placeholder="Ingrese el link de la imagen">
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="label">Descripción</label>
+            <div class="control">
+                <textarea class="textarea" placeholder="Ingrese una descripción"></textarea>
+            </div>
+        </div>
+        <!-- Botones -->
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary">Crear Subasta</button>
+            </div>
+            <div class="control">
+                <button class="button is-primary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+    <div class="footer-index">
+            <div class="columns">
+                <!-- Columna Number One -->
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+
+                </div>
+                <!-- Columna Number Two -->
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>

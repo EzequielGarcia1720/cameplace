@@ -9,6 +9,7 @@
 
 
 .index{
+    margin-bottom: 1rem;
     background-color: var(--primary-bg-color);
     /* display:grid ; */
     padding-bottom: 1rem;
