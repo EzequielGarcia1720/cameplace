@@ -1,0 +1,6 @@
+.container p strong,.container p,.container li {
+    color: black;
+}
+.box {
+    background-color: var(--secondary-bg-color);
+}
