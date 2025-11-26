@@ -7,8 +7,12 @@
 
 }
 
+.navbar {
+    margin-bottom: 1rem;
+}
 
 .index{
+    border-radius: 1rem;
     margin-bottom: 1rem;
     background-color: var(--primary-bg-color);
     /* display:grid ; */
@@ -18,14 +22,19 @@
 }
 
 
-    .titulo{
+    .titulo, .titulo .title, .titulo .subtitle, .title, .subtitle{
         color: black;
     }
 
-
-    .subtitle{
+    /* Publicación */
+    .card {
+        background-color: var(--secondary-bg-color);
         color: black;
     }
+    .card-content{
+        color:black
+    }
+
 
 .subindex {
     display: flex;
@@ -41,10 +50,13 @@
     }
     .input{
         background-color: var(--primary-bg-color);
+        color: black;
     }
+
     .input::placeholder {
         color: var(--text-placeholder-color);
     }
+
     .control .button {
         color: white;
         margin-left: 10px;
@@ -55,3 +67,7 @@
         background-color: var(--button-bg-color-3);
     
     }
+
+body {
+    background-color: var(--secondary-bg-color);
+}
