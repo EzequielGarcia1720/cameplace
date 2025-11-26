@@ -73,38 +73,52 @@
 
                 <!-- Información Básica -->
                 
-                <div class="box">
-                    <h2 class="title is-4">Datos personales</h2>
-                    <fieldset disabled>
-                    <div class="field">
-                        <label class="label">Nombre</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Ezequiel">
-                        </div>
+                <h2 class="title is-4">Datos personales</h2>
+                <fieldset disabled>
+                <div class="field">
+                    <label class="label">Nombre</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Ezequiel">
                     </div>
-                    <div class="field">
-                        <label class="label">Apellido</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Garcia">
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="label">Apellido</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Garcia">
                     </div>
-
-                    <div class="field">
-                        <label class="label">Nombre de Usuario</label>
-                        <div class="control">
-                            <input class="input" type="text" placeholder="Escriba su nombre aquí" value="ZekiiYF">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Biografía</label>
-                        <div class="control">
-                            <textarea class="textarea" type="text" placeholder="Escriba su biografía aquí"></textarea>
-                        </div>
-                    </div>
-                    </fieldset>
-                    
                 </div>
 
+                <div class="field">
+                    <label class="label">Nombre de Usuario</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="ZekiiYF">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Biografía</label>
+                    <div class="control">
+                        <textarea class="textarea" type="text" placeholder="Escriba su biografía aquí"></textarea>
+                    </div>
+                </div>
+                </fieldset>
+
+                <!-- Botones -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button id="perfil_edit_button" class="button is-primary">Editar</button>
+                    </div>
+                    <!--
+                    <div class="control">
+                        <button class="button is-primary">Guardar</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary">Cancelar</button>
+                    </div>
+                    -->
+                </div>
+
+                <hr>
+                
                 <!-- Información de Reputación -->
                 <div class="box">
                     <h2 class="title is-4">Información de Reputación</h2>
@@ -122,7 +136,7 @@
                 </div>
 
                 <!-- Actividad en la Plataforma -->
-                <div class="box" style="background-color: var(--secondary-bg-color);">
+                <div class="box">
                     <h2 class="title is-4">Actividad en la Plataforma</h2>
                     <div class="content">
                         <p><strong>Artículos publicados:</strong> 32</p>
@@ -140,28 +154,31 @@
             </div>
         </section>
     </div>
-    </body>
-<footer>
-    <div class="footer-index">
-        <div class="columns">
-            <!-- Columna Number One -->
-            <div class="column has-text-centered">
-                <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
-                <p>Introducción al Desarrollo de Software</p>
-                <p>Curso 01 - Camejo</p>
+    <script src="js/perfil.js" >
 
-            </div>
-            <!-- Columna Number Two -->
-            <div class="column has-text-centered">
-                <p><strong>Integrantes:</strong></p>
-                <ul>
-                    <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
-                    <li>Alex Espíndola</li>
-                    <li>Felipe Torres</li>
-                    <li>Leandro Cejas</li>
-                </ul>
+    </script>
+    </body>
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+                <!-- Columna Number One -->
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+
+                </div>
+                <!-- Columna Number Two -->
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 </html>
