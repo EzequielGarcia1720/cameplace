@@ -78,26 +78,25 @@
                 <div class="field">
                     <label class="label">Nombre</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Ezequiel">
+                        <input id="nombre_input" class="input" type="text" placeholder="Escriba su nombre aquí" value="Ezequiel">
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Apellido</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="Garcia">
+                        <input id="apellido_input" class="input" type="text" placeholder="Escriba su apellido aquí" value="Garcia">
                     </div>
                 </div>
-
                 <div class="field">
                     <label class="label">Nombre de Usuario</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="Escriba su nombre aquí" value="ZekiiYF">
+                        <input id="usuario_input" class="input" type="text" placeholder="Escriba su usuario aquí" value="ZekiiYF">
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Biografía</label>
                     <div class="control">
-                        <textarea class="textarea" type="text" placeholder="Escriba su biografía aquí"></textarea>
+                        <textarea id="biografia_textarea" class="textarea" placeholder="Escriba su biografía aquí"></textarea>
                     </div>
                 </div>
                 </fieldset>
@@ -107,14 +106,12 @@
                     <div class="control">
                         <button id="perfil_edit_button" class="button is-primary">Editar</button>
                     </div>
-                    <!--
-                    <div class="control">
-                        <button class="button is-primary">Guardar</button>
+                    <div class="control" style="display: none;" id="guardar_cancelar_group">
+                        <button id="guardar_button" class="button is-primary">Guardar</button>
                     </div>
-                    <div class="control">
-                        <button class="button is-primary">Cancelar</button>
+                    <div class="control" style="display: none;">
+                        <button id="cancelar_button" class="button is-primary">Cancelar</button>
                     </div>
-                    -->
                 </div>
 
                 <hr>
