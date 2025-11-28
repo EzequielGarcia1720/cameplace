@@ -13,9 +13,9 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "backend/api.js",
+  "main": "backend/src/api.js",
   "scripts": {
-    "dev": "nodemon backend/api.js"
+    "dev": "nodemon backend/src/api.js"
   },
   "dependencies": {
     "express": "^5.1.0",
