@@ -3,7 +3,8 @@ const express = require('express');
 const { 
     getAllUsers,
     getUser,
-    newUser
+    newUser,
+    updateUser
 } = require('./usuarios.js'); 
 
 const app = express();
@@ -40,12 +41,30 @@ app.post("/api/v1/users", async (req, res) => {
         res.status(201).json({ message: "Usuario creado exitosamente" });
     } catch (error) {
         console.error("Error al crear el usuario:", error);
-        res.status(500).json({ error: "Error al crear el usuario" });
+        const status = (error && error.status) ? error.status : 500;
+        const message = (error && error.message) ? error.message : 'Error al crear el usuario';
+        res.status(status).json({ error: message });
     }
 });
 
 //PUT
-
+app.put("/api/v1/users/:id", async (req, res) => {
+    const userID = req.params.id;
+    const { username, firstname, lastname, biography } = req.body;
+    try {
+        const updatedUser = await updateUser(userID, username, firstname, lastname, biography);
+        if (!updatedUser) {
+            return res.status(404).json({ error: "Usuario no encontrado" });
+        }
+        res.json(updatedUser);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ error: error.message });
+    }
+});
 
 
 //DELETE
+app.delete("/api/v1/users/:id", async (req, res) => {
+    
+});
