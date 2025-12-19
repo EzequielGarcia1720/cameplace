@@ -8,6 +8,8 @@ CREATE TABLE users (
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     tel INT,
+    biography TEXT,
+    image_url VARCHAR(255),
     ubication VARCHAR(255) NOT NULL,
     registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modificationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP

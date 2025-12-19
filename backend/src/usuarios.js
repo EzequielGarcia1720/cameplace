@@ -48,7 +48,7 @@ async function getUser(id) {
 };
 
 //NewUser
-async function newUser(username, psswd, email, firstname, lastname, tel, ubication) {
+async function newUser(username, psswd, email, firstname, lastname, tel, biography, image_url, ubication) {
     if (await checkUsernameExists(username)) {
         const err = new Error('Username already exists');
         err.status = 409;
@@ -56,8 +56,8 @@ async function newUser(username, psswd, email, firstname, lastname, tel, ubicati
     }
 
     const response = await dbClient.query(
-        'INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *',
-        [username, psswd, email, firstname, lastname, tel, ubication]
+        'INSERT INTO users (username, psswd, email, firstname, lastname, tel, biography, image_url, ubication) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
+        [username, psswd, email, firstname, lastname, tel, biography, image_url, ubication]
     );
 
     return response.rows[0];

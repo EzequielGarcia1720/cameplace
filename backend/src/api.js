@@ -36,9 +36,9 @@ app.get("/api/v1/users/:id", async (req, res) => {
 
 //POST
 app.post("/api/v1/users", async (req, res) => {
-    const { username, psswd, email, firstname, lastname, tel, ubication } = req.body;
+    const { username, psswd, email, firstname, lastname, tel, biography, image_url, ubication } = req.body;
     try {
-        await newUser(username, psswd, email, firstname, lastname, tel, ubication);
+        await newUser(username, psswd, email, firstname, lastname, tel, biography, image_url, ubication);
         res.status(201).json({ message: "Usuario creado exitosamente" });
     } catch (error) {
         console.error("Error al crear el usuario:", error);
