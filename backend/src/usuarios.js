@@ -90,13 +90,27 @@ async function updateUser(userID, username, firstname, lastname, biography) {
         return undefined;
     }
     return response.rows[0];
-}
+};
 
-
+async function deleteUser(userID){
+    const response = await dbClient.query(
+        'DELETE FROM users WHERE id = $1 RETURNING *',
+        [userID]
+    );
+    
+    if (response.rowCount === 0) {
+        const err = new Error('Usuario no encontrado');
+        err.status = 404;
+        throw err;
+    }
+    
+    return { message: 'Usuario eliminado', id: userID };
+};
 
 module.exports = {
     getAllUsers,
     getUser,
     newUser,
-    updateUser
+    updateUser,
+    deleteUser
 };

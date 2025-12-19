@@ -4,7 +4,8 @@ const {
     getAllUsers,
     getUser,
     newUser,
-    updateUser
+    updateUser,
+    deleteUser
 } = require('./usuarios.js'); 
 
 const app = express();
@@ -66,5 +67,16 @@ app.put("/api/v1/users/:id", async (req, res) => {
 
 //DELETE
 app.delete("/api/v1/users/:id", async (req, res) => {
-    
+    const userID = req.params.id;
+
+    try {
+        const deletedUser = await deleteUser(userID); 
+        if (!deletedUser) {
+            return res.status(404).json({ error: "Usuario no encontrado" });
+        }
+        res.json(deletedUser)
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ error: error.message });
+    }
 });
