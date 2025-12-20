@@ -55,3 +55,21 @@ CREATE TABLE auctions (
 );
 
 -- Bids
+
+CREATE TABLE bids (
+    id serial PRIMARY KEY,
+    offer_type INT NOT NULL,
+    FOREIGN KEY (offer_type) REFERENCES offer_type(id)
+    title varchar(80) NOT NULL,
+    descripcion varchar(255) NOT NULL,
+    images_urls TEXT[],
+    mount DECIMAL(10,2) NOT NULL,
+    auctioneer_id INT NOT NULL,
+    FOREIGN KEY (auctioneer_id) REFERENCES users(id),
+    bidder_id INT NOT NULL,
+    FOREIGN KEY (bidder_id) REFERENCES users(id),
+    auction_id INT NOT NULL,
+    FOREIGN KEY (auction_id) REFERENCES auctions(id),
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
