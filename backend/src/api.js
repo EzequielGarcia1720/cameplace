@@ -5,8 +5,11 @@ const {
     getUser,
     newUser,
     updateUser,
-    deleteUser
+    deleteUser,
 } = require('./usuarios.js'); 
+const {
+    getAllAuctions
+} = require('./subastas.js')
 
 const app = express();
 const port = 3030;
@@ -80,3 +83,19 @@ app.delete("/api/v1/users/:id", async (req, res) => {
         res.status(status).json({ error: error.message });
     }
 });
+
+//----------------------------------------------------------------------------------------------------
+
+
+//Auctions - Auction
+//-------------------
+
+//GET
+
+//GetAllAuctions
+app.get("/api/v1/auctions", async (req, res) => {
+    const auctions = await getAllAuctions();
+    res.json(auctions);
+});
+
+//getAuction
