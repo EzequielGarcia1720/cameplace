@@ -1,0 +1,98 @@
+:root {
+    /*Cambio en el color primario de bulma*/
+    --bulma-primary-h: 82deg;
+    --bulma-primary-s: 39%;
+    --bulma-primary-l: 30%;
+
+
+}
+
+
+.index{
+    margin-bottom: 1rem;
+    background-color: var(--primary-bg-color);
+    /* display:grid ; */
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+    .titulo{
+        color: rgb(0, 0, 0);
+    }
+
+
+    .subtitle{
+        color: black;
+    }
+
+.subindex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    /*searchbar*/
+    .searchbar {
+        /*margin-left: 300px; */
+        /*margin-right: 300px;*/
+        margin-bottom:10px;
+        display:inline-flex;
+        width: 700px;
+    }
+    .input{
+        background-color: var(--primary-bg-color);
+    }
+    .input::placeholder {
+        color: var(--text-placeholder-color);
+    }
+    .control .button {
+        color: rgb(255, 255, 255);
+        margin-left: 10px;
+    }
+
+    .pagination-previous, .pagination-next {
+        color: white;
+        background-color: var(--button-bg-color-3);
+    
+    }
+
+.columns {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.column .box {
+    background-color: var(--primary-bg-color);
+}
+
+.container1 {
+    padding-left: 20px;
+    padding-top: 10px;
+    background-color: var(--primary-bg-color);
+}
+.container2 {
+    padding-right: 20px;
+    padding-top: 10px;
+    background-color: var(--primary-bg-color);
+}
+.menu-label {
+    font-size: 1.50rem;
+    color: black
+}
+.checkbox {
+    color: black
+}
+
+.category-scroll {
+    max-height: 200px; 
+    overflow-y: auto;
+}
+.menu-list a.is-active {
+    background-color: var(--navbar-bg-color);
+}
+.card-footer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
