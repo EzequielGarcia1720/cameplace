@@ -57,15 +57,24 @@
     
     }
 
+.columns {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.column .box {
+    background-color: var(--primary-bg-color);
+}
+
 .container1 {
     padding-left: 20px;
     padding-top: 10px;
-
+    background-color: var(--primary-bg-color);
 }
 .container2 {
     padding-right: 20px;
     padding-top: 10px;
-
+    background-color: var(--primary-bg-color);
 }
 .menu-label {
     font-size: 1.50rem;
