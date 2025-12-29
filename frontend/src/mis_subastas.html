@@ -281,21 +281,21 @@
                             <li>
                                 <a class="is-active">Cronología</a>
                                 <ul>
-                                    <li><a>Recientes</a></li>
-                                    <li><a>Mas antiguas</a></li>
+                                    <li><a id="boton_recientes">Recientes</a></li>
+                                    <li><a id="boton_masantiguas">Mas antiguas</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a class="is-active">Actividad</a>
                                 <ul>
-                                    <li><a>Mayor cantidad de ofertas</a></li>
-                                    <li><a>Menor cantidad de ofertas</a></li>
+                                    <li><a id="boton_mayor_cant_ofertas">Mayor cantidad de ofertas</a></li>
+                                    <li><a id="boton_menor_cant_ofertas">Menor cantidad de ofertas</a></li>
                                 </ul>
                             <li>
                                 <a class="is-active">Valor</a>
                                 <ul>
-                                    <li><a>Mayor precio</a></li>
-                                    <li><a>Menor precio</a></li>
+                                    <li><a id="boton_mayor_precio">Mayor precio</a></li>
+                                    <li><a id="boton_menor_precio">Menor precio</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -318,6 +318,7 @@
                                         class="input is-primary"
                                         type="text"
                                         placeholder="Buscar entre mis subastas"
+                                        id="barra_busqueda"
                                     /> 
                                 <div class="control">
                                     <button id="buscar_boton" class="button is-primary">Buscar</button>
@@ -715,4 +716,5 @@
                 </div>
             </div>
         </footer>
+    <script src="js/mis_subastas.js" defer></script>
 </body>
