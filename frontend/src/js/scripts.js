@@ -49,3 +49,15 @@ btnCancelar.addEventListener('click', e => {
 
     modoLectura();
 });
+
+const fechaInput = document.getElementById("fecha_registro");
+if (fechaInput) {
+    let fechaRegistro = localStorage.getItem("fechaRegistro");
+
+if (!fechaRegistro) {
+    const hoy = new Date().toISOString().split("T")[0];
+    localStorage.setItem("fechaRegistro", hoy);
+    fechaRegistro = hoy;
+}
+
+fechaInput.value = fechaRegistro;}
