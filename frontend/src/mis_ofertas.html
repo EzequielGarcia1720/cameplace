@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+
+        <!--Header-->
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                    <strong>CameBastas</strong>
+                </a>
+
+                <!--Boton 3 rayas-->
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+
+                        <!-- Boton de crear subasta -->
+                        <a class="button crear_subasta is-primary" href="crear_subasta.html">
+                            <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Imagen con dropdown incluido -->
+            <div class="navbar-item ">
+
+                <!-- Imagen -->
+                <span class="dropdown is-right is-hoverable">
+                    <figure class="image is-32x32">
+                        <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                    </figure>
+
+                    <!-- Dropdown -->
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </nav>
+            
+
+
+
+
+
+
+
+
+    </body>
+
+
+
+
+
+
+
+
+
+
+</html>
