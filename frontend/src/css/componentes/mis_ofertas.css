@@ -1,0 +1,8 @@
+
+.message-header {
+    background-color: darkolivegreen;
+}
+.tag.is-light {
+    background-color: rgb(252, 252, 252);
+    color: darkolivegreen;
+}
