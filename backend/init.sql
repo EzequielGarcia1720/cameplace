@@ -39,17 +39,19 @@ insert into offer_type (type) values ('producto'), ('dinero'), ('mixto');
 CREATE TABLE auctions (
     id serial PRIMARY KEY,
     title VARCHAR(80) NOT NULL,
-    descripcion VARCHAR(255) NOT NULL,
+    descripcion TEXT,
     initial_price DECIMAL(10,2) NOT NULL,
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id),
     condition VARCHAR(100) NOT NULL,
-    images_urls TEXT[],
+    images_urls TEXT,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
     offer_type INT NOT NULL,
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
-    auction_status INT NOT NULL,
+    auction_status VARCHAR(50) NOT NULL,
+    location_id INT NOT NULL,
+    FOREIGN KEY (location_id) REFERENCES users(ubication),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -59,7 +61,7 @@ CREATE TABLE auctions (
 CREATE TABLE bids (
     id serial PRIMARY KEY,
     offer_type INT NOT NULL,
-    FOREIGN KEY (offer_type) REFERENCES offer_type(id)
+    FOREIGN KEY (offer_type) REFERENCES offer_type(id),
     title varchar(80) NOT NULL,
     descripcion varchar(255) NOT NULL,
     images_urls TEXT[],
@@ -72,4 +74,4 @@ CREATE TABLE bids (
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
