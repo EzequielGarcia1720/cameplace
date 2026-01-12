@@ -6,3 +6,8 @@
     background-color: rgb(252, 252, 252);
     color: darkolivegreen;
 }
+
+.tabs li.is-active a {
+    border-bottom-color: darkolivegreen;
+    color: darkolivegreen;
+}
