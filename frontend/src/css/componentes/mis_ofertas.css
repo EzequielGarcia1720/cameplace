@@ -11,3 +11,11 @@
     border-bottom-color: darkolivegreen;
     color: darkolivegreen;
 }
+
+.boton-cancelar {
+    color: red;
+}
+
+.boton-reofertar {
+    color: green
+}
