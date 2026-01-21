@@ -33,7 +33,11 @@
                         <!-- dropdown -->
                         <span class="dropdown is-right is-hoverable">
                             <figure class="image is-32x32">
-                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                                <img 
+                                id="foto_perfil_navbar"
+                                class="is-rounded" 
+                                src="https://avatars.githubusercontent.com/u/231128308?v=4" 
+                                />
                             </figure>
                         
                         <div class="dropdown-trigger">
@@ -112,6 +116,21 @@
                     <div class="control" style="display: none;">
                         <button id="cancelar_button" class="button is-primary">Cancelar</button>
                     </div>
+                    <div class="control" id="editar_foto_group" style="display: none;">
+                    <button id="editar_foto_button" class="button is-info"> Editar Foto de Perfil</button>
+                    </div>
+                    <div class="control" id="editar_foto_form" style="display: none;">
+                        <input 
+                            class="input"
+                            type="url"
+                            id="foto_url_input"
+                            placeholder="Pegá la URL de tu foto de perfil">
+                                <button type="button" 
+                                class="button is-link mt-2" 
+                                id="guardar_foto_button">
+                                Guardar foto
+                                </button>
+                    </div>
                 </div>
 
                 <hr>
@@ -126,7 +145,7 @@
                         <p><strong>Verificaciones:</strong></p>
                         <p><strong>Registrado el: </strong>
                         <input 
-                        id="Fecha_registro" 
+                        id="fecha_registro" 
                         class="input is-small is-static" 
                         type="date" 
                         style="display:inline-block;width:auto;"
