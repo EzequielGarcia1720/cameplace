@@ -206,4 +206,4 @@ app.put("/api/v1/auctions/:id", async (req, res) => {
 
     res.json(auction)
 
-})
+});

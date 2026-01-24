@@ -51,7 +51,6 @@ CREATE TABLE auctions (
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
     auction_status VARCHAR(50) NOT NULL,
     location_id INT NOT NULL,
-    FOREIGN KEY (location_id) REFERENCES users(ubication),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
