@@ -8,6 +8,7 @@ const dbClient = new Pool({
     database: "cameplace"
 });
 
+<<<<<<< HEAD
 async function GetAllAuctions() {
     const response = await dbClient.query("SELECT * FROM auctions")
     return response.rows
@@ -92,3 +93,14 @@ module.exports = {
     RemoveAuction,
     UpdateAuction,
 }
+=======
+//GetAllAuctions
+async function getAllAuctions() {
+    const response = await dbClient.query("SELECT * FROM auctions");
+    return response.rows; 
+}
+
+module.exports = {
+    getAllAuctions
+}
+>>>>>>> 1409f7ebe79e415d3ab0ba093455c86dd1f93946

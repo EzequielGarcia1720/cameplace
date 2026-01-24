@@ -5,6 +5,7 @@ const {
     getUser,
     newUser,
     updateUser,
+<<<<<<< HEAD
     deleteUser
 } = require('./usuarios');
 const {
@@ -14,6 +15,13 @@ const {
     RemoveAuction, 
     UpdateAuction 
 } = require("./subastas");
+=======
+    deleteUser,
+} = require('./usuarios.js'); 
+const {
+    getAllAuctions
+} = require('./subastas.js')
+>>>>>>> 1409f7ebe79e415d3ab0ba093455c86dd1f93946
 
 const app = express();
 const port = 3030;
@@ -88,6 +96,7 @@ app.delete("/api/v1/users/:id", async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 // SUBASTAS
 
 // GET. /subastas
@@ -207,3 +216,20 @@ app.put("/api/v1/auctions/:id", async (req, res) => {
     res.json(auction)
 
 });
+=======
+//----------------------------------------------------------------------------------------------------
+
+
+//Auctions - Auction
+//-------------------
+
+//GET
+
+//GetAllAuctions
+app.get("/api/v1/auctions", async (req, res) => {
+    const auctions = await getAllAuctions();
+    res.json(auctions);
+});
+
+//getAuction
+>>>>>>> 1409f7ebe79e415d3ab0ba093455c86dd1f93946
