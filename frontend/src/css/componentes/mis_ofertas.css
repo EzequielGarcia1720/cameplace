@@ -1,0 +1,21 @@
+
+.message-header {
+    background-color: darkolivegreen;
+}
+.tag.is-light {
+    background-color: rgb(252, 252, 252);
+    color: darkolivegreen;
+}
+
+.tabs li.is-active a {
+    border-bottom-color: darkolivegreen;
+    color: darkolivegreen;
+}
+
+.boton-cancelar {
+    color: red;
+}
+
+.boton-reofertar {
+    color: green
+}
