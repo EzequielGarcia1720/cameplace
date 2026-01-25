@@ -98,13 +98,4 @@ module.exports = {
     RemoveAuction,
     UpdateAuction,
     GetSearchedAuction,
-
 }
-
-
-
-
-
-
-
-
