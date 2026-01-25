@@ -7,20 +7,22 @@ const dbClient = new Pool({
     port: 5432,
     database: "cameplace"
 });
+
 // Obtener todas las ofertas, con opción de filtro
 async function GetAllOffers(querySQL, parameters) {
     try {
-        const response = dbClient.query(querySQL, parameters)
-        return response.rows
-    } catch {
-        return false
+        const response = await dbClient.query(querySQL, parameters);
+        return response.rows; 
+
+    } catch (err) {
+        console.error("Error en GetAllOffers:", err); 
+        return undefined;
     }
 }
-
 // Obtener una oferta por ID
 async function GetOffert(id) {
     const response = await dbClient.query(
-        "SELECT * FROM ofertas WHERE id = $1", 
+        "SELECT * FROM offers WHERE id = $1", 
         [id]
     )
     if (response.rows.length === 0)
@@ -32,7 +34,7 @@ async function GetOffert(id) {
 async function CreateOffert(id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO ofertas(id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+            "INSERT INTO offers(id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
             [id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date]
         )
         if  (result.rowCount === 0) {
@@ -59,10 +61,10 @@ async function CreateOffert(id, type_offert, title, description, images_urls, am
 // Eliminar una oferta por ID
 async function RemoveOffer(id) {
     try {
-        const result = await dbClient.query("DELETE FROM ofertas where id = $1", [id])
+        const result = await dbClient.query("DELETE FROM offers where id = $1", [id])
         return result.rowCount === 1;
     } catch {
-        return false
+        return undefined
     }
 }
 

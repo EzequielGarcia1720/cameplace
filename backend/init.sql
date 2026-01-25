@@ -55,9 +55,9 @@ CREATE TABLE auctions (
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Bids
+-- Offers
 
-CREATE TABLE bids (
+CREATE TABLE offers (
     id serial PRIMARY KEY,
     offer_type INT NOT NULL,
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
@@ -71,6 +71,8 @@ CREATE TABLE bids (
     FOREIGN KEY (bidder_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
+    estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
