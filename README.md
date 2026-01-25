@@ -1,149 +1,148 @@
 # CameBastas
 TP Final 
 
-## IDEAS
-    1. Que el subastador tenga la opcion de ponerle un tiempo limite a la publicacion en caso de ver una oferta que le interese
-
+## Ideas
+    1. Que el subastador tenga la opción de ponerle un tiempo límite a la publicación en caso de ver una oferta que le interese.
 
 ## Objetivo
-    Es una pagina de subastas donde se pueden publicar articulos, las ofertas pueden ser productos, dinero o mixtas. Estas no tienen un tiempo limite, sino que el subastador selecciona la oferta que el quiera. 
+    Es una página de subastas donde se pueden publicar artículos, las ofertas pueden ser productos, dinero o mixtas. Estas no tienen un tiempo límite, sino que el subastador selecciona la oferta que el quiera. 
 
 ## Entidades
 
     -- Usuarios
         -- Id (PK) --> u.id
         -- Nombre de usuario --> u.username
-        -- Correo electronico --> u.email
+        -- Correo electrónico --> u.email
         -- Contraseña --> u.password
         -- Nombre completo --> u.name
-        -- Telefono --> u.tel
-        -- Ubicacion --> u.ubi
+        -- Teléfono --> u.tel
+        -- Ubicación --> u.ubi
         -- Fecha de registro --> u.reg_date
-        -- Fecha de modificacion --> u.mod_date
+        -- Fecha de modificación --> u.mod_date
 
     -- Subastas
         -- Id (PK) --> s.id
-        -- Titulo --> s.name
-        -- Descripcion
+        -- Título --> s.name
+        -- Descripción
         -- Precio inicial
-        -- Categoria_id (FK de categorias)
-        -- Condicion
-        -- Imagenes (js)
+        -- Categoría_id (FK de categorias)
+        -- Condición
+        -- Imágenes (js)
         -- Subastador (FK de usuarios)
         -- Tipo de oferta (canje, dinero, mixta)
-        -- Estado de subasta (Activo, vendido, inactivo)
-        -- Ubicacion_id (FK de usuarios)
-        -- Ofertas recibidas <-- variable
-        -- Fecha de creacion
-        -- Fecha de modficacion
+        -- Estado de subasta (activo, vendido, inactivo)
+        -- Ubicación_id (FK de usuarios)
+        -- Fecha de creación
+        -- Fecha de modificación
 
     -- Ofertas
-        -- id (PK) --> o.id
-        -- tipo de oferta (canje, dinero, mixta) <-- (Tabla fija)
-        -- Titulo 
-        -- Descripcion
-        -- Imagenes (js)
+        -- Id (PK) --> o.id
+        -- Tipo de oferta (canje, dinero, mixta) <-- (Tabla fija)
+        -- Título 
+        -- Descripción
+        -- Imágenes (js)
         -- Monto
-        -- id de vendedor <-- (FK de users)
-        -- id de ofertador <-- (FK de users)
-        -- id de subasta <-- (FK de subastas)
-        -- fecha de creacion
-        -- fecha de modificacion
+        -- Id de vendedor <-- (FK de users)
+        -- Id de ofertador <-- (FK de users)
+        -- Id de subasta <-- (FK de subastas)
+        -- Fecha de creación
+        -- Fecha de modificación
 
     -- Tipo de oferta
-        -- producto
-        -- dinero
-        -- mixta
+        -- Producto
+        -- Dinero
+        -- Mixta
 
-    -- categorias
-        -- id
-        -- nombre
-        -- categora_padre (por si es una subcategoria)
+    -- Categorías
+        -- Id
+        -- Nombre
+        -- Categoría_padre (por si es una subcategoría)
 
 ## Navbar
-    ¿Que contiene?
-        lado izquierdo: Logo (boton de inicio) 
-        lado derecho:  
-            Boton de crear subasta
-            Foto del perfil con dropdown que contenga "mi perfil" "mis subastas" "Cerrar sesion"
+    ¿Qué contiene?
+        Lado izquierdo: 
+            -Logo (botón de inicio) 
+        Lado derecho:  
+            -Botón de crear subasta
+            -Foto del perfil con dropdown que contenga "Mi perfil" "Mis subastas" "Cerrar sesión"
 
 
 ## Paginas
 
     -- Inicio
         ¿Que contiene el inicio?
-            bienvenida(pagina temporal)
-            barra de busqueda
-            Dropdown de filtros
-            Subastas recientes
+            -Bienvenida (página temporal)
+            -Barra de búsqueda
+            -Dropdown de filtros
+            -Subastas recientes
 
     -- Perfil
-        ¿Que contiene el perfil?
-            Datos de usuario
-                nombre completo
-                username
-                foto de perfil
-                correo electronico
-                numero de telefono
-                ubicacion aproximada
-            Mis ofertas
-                grilla con tus ofertas
-                botón de eliminar 
-                imagen
-                título
-                tipo de oferta
-                monto/canje
-                categoria
-                filtro
+        ¿Qué contiene el perfil?
+            Datos de usuario:
+                -Nombre completo
+                -Username
+                -Foto de perfil
+                -Correo electrónico
+                -Número de teléfono
+                -Ubicación aproximada
+                -Mis ofertas
+                -Grilla con tus ofertas
+                -Botón de eliminar 
+                -Imagen
+                -Título
+                -Tipo de oferta
+                -Monto/canje
+                -Categoría
+                -Filtro
     
     -- Mis subastas (dentro de Perfil)
         Grilla con tus subastas (activas e inactivas)
-            título
-            botón de editar(cambiar estado, precio base)
-            botón de eliminar 
-            imagen
-            tipo de oferta
-            precio inicial
-            categoria
-            filtro
+            -Título
+            -Botón de editar(cambiar estado, precio base)
+            -Botón de eliminar 
+            -Imagen
+            -Tipo de oferta
+            -Precio inicial
+            -Categoría
+            -Filtro
 
     -- Subasta
-        título
-        Imagen 
-        descripción
-        precio inicial (solo en opción dinero o mixto)
-        categoria 
-        tipo de canje (dinero, objeto y mixto)
-        botón ofertar
-        botón eliminar 
+        -título
+        -Imagen 
+        -Descripción
+        -Precio inicial (solo en opción dinero o mixto)
+        -Categoría 
+        -Tipo de canje (dinero, objeto y mixto)
+        -Botón ofertar
+        -Botón eliminar 
 
     -- Crear subasta
-        va a contener un formulario
-            -título
-            -precio inicial
-            -categoria
-            -dropdown (condición)
-            -descripción
-            -imagenes
-            -dropdown (tipo de canje)
-            -botón de crear subasta
+        Va a contener un formulario:
+            -Título
+            -Precio inicial
+            -Categoría
+            -Dropdown (condición)
+            -Descripción
+            -Imagenes
+            -Dropdown (tipo de canje)
+            -Botón de crear subasta
     
-    -- Inicio de sesion
-        formulario
-            -correo electronico
-            -contraseña
-            -botoón de Iniciar Sesión
-        botón de "Registrarme"
+    -- Inicio de sesión
+        Formulario
+            -Correo electrónico
+            -Contraseña
+            -Botón de "Iniciar Sesión"
+            -Botón de "Registrarme"
 
     -- Registro
-        formulario
-            -nombre completo
-            -username
-            -foto de perfil
-            -correo electronico
-            -numero de telefono
-            -ubicacion aproximada 
-            -contraseña
+        Formulario:
+            -Nombre completo
+            -Username
+            -Foto de perfil
+            -Correo electrónico
+            -Número de teléfono
+            -Ubicación aproximada 
+            -Contraseña
 
         
 
