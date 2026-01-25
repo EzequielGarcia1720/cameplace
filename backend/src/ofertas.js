@@ -34,7 +34,7 @@ async function GetOffert(id) {
 async function CreateOffert(id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO offers(id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+            "INSERT INTO offers(id, type_offert, title, descripcion, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
             [id, type_offert, title, description, images_urls, amount, auctioneer_id, bidder_id, auction_id, creation_date]
         )
         if  (result.rowCount === 0) {
@@ -48,7 +48,7 @@ async function CreateOffert(id, type_offert, title, description, images_urls, am
         id,
         type_offert,
         title,
-        description,
+        descripcion,
         images_urls,
         amount,
         auctioneer_id,

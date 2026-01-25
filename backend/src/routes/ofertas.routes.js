@@ -11,30 +11,52 @@ const {
 
 // GET /api/v1/offers
 router.get("/", async (req, res) => {
-    const filterStatus = req.query.status; 
+    const filterStatus = req.query.status; // Esperamos 'activas', 'aceptadas', 'rechazadas', 'finalizadas'
     const filterOrder = req.query.order; // Esperamos 'ASC' o 'DESC'
-
+    const filterSearch = req.query.search; // Esperamos un texto para buscar en título y descripción
+   
     let querySQL = 'SELECT * FROM offers';
     let parameters = [];
 
-    //LÓGICA DE FILTRADO (WHERE)
+    //LÓGICA DE ESTADO (WHERE)
+    // ejemplo: /api/v1/offers?status=activas
     if (filterStatus) {
         querySQL += ' WHERE estado = $1'; 
-        parameters.push(filterStatus);
+        parameters.push(filterStatus); //pushea el valor del filtro al array de parámetros
     }
+
 
     // LÓGICA DE ORDENAMIENTO (ORDER BY)
     // Definimos un valor por defecto (DESC = más reciente primero)
+    //ejemplo: /api/v1/offers?order=ASC
     let sortDirection = 'DESC'; 
-
+    
     // Si el usuario envió algo, verificamos si es 'ASC', si no, se queda en 'DESC'
     if (filterOrder && filterOrder.toUpperCase() === 'ASC') {
         sortDirection = 'ASC';
     }
 
+    
+    // LÓGICA DE BÚSQUEDA (SEARCH)
+    // ejemplo: /api/v1/offers?search=telefono
+    if (filterSearch) {
+        // Calculamos la posición del parámetro (si ya hay uno, este será $2, si no, $1)
+        const paramIndex = parameters.length + 1; 
+        
+        // Si el array de parámetros tiene algo, significa que ya pusimos un WHERE antes
+        if (parameters.length > 0) {
+            querySQL += ` AND (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        } else {
+            // Si está vacío, somos el primer filtro, así que ponemos WHERE
+            querySQL += ` WHERE (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        }
+        
+        // Agregamos la palabra clave con los % para que funcione el ILIKE
+        parameters.push(`%${filterSearch}%`);
+    }
+    
     // Dejar un espacio al inicio de " ORDER BY"
     querySQL += ` ORDER BY creation_date ${sortDirection}`;
-
     try {
         
         const result = await GetAllOffers(querySQL, parameters);

@@ -73,6 +73,5 @@ CREATE TABLE offers (
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
