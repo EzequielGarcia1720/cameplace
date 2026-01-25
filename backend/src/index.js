@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 // Importar rutas
 const usuariosRoutes = require('./routes/usuarios.routes');
@@ -10,6 +11,7 @@ const condicionesRoutes = require('./routes/condiciones.routes');
 const app = express();
 const port = 3030;
 
+app.use(cors());
 app.use(express.json());
 
 // Configurar rutas
