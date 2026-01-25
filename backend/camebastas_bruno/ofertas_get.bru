@@ -1,0 +1,15 @@
+meta {
+  name: ofertas_get
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3030/api/v1/bids
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
