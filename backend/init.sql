@@ -32,7 +32,7 @@ CREATE table offer_type (
     type VARCHAR(100) NOT NULL 
 );
 
-insert into offer_type (type) values ('producto'), ('dinero'), ('mixto');
+insert into offer_type (type) values ('Producto'), ('Dinero'), ('Mixto');
 
 -- Auctions
 
@@ -43,7 +43,8 @@ CREATE TABLE auctions (
     initial_price DECIMAL(10,2) NOT NULL,
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id),
-    condition VARCHAR(100) NOT NULL,
+    condition INT,
+    FOREIGN KEY (condition) REFERENCES condition(id)
     images_urls TEXT,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
@@ -74,4 +75,15 @@ CREATE TABLE bids (
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE condition (
+    id serial PRIMARY KEY,
+    auction_condition VARCHAR(100) NOT NULL,
+
+)
+
+CREATE TABLE status (
+    id SERIAL PRIMARY KEY,
+    status_name VARCHAR(100) NOT NULL
 );

@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 //Funciones importadas
 const { 
     getAllUsers,
@@ -12,12 +13,23 @@ const {
     GetAuction, 
     CreateAuction, 
     RemoveAuction, 
-    UpdateAuction 
+    UpdateAuction,
+    GetSearchedAuction,
 } = require("./subastas");
+const {
+    GetAllCategories,
+} = require("./categorias")
+const {
+    GetAllOffersType,
+} = require("./offers_type")
+const {
+    GetAllConditions,
+} = require("./condition")
 
 const app = express();
 const port = 3030;
 app.use(express.json());
+app.use(cors());
 
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
@@ -89,7 +101,7 @@ app.delete("/api/v1/users/:id", async (req, res) => {
 });
 
 // SUBASTAS
-
+// CRUD SUBASTAS
 // GET. /subastas
 app.get("/api/v1/auctions", async (req, res) => {
     const auctions = await GetAllAuctions();
@@ -206,4 +218,33 @@ app.put("/api/v1/auctions/:id", async (req, res) => {
 
     res.json(auction)
 
+
 })
+
+// GET. auctions/search
+app.get("/api/v1/auctions/search", async (req, res) => {
+    const auctions = await GetSearchedAuction(find_text);
+    res.json(auctions);
+    
+});
+
+// Categories
+
+app.get("/api/v1/categories", async (req, res) => {
+    const categories = await GetAllCategories();
+    res.json(categories);
+});
+
+// Offers type
+
+app.get("/api/v1/offers_type", async (req, res) => {
+    const offers_type = await GetAllOffersType();
+    res.json(offers_type);
+});
+
+// Conditions
+
+app.get("/api/v1/conditions", async (req, res) => {
+    const conditions = await GetAllConditions();
+    res.json(conditions);
+});

@@ -84,10 +84,6 @@
     color: black
 }
 
-.category-scroll {
-    max-height: 200px; 
-    overflow-y: auto;
-}
 .menu-list a.is-active {
     background-color: var(--navbar-bg-color);
 }

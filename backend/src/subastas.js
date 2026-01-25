@@ -8,8 +8,9 @@ const dbClient = new Pool({
     database: "cameplace"
 });
 
+// API
 async function GetAllAuctions() {
-    const response = await dbClient.query("SELECT * FROM auctions")
+    const response = await dbClient.query("SELECT a.*, c.auction_condition, s.status_name FROM auctions a LEFT JOIN condition c ON a.condition = c.id LEFT JOIN status s ON a.auction_status = s.id ORDER BY a.modification_date DESC")
     return response.rows
 }
 
@@ -62,7 +63,7 @@ async function RemoveAuction(id) {
 }
 async function UpdateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
     try {
-        const result = await dbClient.query("UPDATE auctions SET title = $2, descripcion = $3, initial_price = $4, category_id = $5, condition = $6, images_urls = $7, auctioneer_id = $8, offer_type = $9, auction_status = $10, location_id = $11, modification_date = CURRENT_TIMESTAMP WHERE id = $1",
+        const result = await dbClient.query("UPDATE auctions SET title = $2, descripcion = $3, initial_price = $4, category_id = $5, condition = $6, images_urls = $7, auctioneer_id = $8, offer_type = $9, auction_status = $10, location_id = $11, modification_date = CURRENT_TIMESTAMP AT TIME ZONE 'America/Argentina/Buenos_Aires' WHERE id = $1",
         [id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id]
         )
         if (result.rowCount === 0) {
@@ -85,10 +86,25 @@ async function UpdateAuction(id, title, descripcion, initial_price, category_id,
     }
 }
 
+async function GetSearchedAuction(title) {
+    const response = await dbClient.query("SELECT * FROM auctions WHERE title LIKE %title%", [title])
+    return response.rows
+}
+
 module.exports = {
     GetAllAuctions,
     GetAuction,
     CreateAuction,
     RemoveAuction,
     UpdateAuction,
+    GetSearchedAuction,
+
 }
+
+
+
+
+
+
+
+
