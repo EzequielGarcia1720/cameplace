@@ -1,31 +1,21 @@
 const express = require('express');
-//Funciones importadas
+const router = express.Router();
 const { 
     getAllUsers,
     getUser,
     newUser,
     updateUser,
     deleteUser
-} = require('./usuarios.js'); 
+} = require('../usuarios');
 
-const app = express();
-const port = 3030;
-app.use(express.json());
-
-app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
-});
-
-//Rutass
-//USERS - USER
-
-//GET
-app.get("/api/v1/users", async (req, res) => {
+// GET /api/v1/users
+router.get("/", async (req, res) => {
     const users = await getAllUsers();
     res.json(users);
 });
 
-app.get("/api/v1/users/:id", async (req, res) => {
+// GET /api/v1/users/:id
+router.get("/:id", async (req, res) => {
     const user = await getUser(req.params.id);
     if (user) {
         res.json(user);
@@ -34,8 +24,8 @@ app.get("/api/v1/users/:id", async (req, res) => {
     }
 });
 
-//POST
-app.post("/api/v1/users", async (req, res) => {
+// POST /api/v1/users
+router.post("/", async (req, res) => {
     const { username, psswd, email, firstname, lastname, tel, biography, image_url, ubication } = req.body;
     try {
         await newUser(username, psswd, email, firstname, lastname, tel, biography, image_url, ubication);
@@ -48,8 +38,8 @@ app.post("/api/v1/users", async (req, res) => {
     }
 });
 
-//PUT
-app.put("/api/v1/users/:id", async (req, res) => {
+// PUT /api/v1/users/:id
+router.put("/:id", async (req, res) => {
     const userID = req.params.id;
     const { username, firstname, lastname, biography } = req.body;
     try {
@@ -64,19 +54,19 @@ app.put("/api/v1/users/:id", async (req, res) => {
     }
 });
 
-
-//DELETE
-app.delete("/api/v1/users/:id", async (req, res) => {
+// DELETE /api/v1/users/:id
+router.delete("/:id", async (req, res) => {
     const userID = req.params.id;
-
     try {
         const deletedUser = await deleteUser(userID); 
         if (!deletedUser) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
-        res.json(deletedUser)
+        res.json(deletedUser);
     } catch (error) {
         const status = error.status || 500;
         res.status(status).json({ error: error.message });
     }
 });
+
+module.exports = router;
