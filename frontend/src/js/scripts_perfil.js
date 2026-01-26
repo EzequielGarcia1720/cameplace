@@ -37,7 +37,9 @@
         btnEditar.style.display = "block";
         groupGuardarCancelar.style.display = "none";
         btnCancelar.parentElement.style.display = "none";
-    }
+        btnEditarFotoGroup.style.display = "none";
+        editarFotoForm.style.display = "none";   
+}
     // Editar perfil
     btnEditar.addEventListener('click', e => {
         e.preventDefault();
@@ -153,8 +155,14 @@
                 localStorage.setItem("fotoPerfil", user.image_url);
                 } else {
         const fotoGuardada = localStorage.getItem("fotoPerfil");
-        if (fotoGuardada) fotoNavbar.src = fotoGuardada;
+            if (fotoGuardada) fotoNavbar.src = fotoGuardada;
             }
+            if (user.image_url) {
+                document.getElementById('perfil_img').src = user.image_url;
+                } else {
+                const fotoGuardada = localStorage.getItem("fotoPerfil");
+            if (fotoGuardada) document.getElementById('perfil_img').src = fotoGuardada;
+                }
 
         } catch (err) {
             console.error(err);

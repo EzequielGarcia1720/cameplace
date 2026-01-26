@@ -1,9 +1,98 @@
-.container p strong,.container p,.container li {
+.container p strong,
+.container p,
+.container li {
     color: black;
 }
 .box {
-    background-color: var(--secondary-bg-color);
+    background-color: var(--secondary-bg-color,#f5f5f5);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
 }
 fieldset{
     margin-bottom: 1rem;
+    border:1px solid white;
+    padding: 15px;
+    border-radius: 8px;    
 }
+
+input.input, textarea.textarea {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+#perfil_img {
+    margin-left: 50px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid darkolivegreen;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+#perfil_img:hover {
+    transform: scale(1.05);
+    border-color: darkolivegreen;
+}
+
+
+
+#cancelar_button {
+    margin-left: 10px;
+    background-color: red;
+    color: white;
+}
+
+#cancelar_button:hover {
+    background-color: firebrick;
+    transform: scale(1.05);
+}
+
+#editar_foto_button {
+    margin-left: 10px;
+    background-color: darkolivegreen;
+    color: white;
+}
+
+#editar_foto_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}
+
+#guardar_foto_button {
+    margin-top: 10px;
+    background-color: darkolivegreen;
+    color: white;
+}
+#guardar_foto_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}
+
+
+#perfil_edit_button {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+#perfil_edit_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}
+
+#guardar_button {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+#guardar_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}
+
+
