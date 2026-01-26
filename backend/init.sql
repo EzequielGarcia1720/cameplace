@@ -32,7 +32,7 @@ CREATE table offer_type (
     type VARCHAR(100) NOT NULL 
 );
 
-insert into offer_type (type) values ('producto'), ('dinero'), ('mixto');
+insert into offer_type (type) values ('Producto'), ('Dinero'), ('Mixto');
 
 -- Auctions
 
