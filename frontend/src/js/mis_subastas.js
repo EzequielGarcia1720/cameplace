@@ -86,6 +86,9 @@ async function GetAuctions() {
                     <div class="content">
                         Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
                     </div>
+                    <div class="content">
+                        <a href="./seeoffers.html?=${auction.id}">Ver Ofertas</a>  
+                    </div>
                 </div>
                 <footer class="card-footer">
                     <p class="buttons">
