@@ -86,10 +86,6 @@ async function UpdateAuction(id, title, descripcion, initial_price, category_id,
     }
 }
 
-async function GetSearchedAuction(title) {
-    const response = await dbClient.query("SELECT * FROM auctions WHERE title LIKE %title%", [title])
-    return response.rows
-}
 
 module.exports = {
     GetAllAuctions,
@@ -97,5 +93,4 @@ module.exports = {
     CreateAuction,
     RemoveAuction,
     UpdateAuction,
-    GetSearchedAuction,
 }

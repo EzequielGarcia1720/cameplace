@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
+
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                            </figure>
+                        
+                        <div class="dropdown-trigger">
+
+                            <!-- Imagen -->
+                            <span>
+
+                            </span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </body>
+    <!--Index-->
+    <div class="index container" id="form_auction_by_ID">
+        <!-- Título -->
+        <div class="titulo pt-5 pb-5">
+            <h1 class="title has-text-centered">EDITAR SUBASTA</h1>
+        </div>
+        <!-- Formulario de creación de subasta -->
+        <script>
+            const urlParams = new URLSearchParams(window.location.search)
+            const id = urlParams.get('id')
+            const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
+            fetch(Backend_Auctions).then((response) => {
+                return response.json();
+            }).then((data) => {
+                const form = `
+                        <div class="field">
+                            <label class="label">Título</label>
+                            <div class="control">
+                                <input class="input" type="text" id="auction_title" placeholder="Escriba el título de la subasta" value="${data.title}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Precio Inicial</label>
+                            <div class="control">
+                                <input class="input" type="number" id="auction_initial_price" placeholder="Ingrese el precio inicial" min="0" step="0.01" value="${data.initial_price}">
+                                <input type="hidden" id="auction_IDAuctioneer" value="${data.auctioneer_id}">
+                                <input type="hidden" id="auction_status" value="${data.auction_status}">
+                                <input type="hidden" id="auction_location_id" value="${data.location_id}">
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label class="label">Categoría</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="select_categories">
+                                        <option value="" disabled selected>Selecciona una Categoría</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Condición</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="select_conditions">
+                                            <option value="" disabled selected>Selecciona una Condición</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Tipo de canje</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="select_offers_type">
+                                        <option value="" disabled selected>Selecciona un Tipo de canje</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Imagen</label>
+                            <div class="control">
+                                <input class="input" type="link" id="auction_image" placeholder="Ingrese el link de la imagen" value="${data.images_urls}">
+                            </div>
+                        </div>
+                    
+                        <div class="field">
+                            <label class="label">Descripción</label>
+                            <div class="control">
+                                <textarea class="textarea" id="auction_description" placeholder="Ingrese una descripción">${data.descripcion}</textarea>
+                            </div>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-primary" onclick="EditAuction()">Confirmar cambios</button>
+                            </div>
+                            <div class="control">
+                                <a class="button is-primary" href="./mis_subastas.html">Cancelar</a>
+                            </div>
+                        </div>`
+                    
+                    const backend_categories = "http://localhost:3030/api/v1/categories"
+                    fetch(backend_categories).then((response) => {
+                        return response.json()
+                    }).then((categories) => {
+                        const dropdown_categories = document.getElementById("select_categories")
+                        categories.forEach(category => {
+                            const NewCategory = document.createElement("option")
+                            NewCategory.value = category.id
+                            NewCategory.innerText = category.name
+                            if (category.id == data.category_id)
+                                NewCategory.selected = true
+
+                            dropdown_categories.appendChild(NewCategory)
+                        });
+                        
+                    })
+
+                    const backend_offers_type = "http://localhost:3030/api/v1/offers_type"
+                    fetch(backend_offers_type).then((response) => {
+                        return response.json()
+                    }).then((offers_type) => {
+                        const dropdown_offers_type = document.getElementById("select_offers_type")
+                        offers_type.forEach(offer_type => {
+                            const NewOfferType = document.createElement("option")
+                            NewOfferType.value = offer_type.id
+                            NewOfferType.innerText = offer_type.type
+                            if (offer_type.id == data.offer_type)
+                                NewOfferType.selected = true
+                            dropdown_offers_type.appendChild(NewOfferType)
+                        });
+                    })
+
+                    const backend_conditions = "http://localhost:3030/api/v1/conditions"
+                    fetch(backend_conditions).then((response) => {
+                        return response.json()
+                    }).then((conditions) => {
+                        const dropdown_conditions = document.getElementById("select_conditions")
+                        conditions.forEach(condition => {
+                            const NewCondition = document.createElement("option")
+                            NewCondition.value = condition.id
+                            NewCondition.innerText = condition.auction_condition
+                            if (condition.id == data.condition)
+                                NewCondition.selected = true
+                            dropdown_conditions.appendChild(NewCondition)
+                        });
+                    })
+
+                    let form_by_ID = document.getElementById("form_auction_by_ID")
+                    let auction_edit = document.createElement("div")
+                    auction_edit.classname = "form"
+                    auction_edit.innerHTML = form
+                    form_by_ID.appendChild(auction_edit)
+                });
+                function EditAuction() {
+                    const data_auction = {
+                        title: document.getElementById("auction_title").value,
+                        initial_price: document.getElementById("auction_initial_price").value,
+                        category_id: document.getElementById("select_categories").value,
+                        condition: document.getElementById("select_conditions").value,
+                        offer_type: document.getElementById("select_offers_type").value,
+                        images_urls: document.getElementById("auction_image").value,
+                        descripcion: document.getElementById("auction_description").value,
+                        auctioneer_id: document.getElementById("auction_IDAuctioneer").value,
+                        auction_status: document.getElementById("auction_status").value,
+                        location_id: document.getElementById("auction_location_id").value
+                        
+                    }
+                    if (data_auction.title.length === 0 || data_auction.initial_price <= 0 || data_auction.images_urls.length === 0 || data_auction.descripcion.length === 0 || data_auction.category_id.length === 0 || data_auction.condition.length === 0 || data_auction.offer_type.length === 0) {
+                        alert("Todos los campos son obligatorios y el precio inicial debe ser mayor a 0")
+                    } else {
+                        fetch('http://localhost:3030/api/v1/auctions/' + id, {
+                        headers: { 'Content-Type': 'application/json' }, 
+                        method:'PUT',
+                        body: JSON.stringify(data_auction),
+                        }).then(response => {
+                            if(!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`)
+                                
+                            }
+                            return response.json()
+                        }).then(data => {
+                            console.log("Success", data)
+                            window.location.replace("mis_subastas.html")
+                        }).catch(error => {
+                            console.error("Error", error)
+                        })
+                        
+                    }
+
+                } 
+        </script>
+    </div>
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+                </div>
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>
