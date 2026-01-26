@@ -6,4 +6,4 @@ router.get("/", async (req, res) => {
     res.json(offers_type);
 });
 
-
+module.exports = router;
