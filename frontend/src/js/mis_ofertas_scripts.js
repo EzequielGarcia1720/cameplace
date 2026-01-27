@@ -193,8 +193,8 @@ function FilterByStatus(estado, elementoHTML) {
     GetOffers();
 }
 
-window.DeleteAuction = function (id) {
-    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
-    console.log(Backend_Auctions)
-    fetch(Backend_Auctions, {method: 'DELETE'}).then(() => GetAuctions())
+window.DeleteOffer = function (id) {
+    const Backend_Offers = "http://localhost:3030/api/v1/offers/" + id
+    console.log(Backend_Offers)
+    fetch(Backend_Offers, {method: 'DELETE'}).then(() => GetOffers())
 }

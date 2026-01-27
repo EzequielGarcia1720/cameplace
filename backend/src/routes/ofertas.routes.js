@@ -81,5 +81,4 @@ router.delete("/:id", async (req, res) => {
     else res.status(404).send("No encontrado");
 });
 
-// --- ESTO ES OBLIGATORIO PARA QUE NODE.JS ARRANQUE ---
 module.exports = router;
