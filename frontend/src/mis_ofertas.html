@@ -125,9 +125,7 @@
                     </div>
                     <section class="section">
                         <div class="container">
-                            <div id="my_offers" class="block mt-0">
-                                <script src="js/mis_ofertas_scripts.js"></script>
-                                <script>GetOffers()</script>                            
+                            <div id="my_offers" class="block mt-0">                           
                             </div>
                         </div>
                     </section>
@@ -159,5 +157,36 @@
                 </div>
             </div>
         </footer>
+            <!-- MODAL OFERTAR -->
+    <div class="modal" id="offerModal">
+    <div class="modal-background" onclick="closeOfferModal()"></div>
+
+    <div class="modal-card">
+        <header class="modal-card-head">
+        <p class="modal-card-title">Mejorar oferta</p>
+        <button class="delete" aria-label="close" onclick="closeOfferModal()"></button>
+        </header>
+
+        <section class="modal-card-body">
+        <div class="field">
+            <label class="label">Monto</label>
+            <div class="control">
+            <input id="offer_amount" class="input" type="number" min="1">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Descripción</label>
+            <textarea id="offer_description" class="textarea"></textarea>
+        </div>
+        </section>
+
+        <footer class="modal-card-foot">
+        <button class="button is-primary" onclick="submitOffer()">Confirmar</button>
+        <button class="button" onclick="closeOfferModal()">Cancelar</button>
+        </footer>
+    </div>
+    </div>
+    <script src="js/mis_ofertas_scripts.js"></script>
     </body>
 </html>

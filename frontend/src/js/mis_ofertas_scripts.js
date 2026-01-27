@@ -115,12 +115,16 @@ async function GetOffers() {
                     </h3>
                     
                     <div style="display: flex; gap: 5px;">
-                        <button onclick="ReofferOffer('${offer.id}')" class="boton-reofertar button is-light is-small">
+                        <button
+                          class="boton-reofertar button is-light is-small"
+                          onclick="openOfferModal(${offer.auction_id})"
+                        >
                             <span class="icon">
                                 <i class="fas fa-pen-to-square"></i>
                             </span>
-                            <span>Mejorar</span> 
+                            <span>Mejorar</span>
                         </button>
+
                         <button onclick="DeleteOffer('${offer.id}')" class="boton-cancelar button is-light is-small">
                             <span>Cancelar</span>
                             <span class="icon is-small">
@@ -169,7 +173,7 @@ async function GetOffers() {
 // Llamada inicial para cargar los datos al entrar
 GetOffers();
 
-// --- FUNCIONES DE FILTRADO (Tus otras funciones) ---
+// --- FUNCIONES DE FILTRADO ---
 
 function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis ofertas"]'); 
@@ -192,9 +196,51 @@ function FilterByStatus(estado, elementoHTML) {
     
     GetOffers();
 }
-
+// --- FUNCIÓN DE ELIMINAR OFERTA ---
 window.DeleteOffer = function (id) {
     const Backend_Offers = "http://localhost:3030/api/v1/offers/" + id
     console.log(Backend_Offers)
     fetch(Backend_Offers, {method: 'DELETE'}).then(() => GetOffers())
 }
+// --- FUNCIONES MODAL REOFERTAR ---
+let currentAuctionId = null;
+
+function openOfferModal(auction_id) {
+    currentAuctionId = auction_id;
+    document.getElementById("offerModal").classList.add("is-active");
+}
+
+function closeOfferModal() {
+    document.getElementById("offerModal").classList.remove("is-active");
+}
+// --- FUNCION ENVIAR REOFERTA ---
+async function submitOffer() {
+    const mount = document.getElementById("offer_amount").value;
+    const descripcion = document.getElementById("offer_description").value;
+
+    if (!mount || !descripcion) {
+        alert("Completá todos los campos");
+        return;
+    }
+
+    const data = {
+        offer_type: 2,       
+        title: "Mejora de oferta",
+        descripcion,
+        images_urls: [],
+        mount,
+        auctioneer_id: 1,     
+        bidder_id: 2,            
+        auction_id: currentAuctionId
+    };
+
+    await fetch("http://localhost:3030/api/v1/offers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+// Cerrar modal y recargar ofertas
+    closeOfferModal();
+    GetOffers();
+}
+
