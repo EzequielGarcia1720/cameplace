@@ -1,3 +1,31 @@
+-- Categories
+CREATE table categories (
+    id serial PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    father_category INT,
+    FOREIGN KEY (father_category) REFERENCES categories(id)
+);
+
+
+-- Offer types
+CREATE table offer_type (
+    id serial PRIMARY KEY,
+    type VARCHAR(100) NOT NULL 
+);
+
+insert into offer_type (type) values ('Producto'), ('Dinero'), ('Mixto');
+
+-- Condition of auctions
+CREATE TABLE condition (
+    id serial PRIMARY KEY,
+    auction_condition VARCHAR(100) NOT NULL
+);
+
+-- Status of auctions
+CREATE TABLE status (
+    id SERIAL PRIMARY KEY,
+    status_name VARCHAR(100) NOT NULL
+);
 -- Users
 
 CREATE TABLE users (
@@ -15,24 +43,6 @@ CREATE TABLE users (
     modificationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Categories
-
-CREATE table categories (
-    id serial PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    father_category INT,
-    FOREIGN KEY (father_category) REFERENCES categories(id)
-);
-
-
--- Offer types
-
-CREATE table offer_type (
-    id serial PRIMARY KEY,
-    type VARCHAR(100) NOT NULL 
-);
-
-insert into offer_type (type) values ('producto'), ('dinero'), ('mixto');
 
 -- Auctions
 
@@ -43,13 +53,15 @@ CREATE TABLE auctions (
     initial_price DECIMAL(10,2) NOT NULL,
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id),
-    condition VARCHAR(100) NOT NULL,
+    condition INT NOT NULL,
+    FOREIGN KEY (condition) REFERENCES condition(id),
     images_urls TEXT,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
     offer_type INT NOT NULL,
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
-    auction_status VARCHAR(50) NOT NULL,
+    auction_status INT,
+    FOREIGN KEY (auction_status) REFERENCES status(id),
     location_id INT NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -72,6 +84,5 @@ CREATE TABLE offers (
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
-    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-

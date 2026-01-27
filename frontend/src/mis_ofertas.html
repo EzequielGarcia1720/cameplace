@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+
+        <!--Header-->
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                    <strong>CameBastas</strong>
+                </a>
+
+                <!--Boton 3 rayas-->
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+
+                        <!-- Boton de crear subasta -->
+                        <a class="button crear_subasta is-primary" href="crear_subasta.html">
+                            <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Imagen con dropdown incluido -->
+            <div class="navbar-item ">
+
+                <!-- Imagen -->
+                <span class="dropdown is-right is-hoverable">
+                    <figure class="image is-32x32">
+                        <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                    </figure>
+
+                    <!-- Dropdown -->
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </nav>
+
+        <!-- index/Columna filtro -->
+        <div class="columns">
+            <div class="column is-narrow">
+                <div class="box" style="width: 300px">
+                    <div class="container1">
+                        <aside class="menu">
+                            <p class="menu-label">Ordenar por</p>
+                            <ul class="menu-list">
+                                <li>
+                                    <a class="is-active">Cronología</a>
+                                    <ul>
+                                        <li>
+                                            <a id="boton_recientes" onclick="ChangeOrderv1('DESC', this)">Mas Recientes</a>
+                                        </li>
+                                        <li>
+                                            <a id="boton_masantiguas" onclick="ChangeOrderv1('ASC', this)">Mas antiguas</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+            <!-- Index/Columna mis ofertas -->
+            <div class="column">
+                
+                <div class="box container2">
+                    
+                    <!-- Bienvenida -->
+                    <div class="titulo pt-5 pb-5">
+                        <h1 class="title has-text-centered">Mis ofertas</h1>
+                    </div>
+                    <!-- Barra de busqueda -->
+                    <div class="subindex mb-5">
+                        <div class="searchbar">
+                            <input
+                                class="input is-primary"
+                                type="text"
+                                placeholder="Buscar entre mis ofertas"
+                                id="barra_busqueda"
+                            /> 
+                            <div class="control">
+                                <button id="buscar_boton" class="button is-primary" onclick="ApplySearch()">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Tabs - Filtro por estado de oferta-->
+                    <div class="tabs is-centered">
+                        <ul>
+                            <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
+                            <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
+                            <li><a onclick="FilterByStatus('aceptadas', this)">Aceptadas</a></li>
+                            <li><a onclick="FilterByStatus('rechazadas', this)">Rechazadas</a></li>
+                            <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
+                        </ul>
+                    </div>
+                    <section class="section">
+                        <div class="container">
+                            <div id="my_offers" class="block mt-0">
+                                <script src="js/mis_ofertas_scripts.js"></script>
+                                <script>GetOffers()</script>                            
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!--Footer-->
+        <footer>
+            <div class="footer-index">
+                <div class="columns">
+    
+                    <!-- Columna Number One -->
+                    <div class="column has-text-centered">
+                        <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                        <p>Introducción al Desarrollo de Software</p>
+                        <p>Curso 01 - Camejo</p>
+                    </div>
+
+                    <!-- Columna Number Two -->
+                    <div class="column has-text-centered">
+                        <p><strong>Integrantes:</strong></p>
+                        <ul>
+                            <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                            <li>Alex Espíndola</li>
+                            <li>Felipe Torres</li>
+                            <li>Leandro Cejas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
