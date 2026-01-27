@@ -1,0 +1,12 @@
+.footer-index {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: var(--navbar-bg-color);
+    border-top: 2px solid darkgreen;
+}
+a strong:hover {
+    color: var(--text-hover-color);
+}
+li,p,p strong {
+    color: white;
+}

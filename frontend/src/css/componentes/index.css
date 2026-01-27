@@ -1,0 +1,73 @@
+:root {
+    /*Cambio en el color primario de bulma*/
+    --bulma-primary-h: 82deg;
+    --bulma-primary-s: 39%;
+    --bulma-primary-l: 30%;
+
+
+}
+
+.navbar {
+    margin-bottom: 1rem;
+}
+
+.index{
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--primary-bg-color);
+    /* display:grid ; */
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+    .titulo, .titulo .title, .titulo .subtitle, .title, .subtitle{
+        color: black;
+    }
+
+    /* Publicación */
+    .card {
+        background-color: var(--secondary-bg-color);
+        color: black;
+    }
+    .card-content{
+        color:black
+    }
+
+
+.subindex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    /*searchbar*/
+    .searchbar {
+        /*margin-left: 300px; */
+        /*margin-right: 300px;*/
+        margin-bottom:30px;
+        display:inline-flex;
+    }
+    .input{
+        background-color: var(--primary-bg-color);
+        color: black;
+    }
+
+    .input::placeholder {
+        color: var(--text-placeholder-color);
+    }
+
+    .control .button {
+        color: white;
+        margin-left: 10px;
+    }
+
+    .pagination-previous, .pagination-next {
+        color: white;
+        background-color: var(--button-bg-color-3);
+    
+    }
+
+body {
+    background-color: var(--secondary-bg-color);
+}

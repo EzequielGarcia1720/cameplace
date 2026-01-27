@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
+
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                            </figure>
+                        
+                        <div class="dropdown-trigger">
+
+                            <!-- Imagen -->
+                            <span>
+
+                            </span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    
+    <!--Index-->
+    <div class="index container">
+        <!-- Título -->
+        <div class="titulo pt-5 pb-5">
+            <h1 class="title has-text-centered">Mi perfil</h1>
+        </div>
+        <section class="section">
+            <div class="container">
+
+                <!-- Información Básica -->
+                
+                <h2 class="title is-4">Datos personales</h2>
+                <fieldset disabled>
+                <div class="field">
+                    <label class="label">Nombre</label>
+                    <div class="control">
+                        <input id="nombre_input" class="input" type="text" placeholder="Escriba su nombre aquí" value="Ezequiel">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Apellido</label>
+                    <div class="control">
+                        <input id="apellido_input" class="input" type="text" placeholder="Escriba su apellido aquí" value="Garcia">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Nombre de Usuario</label>
+                    <div class="control">
+                        <input id="usuario_input" class="input" type="text" placeholder="Escriba su usuario aquí" value="ZekiiYF">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Biografía</label>
+                    <div class="control">
+                        <textarea id="biografia_textarea" class="textarea" placeholder="Escriba su biografía aquí"></textarea>
+                    </div>
+                </div>
+                </fieldset>
+
+                <!-- Botones -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button id="perfil_edit_button" class="button is-primary">Editar</button>
+                    </div>
+                    <div class="control" style="display: none;" id="guardar_cancelar_group">
+                        <button id="guardar_button" class="button is-primary">Guardar</button>
+                    </div>
+                    <div class="control" style="display: none;">
+                        <button id="cancelar_button" class="button is-primary">Cancelar</button>
+                    </div>
+                </div>
+
+                <hr>
+                
+                <!-- Información de Reputación -->
+                <div class="box">
+                    <h2 class="title is-4">Información de Reputación</h2>
+                    <div class="content">
+                        <p><strong>Puntuación:</strong> ⭐ 4.8 / 5</p>
+                        <p><strong>Reseñas recibidas:</strong> 124</p>
+                        <p><strong>Nivel:</strong> Usuario Confiable</p>
+                        <p><strong>Verificaciones:</strong></p>
+                        <ul>
+                            <li>Email verificado ✔️</li>
+                            <li>Teléfono verificado ✔️</li>
+                            <li>Identidad verificada ✔️</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Actividad en la Plataforma -->
+                <div class="box">
+                    <h2 class="title is-4">Actividad en la Plataforma</h2>
+                    <div class="content">
+                        <p><strong>Artículos publicados:</strong> 32</p>
+                        <p><strong>Artículos vendidos:</strong> 19</p>
+                        <p><strong>Artículos comprados:</strong> 8</p>
+                        <p><strong>Subastas activas:</strong> 3</p>
+                        <p><strong>Historial reciente:</strong></p>
+                        <ul>
+                            <li>Pujaste en: "R19 Modelo 2000"</li>
+                            <li>Ganaste la subasta: "Placa de video GTX 1080"</li>
+                            <li>Publicaste: "Cámara de fotos Nikon"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="js/perfil.js" >
+
+    </script>
+    </body>
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+                <!-- Columna Number One -->
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+
+                </div>
+                <!-- Columna Number Two -->
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>
