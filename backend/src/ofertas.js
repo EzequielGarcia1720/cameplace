@@ -19,6 +19,38 @@ async function GetAllOffers(querySQL, parameters) {
         return undefined;
     }
 }
+// Obtener las ofertas de acuerdo a la subasta
+async function GetOffersByAuction(id) {
+    const querySQL = `
+    SELECT 
+        o.id AS offer_id,
+        o.title AS offer_title,           
+        o.descripcion AS offer_description,
+        o.mount AS offer_amount,          
+        o.images_urls AS offer_images,
+        o.creation_date AS offer_date,
+        o.estado AS offer_status,
+        o.offer_type AS offer_type_id,
+        o.auctioneer_id AS id_auctioneer_person,     
+        a.id AS auction_original_id,
+        a.offer_type AS auction_offer_type,
+        u.id AS id_bidder,
+        u.username AS bidder,
+        u.image_url AS image_user,
+        u.firstname AS name_user,
+        u.lastname AS lastname_user,
+        of.type AS offer_type_auction
+        
+    FROM offers o 
+    LEFT JOIN auctions a ON o.auction_id = a.id 
+    LEFT JOIN users u ON o.bidder_id = u.id
+    LEFT JOIN offer_type of ON o.offer_type = of.id
+
+    WHERE o.auction_id = $1`
+
+    const response = await dbClient.query(querySQL, [id]);
+    return response.rows;
+}
 // Obtener una oferta por ID
 async function GetOffert(id) {
     const response = await dbClient.query(
@@ -73,5 +105,6 @@ module.exports = {
     GetAllOffers,
     GetOffert,
     CreateOffert,
-    RemoveOffer
+    RemoveOffer,
+    GetOffersByAuction
 }

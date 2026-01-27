@@ -58,9 +58,10 @@ async function GetAuctions() {
     const URL = "http://localhost:3030/api/v1/auctions"
     const response = await fetch(URL)
     const auctions = await response.json();
-
     auctions.forEach(auction => {
-        const card = `
+        let finish_auction = auction.auction_status
+
+        let card = `
             <div class="cell card">
                 <div class="card-image">
                     <figure class="image is-4by3">
@@ -86,8 +87,17 @@ async function GetAuctions() {
                     <div class="content">
                         Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
                     </div>
-                    <div class="content">
-                        <a href="./seeoffers.html?=${auction.id}">Ver Ofertas</a>  
+                    <div class="columns is-vcentered">
+                            <div class="column">
+                                <button class="button is-outlined">
+                                    <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
+                                </button>
+                            </div>
+                            <div class="column is-narrow">
+                                <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
+                                    <a>Finalizar</a>  
+                                </button>
+                            </div>
                     </div>
                 </div>
                 <footer class="card-footer">
@@ -113,7 +123,42 @@ async function GetAuctions() {
                     </p>
                 </footer>
             </div>`
-
+        if (finish_auction === 2) {
+            card = `
+                <div class="cell card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img
+                            src=${auction.images_urls}
+                            alt="Placeholder image"
+                        />
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">${auction.title}</p>
+                            <p class="title is-5">$${auction.initial_price}</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                        ${auction.descripcion}
+                    </div>
+                    <div class="content">
+                        Condición: ${auction.auction_condition}
+                    </div>
+                    <div class="content">
+                        Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <div class="content">
+                        FINALIZADA
+                    </div>
+                </footer>
+            </div>
+            `
+        }
         let auctions_container = document.getElementById("my_auctions")
         let auctionactual = document.createElement("div")
         auctionactual.classname = "card post"
@@ -141,6 +186,51 @@ window.PauseAuction = function(id) {
             AuctionStatus = 0
         } else {
             AuctionStatus = 1
+        }
+        const data_auction = {
+            title: auction.title,
+            initial_price: auction.initial_price,
+            category_id: auction.category_id,
+            condition: auction.condition,
+            offer_type: auction.offer_type,
+            images_urls: auction.images_urls,
+            descripcion: auction.descripcion,
+            auctioneer_id: auction.auctioneer_id,
+            auction_status: AuctionStatus,
+            location_id: auction.location_id
+        }
+        fetch(Backend_Auctions, {
+        headers: { 'Content-Type': 'application/json' }, 
+        method:'PUT',
+        body: JSON.stringify(data_auction),
+        }).then(response => {
+            if(!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+                
+            }
+            return response.json()
+        }).then(data => {
+            console.log("Success", data)
+            window.location.replace("mis_subastas.html")
+        }).catch(error => {
+            console.error("Error", error)
+        })
+        
+    })
+
+}
+
+window.FinishAuction = function(id) {
+    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
+    fetch(Backend_Auctions).then((response) => {
+        return response.json();
+    }).then((auction) => {
+        let AuctionStatus = auction.auction_status
+        if (AuctionStatus == 1) {
+            AuctionStatus = 2
+        }
+        if (AuctionStatus == 0) {
+            AuctionStatus = 2
         }
         const data_auction = {
             title: auction.title,

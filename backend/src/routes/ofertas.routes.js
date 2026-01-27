@@ -6,7 +6,8 @@ const {
     GetAllOffers,
     GetOffert,
     CreateOffert,
-    RemoveOffer
+    RemoveOffer,
+    GetOffersByAuction,
 } = require("../ofertas");
 
 // GET /api/v1/offers
@@ -134,6 +135,11 @@ router.delete("/:id", async (req, res) => {
         return res.sendStatus(500);
     }
     return res.json(offert);
+});
+
+router.get("/:by_auction", async (req, res) => {
+    const offers = await GetOffersByAuction(req.params.by_auction);
+    res.json(offers);
 });
 // Exportar el router
 module.exports = router;

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CameBastas</title>
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -63,11 +64,7 @@
         </nav>
     </body>
     <!--Index-->
-    <div class="index container" id="form_auction_by_ID">
-        <!-- Título -->
-        <div class="titulo pt-5 pb-5">
-            <h1 class="title has-text-centered">EDITAR SUBASTA</h1>
-        </div>
+    <div class="index container" id="form_auction_by_ID" style="min-height: 100vh;">       
         <!-- Formulario de creación de subasta -->
         <script>
             const urlParams = new URLSearchParams(window.location.search)
@@ -77,76 +74,21 @@
                 return response.json();
             }).then((data) => {
                 const form = `
-                        <div class="field">
-                            <label class="label">Título</label>
-                            <div class="control">
-                                <input class="input" type="text" id="auction_title" placeholder="Escriba el título de la subasta" value="${data.title}">
+                        <div class="columns is-vcentered" style="padding-top: 20px">
+                            <div class="column">
+                                <h1 class="title">${data.title}</h1>
+                                <p class="subtitle is-4">$${data.initial_price}</p>
+                                <div class="content" style="color: black">${data.descripcion}</div>
+                                <h5 class="title is-5">Ofertas recibidas (${data.count_offers})</h5>
                             </div>
-                        </div>
-                        <div class="field">
-                            <label class="label">Precio Inicial</label>
-                            <div class="control">
-                                <input class="input" type="number" id="auction_initial_price" placeholder="Ingrese el precio inicial" min="0" step="0.01" value="${data.initial_price}">
-                                <input type="hidden" id="auction_IDAuctioneer" value="${data.auctioneer_id}">
-                                <input type="hidden" id="auction_status" value="${data.auction_status}">
-                                <input type="hidden" id="auction_location_id" value="${data.location_id}">
-                            </div>
-                        </div>
-                        
-                        <div class="field">
-                            <label class="label">Categoría</label>
-                            <div class="control">
-                                <div class="select">
-                                    <select id="select_categories">
-                                        <option value="" disabled selected>Selecciona una Categoría</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label">Condición</label>
-                                <div class="control">
-                                    <div class="select">
-                                        <select id="select_conditions">
-                                            <option value="" disabled selected>Selecciona una Condición</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label">Tipo de canje</label>
-                            <div class="control">
-                                <div class="select">
-                                    <select id="select_offers_type">
-                                        <option value="" disabled selected>Selecciona un Tipo de canje</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label class="label">Imagen</label>
-                            <div class="control">
-                                <input class="input" type="link" id="auction_image" placeholder="Ingrese el link de la imagen" value="${data.images_urls}">
-                            </div>
-                        </div>
-                    
-                        <div class="field">
-                            <label class="label">Descripción</label>
-                            <div class="control">
-                                <textarea class="textarea" id="auction_description" placeholder="Ingrese una descripción">${data.descripcion}</textarea>
-                            </div>
-                        </div>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button class="button is-primary" onclick="EditAuction()">Confirmar cambios</button>
-                            </div>
-                            <div class="control">
-                                <a class="button is-primary" href="./mis_subastas.html">Cancelar</a>
+                            <div class="column is-narrow">
+                                <figure class="image is-128x128">
+                                    <img src="${data.images_urls}" alt="Descripción">
+                                </figure>
                             </div>
                         </div>`
                     
-                    const backend_categories = "http://localhost:3030/api/v1/categories"
+                    /*const backend_categories = "http://localhost:3030/api/v1/categories"
                     fetch(backend_categories).then((response) => {
                         return response.json()
                     }).then((categories) => {
@@ -191,14 +133,125 @@
                                 NewCondition.selected = true
                             dropdown_conditions.appendChild(NewCondition)
                         });
-                    })
+                    }) */
 
                     let form_by_ID = document.getElementById("form_auction_by_ID")
                     let auction_edit = document.createElement("div")
                     auction_edit.classname = "form"
                     auction_edit.innerHTML = form
                     form_by_ID.appendChild(auction_edit)
-                });
+                    GetOffers(data.id)
+            });
+            
+            async function GetOffers(id) {
+                const URL = "http://localhost:3030/api/v1/offers/" + id
+                const response = await fetch(URL)
+                const offers = await response.json();
+                console.log(offers)
+
+                offers.forEach(offer => {
+                    let contenido_tags = offer.auction_offer_type
+                    let amount = offer.offer_amount
+                    if (contenido_tags === 1) {
+                        amount = `<p class="title is-5"></p>`
+                        contenido_tags = `
+                        <span class="tag is-warning">
+                            <span class="icon"><i class="fas fa-box-open"></i></span>
+                            <span>Producto de Canje</span>
+                        </span>`
+                    }
+                    if (contenido_tags === 2) {
+                        amount = `<p class="title is-5">$${offer.offer_amount}</p>`
+                        contenido_tags = `
+                        <span class="tag is-success">
+                            <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                            <span>Dinero</span>
+                        </span>`
+                        
+                    }
+                    if (contenido_tags === 3) {
+                        amount = `<p class="title is-5">$${offer.offer_amount}</p>`
+                        contenido_tags = `
+                        <span class="tag is-success">
+                            <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                            <span>Dinero</span>
+                        </span>
+                        <span class="tag is-warning">
+                            <span class="icon"><i class="fas fa-box-open"></i></span>
+                            <span>Producto de Canje</span>
+                        </span>`
+                        
+                    }
+    
+                    const offers_from_db = `
+                    <div class="container" style="padding-top: 40px;">
+                        <article class="message is-link">
+                            <div class="message-header">
+                                <span class="tag is-link is-light">${offer.offer_date.slice(0,10)}, ${offer.offer_date.slice(11,16)}</span>
+                                <h3>${offer.offer_title}</h3>
+                                <div>
+                                    <button class="boton-reofertar button is-light">
+                                        <span class="icon">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </span>
+                                        <span>Aceptar oferta</span> 
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cuerpo de la oferta -->
+                            <div class="message-body">
+                                <div class="columns is-vcentered">
+                                
+                                    <div class="column is-narrow">
+                                        <figure class="image is-128x128" style="padding-top: 15px">
+                                            <img src=${offer.offer_images} alt="Producto de canje">
+                                        </figure>
+                                    </div>
+                                    
+                                    <div class="column" style="padding-left: 40px">
+                                        <div class="card-content">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <figure class="image is-48x48">
+                                                        <img
+                                                            src=${offer.image_user}
+                                                            alt="Placeholder image"
+                                                        />
+                                                    </figure>
+                                                </div>
+                                                <div class="media-content">
+                                                    <p class="title is-4">${offer.name_user} ${offer.lastname_user}</p>
+                                                    <p class="subtitle is-6">@${offer.bidder}</p>
+                                                    ${amount}
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="tags mb-2" id="tags">
+                                                ${contenido_tags}
+                                            </div>
+                                            <p class="is-size-6">
+                                                ${offer.offer_description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>`
+                   
+                    let container_offers = document.getElementById("form_auction_by_ID")
+                    console.log(container_offers)
+                    let offer_db = document.createElement("div")
+                    offer_db.innerHTML = offers_from_db
+                    
+                    container_offers.appendChild(offer_db)
+                    let tags = document.getElementById("tags")
+                    console.log(tags)
+                })
+
+            }
+            /*
                 function EditAuction() {
                     const data_auction = {
                         title: document.getElementById("auction_title").value,
@@ -236,7 +289,12 @@
                     }
 
                 } 
+            */
         </script>
+        <div class="container" style="flex-grow: 1;">
+            <script>GetOffers()</script>
+        </div>
+
     </div>
     <footer>
         <div class="footer-index">
