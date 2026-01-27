@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CameBastas</title>
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/componentes/perfil.css">
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -77,8 +78,10 @@
 
                 <!-- Información Básica -->
                 
-                <h2 class="title is-4">Datos personales</h2>
-                <fieldset disabled>
+<h2 class="title is-4">Datos personales</h2>
+    <div class="columns">
+        <div class="column is-two-thirds">
+            <fieldset disabled>
                 <div class="field">
                     <label class="label">Nombre</label>
                     <div class="control">
@@ -103,8 +106,16 @@
                         <textarea id="biografia_textarea" class="textarea" placeholder="Escriba su biografía aquí"></textarea>
                     </div>
                 </div>
-                </fieldset>
+            </fieldset>
+        </div>
 
+        <!-- Imagen de perfil -->
+        <div class="column is-one-third has-text-centered">
+            <figure class="image" style="margin:auto;">
+                <img id="perfil_img" class="image is-large" src="https://avatars.githubusercontent.com/u/231128308?v=4"  alt="Imagen de perfil">
+            </figure>
+        </div>
+    </div>
                 <!-- Botones -->
                 <div class="field is-grouped">
                     <div class="control">
@@ -114,7 +125,7 @@
                         <button id="guardar_button" class="button is-primary">Guardar</button>
                     </div>
                     <div class="control" style="display: none;">
-                        <button id="cancelar_button" class="button is-primary">Cancelar</button>
+                        <button id="cancelar_button" class="button is-danger">Cancelar</button>
                     </div>
                     <div class="control" id="editar_foto_group" style="display: none;">
                     <button id="editar_foto_button" class="button is-info"> Editar Foto de Perfil</button>
@@ -126,7 +137,7 @@
                             id="foto_url_input"
                             placeholder="Pegá la URL de tu foto de perfil">
                                 <button type="button" 
-                                class="button is-link mt-2" 
+                                class="button is-primary mt-2" 
                                 id="guardar_foto_button">
                                 Guardar foto
                                 </button>
