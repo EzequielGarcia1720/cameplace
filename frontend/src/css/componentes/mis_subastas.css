@@ -95,3 +95,13 @@
 .activo {
     background-color: lightgreen !important;
 }
+.grid.is-col-min-12 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.cell.card {
+    width: 100%;
+    height: 100%;
+}
