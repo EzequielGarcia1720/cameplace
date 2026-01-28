@@ -72,14 +72,17 @@
                 <div class="box" style="width: 300px">
                     <div class="container1">
                         <aside class="menu">
-                            
                             <p class="menu-label">Ordenar por</p>
                             <ul class="menu-list">
                                 <li>
                                     <a class="is-active">Cronología</a>
                                     <ul>
-                                        <li><a id="boton_recientes">Mas Recientes</a></li>
-                                        <li><a id="boton_masantiguas">Mas antiguas</a></li>
+                                        <li>
+                                            <a id="boton_recientes" onclick="ChangeOrderv1('DESC', this)">Mas Recientes</a>
+                                        </li>
+                                        <li>
+                                            <a id="boton_masantiguas" onclick="ChangeOrderv1('ASC', this)">Mas antiguas</a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -106,170 +109,27 @@
                                 id="barra_busqueda"
                             /> 
                             <div class="control">
-                                <button id="buscar_boton" class="button is-primary">Buscar</button>
+                                <button id="buscar_boton" class="button is-primary" onclick="ApplySearch()">Buscar</button>
                             </div>
                         </div>
                     </div>
                     <!--Tabs - Filtro por estado de oferta-->
-                    <div class="tabs is-centered mb-0" id="filtro_estado_oferta">
+                    <div class="tabs is-centered">
                         <ul>
-                            <li class="is-active"><a>Todo</a></li>
-                            <li><a>Activas</a></li>
-                            <li><a>Aceptadas</a></li>
-                            <li><a>Rechazadas</a></li>
-                            <li><a>Finalizadas</a></li>
+                            <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
+                            <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
+                            <li><a onclick="FilterByStatus('aceptadas', this)">Aceptadas</a></li>
+                            <li><a onclick="FilterByStatus('rechazadas', this)">Rechazadas</a></li>
+                            <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
                         </ul>
                     </div>
                     <section class="section">
                         <div class="container">
-                            <div class="block mt-0">
-                                <article class="message is-link">
-                                    <div class="message-header">
-                                        <span class="tag is-link is-light">10 Ene 2026</span>
-                                        <h3>Playstation 4 + Diferencia a favor</h3>
-                                        <div>
-                                            <button class="boton-reofertar button is-light">
-                                                <span class="icon">
-                                                <i class="fas fa-pen-to-square"></i>
-                                                </span>
-                                                <span>Mejorar oferta</span> 
-                                            </button>
-                                            <button class="boton-cancelar button is-light">
-                                                <span>Cancelar</span>
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-times"></i>
-                                                </span>
-                                            </button>
-
-                                        </div>
-                                        
-                                    </div>
-
-                                    <!-- Cuerpo de la oferta -->
-                                    <div class="message-body">
-                                        <div class="columns is-vcentered">
-                                        
-                                        <div class="column is-narrow">
-                                            <figure class="image is-96x96">
-                                            <img class="is-rounded" src="https://via.placeholder.com/150" alt="Producto de canje">
-                                            </figure>
-                                        </div>
-
-                                        <div class="column">
-                                            <div class="tags mb-2">
-                                            <span class="tag is-success">
-                                                <span class="icon"><i class="fas fa-dollar-sign"></i></span>
-                                                <span>Dinero</span>
-                                            </span>
-                                            <span class="tag is-warning">
-                                                <span class="icon"><i class="fas fa-box-open"></i></span>
-                                                <span>Producto de Canje</span>
-                                            </span>
-                                            </div>
-
-                                            <p class="is-size-6">
-                                                Te ofrezco mi consola usada en perfecto estado con 2 joysticks originales, 
-                                                más $50.000 en efectivo al momento del intercambio. Puedo pasar a retirarlo mañana mismo.
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                    
-                                </article>
-                                <!--EJEMPLO 2-->
-                                <article class="message is-link">
-                                    <div class="message-header">
-                                        <span class="tag is-link is-light">4 Ene 2026</span>
-                                        <h3>Dinero</h3>
-                                        <div>
-                                            <button class="boton-reofertar button is-light">
-                                                <span class="icon">
-                                                <i class="fas fa-pen-to-square"></i>
-                                                </span>
-                                                <span>Mejorar oferta</span> 
-                                            </button>
-                                            <button class="boton-cancelar button is-light">
-                                                <span>Cancelar</span>
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-times"></i>
-                                                </span>
-                                            </button>
-
-                                        </div>
-                                       
-                                    </div>
-
-                                    <!-- Cuerpo de la oferta -->
-                                    <div class="message-body">
-                                        <div class="columns is-vcentered">
-                                        <div class="column">
-                                            <div class="tags mb-2">
-                                            <span class="tag is-success">
-                                                <span class="icon"><i class="fas fa-dollar-sign"></i></span>
-                                                <span>Dinero</span>
-                                            </span>
-                                            </div>
-
-                                            <p class="is-size-6">
-                                                Te ofrezco $150.000 en efectivo al momento del intercambio. Puedo pasar a retirarlo mañana mismo.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </article>
-
-                                <!--EJEMPLO 3-->
-                                <article class="message is-link">
-                                    <div class="message-header">
-                                        <span class="tag is-link is-light">31 Dic 2025</span>
-                                        <h3>phone 14 y Bicicleta rodado 29 "venzo"</h3>
-                                        <div>
-                                            <button class="boton-reofertar button is-light">
-                                                <span class="icon">
-                                                <i class="fas fa-pen-to-square"></i>
-                                                </span>
-                                                <span>Mejorar oferta</span> 
-                                            </button>
-                                            <button class="boton-cancelar button is-light">
-                                                <span>Cancelar</span>
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-times"></i>
-                                                </span>
-                                            </button>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Cuerpo de la oferta -->
-                                    <div class="message-body">
-                                        <div class="columns is-vcentered">
-                                        
-                                        <div class="column is-narrow">
-                                            <figure class="image is-96x96">
-                                            <img class="is-rounded" src="https://via.placeholder.com/150" alt="Producto de canje">
-                                            </figure>
-                                        </div>
-
-                                        <div class="column">
-                                            <div class="tags mb-2">
-                                            
-                                            <span class="tag is-warning">
-                                                <span class="icon"><i class="fas fa-box-open"></i></span>
-                                                <span>Producto de Canje</span>
-                                            </span>
-                                            </div>
-
-                                            <p class="is-size-6">
-                                                Te ofrezco mi Iphone 14 en excelente estado 89% y una bicicleta rodado 29 "venzo" casi sin uso.
-                                            </p>
-
-                                        </div>
-                                    </div>
-                                </article>
+                            <div id="my_offers" class="block mt-0">
+                                <script src="js/mis_ofertas_scripts.js"></script>
+                                <script>GetOffers()</script>                            
                             </div>
                         </div>
-
-
-                            
                     </section>
                 </div>
             </div>
