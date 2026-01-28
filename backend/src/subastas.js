@@ -10,7 +10,13 @@ const dbClient = new Pool({
 
 // API
 async function GetAllAuctions() {
-    const response = await dbClient.query("SELECT a.*, c.auction_condition, s.status_name FROM auctions a LEFT JOIN condition c ON a.condition = c.id LEFT JOIN status s ON a.auction_status = s.id ORDER BY a.modification_date DESC")
+    const response = await dbClient.query(        
+        `SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
+        LEFT JOIN condition c ON a.condition = c.id 
+        LEFT JOIN status s ON a.auction_status = s.id
+        JOIN users u ON a.auctioneer_id = u.id 
+        ORDER BY a.modification_date DESC`
+    )
     return response.rows
 }
 
