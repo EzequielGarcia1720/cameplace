@@ -18,10 +18,10 @@ async function checkUsernameExists(username) {
 }
 
 //GetUserID
-async function getUserID(username) {
+async function getUserID(email) {
     const response = await dbClient.query(
-        "SELECT id from users where username = $1",
-        [username]
+        "SELECT id from users where email = $1",
+        [email]
     )
     return response.rows[0];
 }
@@ -107,10 +107,28 @@ async function deleteUser(userID){
     return { message: 'Usuario eliminado', id: userID };
 };
 
+//Login User
+async function loginUser(email, psswd) {
+    const response = await dbClient.query(
+        'SELECT id, username, email FROM users WHERE email = $1 AND psswd = $2',
+        [email, psswd]
+    );
+
+    if (response.rowCount === 0) {
+        const err = new Error('Email o contraseña incorrectos');
+        err.status = 401;
+        throw err;
+    }
+
+    return response.rows[0];
+};
+
 module.exports = {
     getAllUsers,
     getUser,
     newUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserID,
+    loginUser
 };
