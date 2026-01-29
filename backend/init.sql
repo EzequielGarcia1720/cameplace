@@ -33,12 +33,12 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL,
     psswd VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    firstname VARCHAR(255) NOT NULL,
-    lastname VARCHAR(255) NOT NULL,
+    firstname VARCHAR(255),
+    lastname VARCHAR(255),
     tel INT,
     biography TEXT,
     image_url VARCHAR(255),
-    ubication VARCHAR(255) NOT NULL,
+    ubication VARCHAR(255),
     registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modificationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -83,4 +83,136 @@ CREATE TABLE offers (
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+
+
+-- Datos de ejemplo
+
+--
+INSERT INTO categories (name, father_category) VALUES
+('Electrónica', NULL),
+('Smartphones', 1),
+('Videojuegos', NULL),
+('Consolas', 3)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO condition (auction_condition) VALUES
+('Nuevo'),
+('Usado - Como nuevo'),
+('Usado - Buen estado'),
+('Usado - Aceptable')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO status (status_name) VALUES
+('Activa'),
+('Pausada'),
+('Finalizada'),
+('Cancelada')
+ON CONFLICT DO NOTHING;
+
+--
+INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) VALUES
+('juan_perez', 'hashed_password_123', 'juan@email.com', 'Juan', 'Pérez', 1122334455, 'Buenos Aires, Argentina'),
+('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
+('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina')
+ON CONFLICT DO NOTHING;
+
+-- 
+INSERT INTO auctions (
+    title,
+    descripcion,
+    initial_price,
+    category_id,
+    condition,
+    images_urls,
+    auctioneer_id,
+    offer_type,
+    auction_status,
+    location_id,
+    creation_date,
+    modification_date
+) VALUES
+(
+    'iPhone 15 Pro Max 256GB',
+    'iPhone 15 Pro Max en perfecto estado, con todos sus accesorios originales. Incluye cargador, cable y funda de regalo. Comprado hace 3 meses, con garantía oficial Apple vigente.',
+    120000.00,
+    (SELECT id FROM categories WHERE name = 'Smartphones' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
+    'https://i.blogs.es/f15f0b/img_2033/650_1200.jpeg',
+    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    1,
+    CURRENT_TIMESTAMP - INTERVAL '5 days',
+    CURRENT_TIMESTAMP - INTERVAL '1 day'
+),
+(
+    'PlayStation 5 + 2 Juegos',
+    'Consola PlayStation 5 edición digital, con 2 mandos DualSense y juegos Spider-Man 2 y God of War Ragnarök. Perfecto funcionamiento, poco uso.',
+    85000.00,
+    (SELECT id FROM categories WHERE name = 'Consolas' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    'https://hips.hearstapps.com/hmg-prod/images/esq240112-digital-ecomm-playstationps5-0305-679133a09328d.jpg?crop=0.509xw:0.763xh;0.262xw,0.0765xh&resize=640:*',
+    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    2,
+    CURRENT_TIMESTAMP - INTERVAL '3 days',
+    CURRENT_TIMESTAMP
+),
+(
+    'Colección de Videojuegos Retro',
+    'Lote de 15 videojuegos retro para diversas consolas. Incluye títulos clásicos de Nintendo, Sega y PlayStation 1. Todos en buen estado, algunos con sus cajas originales.',
+    35000.00,
+    (SELECT id FROM categories WHERE name = 'Videojuegos' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Buen estado' LIMIT 1),
+    'https://i.redd.it/e2i0bz33to061.jpg',
+    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    3,
+    CURRENT_TIMESTAMP - INTERVAL '1 day',
+    CURRENT_TIMESTAMP
+);
+
+--
+INSERT INTO offers (
+    offer_type,
+    title,
+    descripcion,
+    images_urls,
+    mount,
+    auctioneer_id,
+    bidder_id,
+    auction_id,
+    estado,
+    creation_date
+) VALUES
+(
+    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
+    'Oferta por iPhone',
+    'Te ofrezco $110,000 en efectivo por el iPhone',
+    ARRAY['https://ejemplo.com/of1.jpg'],
+    110000.00,
+    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%iPhone%' LIMIT 1),
+    'activas',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+),
+(
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    'Cambio por Xbox Series X',
+    'Te ofrezco mi Xbox Series X más $20,000 por la PS5',
+    ARRAY['https://ejemplo.com/xbox1.jpg', 'https://ejemplo.com/xbox2.jpg'],
+    20000.00,
+    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
+    'activas',
+    CURRENT_TIMESTAMP - INTERVAL '1 day'
 );
