@@ -207,30 +207,63 @@ let currentAuctionId = null;
 
 function openOfferModal(auction_id) {
     currentAuctionId = auction_id;
+    document.getElementById("offer_amount").value = "";
+    document.getElementById("offer_description").value = "";
+    document.getElementById("offer_image").value = "";
+    document.getElementById("offer_type").value = "2";
+    document.getElementById("mount_field").style.display = "block";
+
     document.getElementById("offerModal").classList.add("is-active");
 }
+
 
 function closeOfferModal() {
     document.getElementById("offerModal").classList.remove("is-active");
 }
+
+// --- MANEJO DEL TIPO DE OFERTA ---
+const offerTypeSelect = document.getElementById("offer_type");
+const mountField = document.getElementById("mount_field");
+
+if (offerTypeSelect) {
+    offerTypeSelect.addEventListener("change", () => {
+        const type = offerTypeSelect.value;
+
+        // oculta el monto si es canje
+        if (type === "1") {
+            mountField.style.display = "none";
+        } else {
+            mountField.style.display = "block";
+        }
+    });
+}
+
 // --- FUNCION ENVIAR REOFERTA ---
 async function submitOffer() {
+    const offer_type = document.getElementById("offer_type").value;
     const mount = document.getElementById("offer_amount").value;
     const descripcion = document.getElementById("offer_description").value;
+    const imageUrl = document.getElementById("offer_image").value;
 
-    if (!mount || !descripcion) {
-        alert("Completá todos los campos");
+    // Validaciones
+    if (!descripcion) {
+        alert("La descripción es obligatoria");
+        return;
+    }
+
+    if ((offer_type === "2" || offer_type === "3") && !mount) {
+        alert("Ingresá un monto");
         return;
     }
 
     const data = {
-        offer_type: 2,       
+        offer_type: Number(offer_type),
         title: "Mejora de oferta",
         descripcion,
-        images_urls: [],
-        mount,
-        auctioneer_id: 1,     
-        bidder_id: 2,            
+        images_urls: imageUrl ? [imageUrl] : [],
+        mount: offer_type === "1" ? 0 : Number(mount),
+        auctioneer_id: 1,
+        bidder_id: 2,       
         auction_id: currentAuctionId
     };
 
@@ -239,8 +272,13 @@ async function submitOffer() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     });
-// Cerrar modal y recargar ofertas
+
     closeOfferModal();
     GetOffers();
 }
+
+// Cerrar modal y recargar ofertas
+    closeOfferModal();
+    GetOffers();
+
 

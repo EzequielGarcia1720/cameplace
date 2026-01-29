@@ -156,37 +156,66 @@
                     </div>
                 </div>
             </div>
-        </footer>
+                </footer>
             <!-- MODAL OFERTAR -->
-    <div class="modal" id="offerModal">
-    <div class="modal-background" onclick="closeOfferModal()"></div>
+    <div id="offerModal" class="modal">
+  <div class="modal-background" onclick="closeOfferModal()"></div>
 
-    <div class="modal-card">
-        <header class="modal-card-head">
-        <p class="modal-card-title">Mejorar oferta</p>
-        <button class="delete" aria-label="close" onclick="closeOfferModal()"></button>
-        </header>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Mejorar oferta</p>
+      <button class="delete" aria-label="close" onclick="closeOfferModal()"></button>
+    </header>
 
-        <section class="modal-card-body">
-        <div class="field">
-            <label class="label">Monto</label>
-            <div class="control">
-            <input id="offer_amount" class="input" type="number" min="1">
-            </div>
+    <section class="modal-card-body">
+
+      <!-- Tipo de oferta -->
+      <div class="field">
+        <label class="label">Tipo de oferta</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="offer_type">
+              <option value="2">Dinero</option>
+              <option value="1">Canje</option>
+              <option value="3">Mixto</option>
+            </select>
+          </div>
         </div>
-
-        <div class="field">
-            <label class="label">Descripción</label>
-            <textarea id="offer_description" class="textarea"></textarea>
+      </div>
+    
+      <!-- Monto -->
+      <div class="field" id="mount_field">
+        <label class="label">Monto ($)</label>
+        <div class="control">
+          <input id="offer_amount" class="input" type="number">
         </div>
-        </section>
+      </div>
 
-        <footer class="modal-card-foot">
-        <button class="button is-primary" onclick="submitOffer()">Confirmar</button>
-        <button class="button" onclick="closeOfferModal()">Cancelar</button>
-        </footer>
-    </div>
-    </div>
+      <!-- Descripción -->
+      <div class="field">
+        <label class="label">Descripción</label>
+        <div class="control">
+          <textarea id="offer_description" class="textarea"></textarea>
+        </div>
+      </div>
+
+      <!-- Imagen -->
+      <div class="field">
+        <label class="label">URL de imagen</label>
+        <div class="control">
+          <input id="offer_image" class="input" type="text" placeholder="https://...">
+        </div>
+      </div>
+
+    </section>
+  
+    <footer class="modal-card-foot">
+      <button class="button is-success" onclick="submitOffer()">Confirmar</button>
+      <button class="button" onclick="closeOfferModal()">Cancelar</button>
+    </footer>
+  </div>
+</div>
+
     <script src="js/mis_ofertas_scripts.js"></script>
     </body>
-</html>
+</html>         
