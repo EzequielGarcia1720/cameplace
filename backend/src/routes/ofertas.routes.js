@@ -4,7 +4,6 @@ const express = require('express');
 const router = express.Router();
 const {
     GetAllOffers,
-    GetOffert,
     CreateOffert,
     RemoveOffer,
     GetOffersByAuction,
@@ -72,6 +71,13 @@ router.get("/", async (req, res) => {
     }
 });
 
+/*router.get("/:id", async (req, res) => {
+    const offers = await GetOffer(req.params.id);
+    if (offers === undefined)
+        return sendStatus(404)
+    res.json(offers);
+});*/
+
 
 //POST. /api/v1/offers
 router.post("/", async (req, res) => {
@@ -81,40 +87,42 @@ router.post("/", async (req, res) => {
     
     // Extraer los campos del cuerpo de la solicitud
     const id = req.body.id;
-    const type_offert = req.body.type_offert;
+    const offer_type = req.body.offer_type;
     const title = req.body.title;
-    const description = req.body.description;
+    const descripcion = req.body.descripcion;
     const images_urls = req.body.images_urls;
-    const amount = req.body.amount;
+    const mount = req.body.mount;
     const auctioneer_id = req.body.auctioneer_id;
     const bidder_id = req.body.bidder_id;
     const auction_id = req.body.auction_id;
-    const creation_date = req.body.creation_date;
+    const estado = req.body.estado
 
     // Validaciones
     if (id === undefined)
         return res.status(400).send("Number not provided");
-    if (await GetAuction(id) !== undefined)
+    if (await GetOffert(id) !== undefined)
         return res.status(409).send("The auction already exists");
-    if (type_offert === undefined) 
+    if (offer_type === undefined) 
         return res.status(400).send("Type of offer not provided");
     if (title === undefined) 
         return res.status(400).send("Title not provided");
-    if (description === undefined) 
-        return res.status(400).send("Description not provided");
-    if (amount === undefined) 
-        return res.status(400).send("Amount not provided");
+    if (descripcion === undefined) 
+        return res.status(400).send("Descripcion not provided");
+    if (mount === undefined) 
+        return res.status(400).send("Mount not provided");
     if (auctioneer_id === undefined) 
         return res.status(400).send("Auctioneer ID not provided");
     if (bidder_id === undefined) 
         return res.status(400).send("Bidder ID not provided");
     if (auction_id === undefined) 
         return res.status(400).send("Auction ID not provided");
-    if (creation_date === undefined) 
-        return res.status(400).send("Creation date not provided");
+    if (images_urls === undefined)
+        return res.status(400).send("Image not provided")
+    if (estado === undefined)
+        return res.status(400).send("State not provided")
 
     // Crear la oferta
-    const offert = await CreateOffert(id, title, description, amount, auctioneer_id, bidder_id, auction_id, creation_date);
+    const offert = await CreateOffert(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado)
     // Verificar si la creación fue exitosa
     if (offert === undefined)
         res.sendStatus(500);
@@ -124,7 +132,7 @@ router.post("/", async (req, res) => {
 //DELETE. /api/v1/offers/:id
 router.delete("/:id", async (req, res) => {
     // Verificar si la oferta existe
-    const offert = await GetOffert(req.params.id);
+    const offert = await GetOffer(req.params.id);
 
     // Si no existe, devolver 404
     if (offert === undefined)
@@ -137,9 +145,13 @@ router.delete("/:id", async (req, res) => {
     return res.json(offert);
 });
 
-router.get("/:by_auction", async (req, res) => {
-    const offers = await GetOffersByAuction(req.params.by_auction);
+router.get("/:id", async (req, res) => {
+    const offers = await GetOffersByAuction(req.params.id);
+    if (offers === undefined)
+        return res.sendStatus(404)
     res.json(offers);
 });
+
+
 // Exportar el router
 module.exports = router;

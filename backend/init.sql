@@ -69,6 +69,8 @@ CREATE TABLE offers (
     mount DECIMAL(10,2) NOT NULL,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
+    bidder_id INT NOT NULL,
+    FOREIGN KEY (auctioneer_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
