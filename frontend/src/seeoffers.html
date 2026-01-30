@@ -64,9 +64,9 @@
         </nav>
     </body>
     <!--Index-->
+    <!-- Data de la subasta -->
     <div class="index container" id="form_auction_by_ID" style="min-height: 100vh;">   
         <div class="container" id="auction_container"></div>
-        <!-- Formulario de creación de subasta -->
         <script>
             const urlParams = new URLSearchParams(window.location.search)
             const id = urlParams.get('id')
@@ -75,7 +75,7 @@
             fetch(Backend_Auctions).then((response) => {
                 return response.json();
             }).then((data) => {
-                const form = `
+                const auction_data = `
                         <div class="columns is-vcentered" style="padding-top: 20px">
                             <div class="column">
                                 <h1 class="title">${data.title}</h1>
@@ -89,14 +89,12 @@
                                 </figure>
                             </div>
                         </div>`
-                    let form_by_ID = document.getElementById("auction_container")
-                    let auction_edit = document.createElement("div")
-                    auction_edit.classname = "form"
-                    auction_edit.innerHTML = form
-                    form_by_ID.appendChild(auction_edit)
+                    let auction_by_ID = document.getElementById("auction_container")
+                    let auction_db = document.createElement("div")
+                    auction_db.innerHTML = auction_data
+                    auction_by_ID.appendChild(auction_db)
                     
             });
-            
             async function GetOffers(id) {
                 console.log(id)
                 const URL = "http://localhost:3030/api/v1/offers/" + id
@@ -212,7 +210,6 @@
                     return response.json();
                 }).then((offer) => {
                     let status_offer = offer.offer_status
-                    console.log(offer)
                     const data_offer = {
                         offer_status: status_offer
                     }
@@ -240,11 +237,13 @@
             }
             
         </script>
+        <!-- Data de las ofertas -->
         <div class="container" style="flex-grow: 1;" id="offers_container">
             <script>GetOffers()</script>
         </div>
 
     </div>
+    <!-- Pie de página -->
     <footer>
         <div class="footer-index">
             <div class="columns">

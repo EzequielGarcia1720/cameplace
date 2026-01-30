@@ -62,100 +62,102 @@ async function GetAuctions() {
         let finish_auction = auction.auction_status
 
         let card = `
-            <div class="cell card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img
-                            src=${auction.images_urls}
-                            alt="Placeholder image"
-                        />
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">${auction.title}</p>
-                            <p class="title is-5">$${auction.initial_price}</p>
+            <div>
+                <div class="cell card card-full-height" style="width: 400px; height: 780px;">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img
+                                src=${auction.images_urls}
+                                alt="Placeholder image"
+                            />
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">${auction.title}</p>
+                                <p class="title is-5">$${auction.initial_price}</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            ${auction.descripcion}
+                        </div>
+                        <div class="content">
+                            Condición: ${auction.auction_condition}
+                        </div>
+                        <div class="content">
+                            Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
+                        </div>
+                        <div class="columns is-vcentered is-center">
+                                <div class="column">
+                                    <button class="button is-outlined">
+                                        <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
+                                    </button>
+                                </div>
+                                <div class="column is-narrow">
+                                    <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
+                                        <a>Finalizar</a>  
+                                    </button>
+                                </div>
                         </div>
                     </div>
-                    <div class="content">
-                        ${auction.descripcion}
+                    <footer class="card-footer">
+                        <p class="buttons">
+                            <a class="button is-success is-outlined is-small" href="./auction.html?id=${auction.id}">
+                                <span class="icon">
+                                    <i class="fas fa-pen-to-square"></i>
+                                </span>
+                                <span>Editar</span> 
+                            </a>
+                            <button class="button is-dark is-outlined is-small" onclick="PauseAuction(${auction.id})">
+                                <span class="icon">
+                                    <i class="fa-solid fa-pause"></i>
+                                </span>
+                                <span>${auction.status_name}</span> 
+                            </button>
+                            <button class="button is-danger is-outlined is-small" onclick="DeleteAuction(${auction.id})">
+                                <span>Eliminar</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </button>
+                        </p>
+                    </footer>
+                </div>`
+            if (finish_auction === 2) {
+                card = `
+                    <div class="cell card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img
+                                src=${auction.images_urls}
+                                alt="Placeholder image"
+                            />
+                        </figure>
                     </div>
-                    <div class="content">
-                        Condición: ${auction.auction_condition}
-                    </div>
-                    <div class="content">
-                        Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                    </div>
-                    <div class="columns is-vcentered">
-                            <div class="column">
-                                <button class="button is-outlined">
-                                    <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                </button>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">${auction.title}</p>
+                                <p class="title is-5">$${auction.initial_price}</p>
                             </div>
-                            <div class="column is-narrow">
-                                <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                    <a>Finalizar</a>  
-                                </button>
-                            </div>
-                    </div>
-                </div>
-                <footer class="card-footer">
-                    <p class="buttons">
-                        <a class="button is-success is-outlined" href="./auction.html?id=${auction.id}">
-                            <span class="icon">
-                                <i class="fas fa-pen-to-square"></i>
-                            </span>
-                            <span>Editar</span> 
-                        </a>
-                        <button class="button is-dark is-outlined" onclick="PauseAuction(${auction.id})">
-                            <span class="icon">
-                                <i class="fa-solid fa-pause"></i>
-                            </span>
-                            <span>${auction.status_name}</span> 
-                        </button>
-                        <button class="button is-danger is-outlined" onclick="DeleteAuction(${auction.id})">
-                            <span>Eliminar</span>
-                            <span class="icon is-small">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </button>
-                    </p>
-                </footer>
-            </div>`
-        if (finish_auction === 2) {
-            card = `
-                <div class="cell card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img
-                            src=${auction.images_urls}
-                            alt="Placeholder image"
-                        />
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">${auction.title}</p>
-                            <p class="title is-5">$${auction.initial_price}</p>
+                        </div>
+                        <div class="content">
+                            ${auction.descripcion}
+                        </div>
+                        <div class="content">
+                            Condición: ${auction.auction_condition}
+                        </div>
+                        <div class="content">
+                            Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
                         </div>
                     </div>
-                    <div class="content">
-                        ${auction.descripcion}
-                    </div>
-                    <div class="content">
-                        Condición: ${auction.auction_condition}
-                    </div>
-                    <div class="content">
-                        Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                    </div>
+                    <footer class="card-footer">
+                        <div class="content">
+                            FINALIZADA
+                        </div>
+                    </footer>
                 </div>
-                <footer class="card-footer">
-                    <div class="content">
-                        FINALIZADA
-                    </div>
-                </footer>
             </div>
             `
         }

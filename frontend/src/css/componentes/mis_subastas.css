@@ -58,8 +58,8 @@
     }
 
 .columns {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .column .box {
@@ -90,8 +90,32 @@
 .card-footer {
     display: flex;
     justify-content: center;
-    padding: 10px;
 }
+
 .activo {
     background-color: lightgreen !important;
+}
+#my_auctions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.is-small {
+    width: 80px;
+    height: 40px;
+}
+
+.is-center {
+    display: flex;
+    justify-content: center;
+}
+
+.card-full-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-full-height .card-content {
+    flex-grow: 1;
 }
