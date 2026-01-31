@@ -68,13 +68,14 @@ async function GetAuctions() {
 
     try {
 
-            // --- CONSTRUCCIÓN DE URL DINÁMICA ---
         const params = new URLSearchParams();
+
         // Agregamos parámetros solo si tienen valor
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
         if (currentFilters.type_offer) params.append('type_offer', currentFilters.type_offer);
         if (currentFilters.category) params.append('category', currentFilters.category);
+
         // Agregamos parámetros solo si tienen valor
         const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`
         const response = await fetch(URL)
@@ -201,7 +202,7 @@ async function GetAuctions() {
     }
 }
 
-// Llamada inicial para cargar los datos al entrar
+// Inicializamos la carga de subastas
 GetAuctions();
 
 function FilterByCategory(categoryId) {
@@ -210,8 +211,7 @@ function FilterByCategory(categoryId) {
 }
 
 function FilterByTypeOffer() {
-    // Aquí puedes implementar la lógica para filtrar por tipo de oferta
-    // Por ejemplo, podrías actualizar currentFilters y luego llamar a GetAuctions()
+    currentFilters.offer_type = document.getElementById("offer_type_filter").value;
     GetAuctions();
 }
 
@@ -225,7 +225,6 @@ function ApplySearch() {
 function FilterByStatus(estado, elementoHTML) {
     currentFilters.status = estado;
     
-    // Actualizar visualmente la clase is-active en los tabs
     const tabs = document.querySelectorAll('.tabs li');
     tabs.forEach(tab => tab.classList.remove('is-active'));
     
@@ -288,7 +287,7 @@ window.PauseAuction = function(id) {
 }
 
 window.FinishAuction = async function(id) {
-    // 1. Confirmación (Si cancela, cortamos la ejecución aquí)
+    // 1. Confirmamos la acción con el usuario
     if (!confirm("¿Estás seguro de que quieres finalizar esta subasta? Esta acción no se puede deshacer.")) {
         return;
     }
@@ -296,13 +295,13 @@ window.FinishAuction = async function(id) {
     const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id;
 
     try {
-        // 2. Traemos la subasta actual para no perder sus datos (título, precio, etc.)
+        // 2. Obtenemos los datos actuales de la subasta
         const response = await fetch(Backend_Auctions);
         if (!response.ok) throw new Error("No se pudo obtener la subasta");
         
         const auction = await response.json();
 
-        // 3. Preparamos el objeto con el ESTADO FORZADO A 2 (Finalizada)
+        // 3. Preparamos los datos para la actualización
         const data_auction = {
             title: auction.title,
             initial_price: auction.initial_price,
@@ -312,11 +311,11 @@ window.FinishAuction = async function(id) {
             images_urls: auction.images_urls,
             descripcion: auction.descripcion,
             auctioneer_id: auction.auctioneer_id,
-            auction_status: 2, // <--- Aquí forzamos el 2 (Finalizada)
+            auction_status: 2, 
             location_id: auction.location_id
         };
 
-        // 4. Enviamos la actualización al Backend
+        // 4. Enviamos la solicitud PUT para actualizar el estado
         const putResponse = await fetch(Backend_Auctions, {
             headers: { 'Content-Type': 'application/json' },
             method: 'PUT',
@@ -324,9 +323,9 @@ window.FinishAuction = async function(id) {
         });
 
         if (putResponse.ok) {
-            // 5. ¡Éxito! Refrescamos la lista visualmente
+            
             alert("Subasta finalizada correctamente.");
-            GetAuctions(); // Volvemos a pintar las cartas con el estado nuevo
+            GetAuctions(); 
         } else {
             alert("Hubo un error al intentar finalizar la subasta.");
             console.error("Error del servidor:", await putResponse.text());
