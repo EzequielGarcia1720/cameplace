@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
+
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
+
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                            </figure>
+                        
+                        <div class="dropdown-trigger">
+
+                            <!-- Imagen -->
+                            <span>
+
+                            </span>
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                            <hr class="dropdown-divider" />
+                            <a class="dropdown-item"> Cerrar Sesión </a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </body>
+    <!--Index-->
+    <div class="index container" id="form_auction_by_ID" style="min-height: 100vh;">       
+        <!-- Formulario de creación de subasta -->
+        <script>
+            const urlParams = new URLSearchParams(window.location.search)
+            const id = urlParams.get('id')
+            const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
+            fetch(Backend_Auctions).then((response) => {
+                return response.json();
+            }).then((data) => {
+                const form = `
+                        <div class="columns is-vcentered" style="padding-top: 20px">
+                            <div class="column">
+                                <h1 class="title">${data.title}</h1>
+                                <p class="subtitle is-4">$${data.initial_price}</p>
+                                <div class="content" style="color: black">${data.descripcion}</div>
+                                <h5 class="title is-5">Ofertas recibidas (${data.count_offers})</h5>
+                            </div>
+                            <div class="column is-narrow">
+                                <figure class="image is-128x128">
+                                    <img src="${data.images_urls}" alt="Descripción">
+                                </figure>
+                            </div>
+                        </div>`
+                    
+                    /*const backend_categories = "http://localhost:3030/api/v1/categories"
+                    fetch(backend_categories).then((response) => {
+                        return response.json()
+                    }).then((categories) => {
+                        const dropdown_categories = document.getElementById("select_categories")
+                        categories.forEach(category => {
+                            const NewCategory = document.createElement("option")
+                            NewCategory.value = category.id
+                            NewCategory.innerText = category.name
+                            if (category.id == data.category_id)
+                                NewCategory.selected = true
+
+                            dropdown_categories.appendChild(NewCategory)
+                        });
+                        
+                    })
+
+                    const backend_offers_type = "http://localhost:3030/api/v1/offers_type"
+                    fetch(backend_offers_type).then((response) => {
+                        return response.json()
+                    }).then((offers_type) => {
+                        const dropdown_offers_type = document.getElementById("select_offers_type")
+                        offers_type.forEach(offer_type => {
+                            const NewOfferType = document.createElement("option")
+                            NewOfferType.value = offer_type.id
+                            NewOfferType.innerText = offer_type.type
+                            if (offer_type.id == data.offer_type)
+                                NewOfferType.selected = true
+                            dropdown_offers_type.appendChild(NewOfferType)
+                        });
+                    })
+
+                    const backend_conditions = "http://localhost:3030/api/v1/conditions"
+                    fetch(backend_conditions).then((response) => {
+                        return response.json()
+                    }).then((conditions) => {
+                        const dropdown_conditions = document.getElementById("select_conditions")
+                        conditions.forEach(condition => {
+                            const NewCondition = document.createElement("option")
+                            NewCondition.value = condition.id
+                            NewCondition.innerText = condition.auction_condition
+                            if (condition.id == data.condition)
+                                NewCondition.selected = true
+                            dropdown_conditions.appendChild(NewCondition)
+                        });
+                    }) */
+
+                    let form_by_ID = document.getElementById("form_auction_by_ID")
+                    let auction_edit = document.createElement("div")
+                    auction_edit.classname = "form"
+                    auction_edit.innerHTML = form
+                    form_by_ID.appendChild(auction_edit)
+                    GetOffers(data.id)
+            });
+            
+            async function GetOffers(id) {
+                const URL = "http://localhost:3030/api/v1/offers/" + id
+                const response = await fetch(URL)
+                const offers = await response.json();
+                console.log(offers)
+
+                offers.forEach(offer => {
+                    let contenido_tags = offer.auction_offer_type
+                    let amount = offer.offer_amount
+                    if (contenido_tags === 1) {
+                        amount = `<p class="title is-5"></p>`
+                        contenido_tags = `
+                        <span class="tag is-warning">
+                            <span class="icon"><i class="fas fa-box-open"></i></span>
+                            <span>Producto de Canje</span>
+                        </span>`
+                    }
+                    if (contenido_tags === 2) {
+                        amount = `<p class="title is-5">$${offer.offer_amount}</p>`
+                        contenido_tags = `
+                        <span class="tag is-success">
+                            <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                            <span>Dinero</span>
+                        </span>`
+                        
+                    }
+                    if (contenido_tags === 3) {
+                        amount = `<p class="title is-5">$${offer.offer_amount}</p>`
+                        contenido_tags = `
+                        <span class="tag is-success">
+                            <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                            <span>Dinero</span>
+                        </span>
+                        <span class="tag is-warning">
+                            <span class="icon"><i class="fas fa-box-open"></i></span>
+                            <span>Producto de Canje</span>
+                        </span>`
+                        
+                    }
+    
+                    const offers_from_db = `
+                    <div class="container" style="padding-top: 40px;">
+                        <article class="message is-link">
+                            <div class="message-header">
+                                <span class="tag is-link is-light">${offer.offer_date.slice(0,10)}, ${offer.offer_date.slice(11,16)}</span>
+                                <h3>${offer.offer_title}</h3>
+                                <div>
+                                    <button class="boton-reofertar button is-light">
+                                        <span class="icon">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </span>
+                                        <span>Aceptar oferta</span> 
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cuerpo de la oferta -->
+                            <div class="message-body">
+                                <div class="columns is-vcentered">
+                                
+                                    <div class="column is-narrow">
+                                        <figure class="image is-128x128" style="padding-top: 15px">
+                                            <img src=${offer.offer_images} alt="Producto de canje">
+                                        </figure>
+                                    </div>
+                                    
+                                    <div class="column" style="padding-left: 40px">
+                                        <div class="card-content">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <figure class="image is-48x48">
+                                                        <img
+                                                            src=${offer.image_user}
+                                                            alt="Placeholder image"
+                                                        />
+                                                    </figure>
+                                                </div>
+                                                <div class="media-content">
+                                                    <p class="title is-4">${offer.name_user} ${offer.lastname_user}</p>
+                                                    <p class="subtitle is-6">@${offer.bidder}</p>
+                                                    ${amount}
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="tags mb-2" id="tags">
+                                                ${contenido_tags}
+                                            </div>
+                                            <p class="is-size-6">
+                                                ${offer.offer_description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>`
+                   
+                    let container_offers = document.getElementById("form_auction_by_ID")
+                    console.log(container_offers)
+                    let offer_db = document.createElement("div")
+                    offer_db.innerHTML = offers_from_db
+                    
+                    container_offers.appendChild(offer_db)
+                    let tags = document.getElementById("tags")
+                    console.log(tags)
+                })
+
+            }
+            /*
+                function EditAuction() {
+                    const data_auction = {
+                        title: document.getElementById("auction_title").value,
+                        initial_price: document.getElementById("auction_initial_price").value,
+                        category_id: document.getElementById("select_categories").value,
+                        condition: document.getElementById("select_conditions").value,
+                        offer_type: document.getElementById("select_offers_type").value,
+                        images_urls: document.getElementById("auction_image").value,
+                        descripcion: document.getElementById("auction_description").value,
+                        auctioneer_id: document.getElementById("auction_IDAuctioneer").value,
+                        auction_status: document.getElementById("auction_status").value,
+                        location_id: document.getElementById("auction_location_id").value
+                        
+                    }
+                    if (data_auction.title.length === 0 || data_auction.initial_price <= 0 || data_auction.images_urls.length === 0 || data_auction.descripcion.length === 0 || data_auction.category_id.length === 0 || data_auction.condition.length === 0 || data_auction.offer_type.length === 0) {
+                        alert("Todos los campos son obligatorios y el precio inicial debe ser mayor a 0")
+                    } else {
+                        fetch('http://localhost:3030/api/v1/auctions/' + id, {
+                        headers: { 'Content-Type': 'application/json' }, 
+                        method:'PUT',
+                        body: JSON.stringify(data_auction),
+                        }).then(response => {
+                            if(!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`)
+                                
+                            }
+                            return response.json()
+                        }).then(data => {
+                            console.log("Success", data)
+                            window.location.replace("mis_subastas.html")
+                        }).catch(error => {
+                            console.error("Error", error)
+                        })
+                        
+                    }
+
+                } 
+            */
+        </script>
+        <div class="container" style="flex-grow: 1;">
+            <script>GetOffers()</script>
+        </div>
+
+    </div>
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+                </div>
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</html>
