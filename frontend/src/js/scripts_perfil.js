@@ -3,7 +3,7 @@
     // Elementos del DOM
 
     const API_URL = "http://localhost:3030/api/v1/users";
-    const USER_ID = 2;
+    const USER_ID = sessionStorage.getItem("sesion_actual");
     const fieldset = document.querySelector('fieldset');
     const btnEditar = document.getElementById('perfil_edit_button');
     const btnGuardar = document.getElementById('guardar_button');
