@@ -13,7 +13,7 @@ async function GetAllAuctions(status_id = null) {
     // 1. Construimos la consulta base  
     let querySQL = `
         SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
-        LEFT JOIN condition c ON a.condition = c.id 
+        LEFT JOIN conditions c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id 
     `;
@@ -37,13 +37,31 @@ async function GetAllAuctions(status_id = null) {
 }
 
 async function GetAuction(id) {
-    const response = await dbClient.query(
-        "SELECT a.*, o.type, count(of.id) AS count_offers FROM auctions a LEFT JOIN offer_type o ON a.offer_type = o.id LEFT JOIN offers of ON a.id = of.auction_id WHERE a.id = $1 GROUP BY a.id, o.type", 
-        [id]
-    )
-    if (response.rows.length === 0)
-        return undefined
-    return response.rows[0]
+    
+    // Consulta SQL para obtener la subasta por ID
+    const querySQL = `
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname
+        FROM auctions a
+        LEFT JOIN conditions c ON a.condition = c.id 
+        LEFT JOIN status s ON a.auction_status = s.id
+        JOIN users u ON a.auctioneer_id = u.id
+        WHERE a.id = $1
+    `;
+
+    try {
+        const response = await dbClient.query(querySQL, [id]);
+        
+        //
+        if (response.rows.length === 0) {
+            return undefined;
+        }
+        
+        return response.rows[0];
+        
+    } catch (error) {
+        console.error("Error buscando la subasta individual:", error);
+        return undefined;
+    }
 }
 
 async function CreateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {

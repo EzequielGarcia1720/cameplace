@@ -263,18 +263,22 @@ window.PauseAuction = function(id) {
 
 }
 
-window.FinishAuction = function(id) {
-    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
-    fetch(Backend_Auctions).then((response) => {
-        return response.json();
-    }).then((auction) => {
-        let AuctionStatus = auction.auction_status
-        if (AuctionStatus == 1) {
-            AuctionStatus = 2
-        }
-        if (AuctionStatus == 0) {
-            AuctionStatus = 2
-        }
+window.FinishAuction = async function(id) {
+    // 1. Confirmación (Si cancela, cortamos la ejecución aquí)
+    if (!confirm("¿Estás seguro de que quieres finalizar esta subasta? Esta acción no se puede deshacer.")) {
+        return;
+    }
+
+    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id;
+
+    try {
+        // 2. Traemos la subasta actual para no perder sus datos (título, precio, etc.)
+        const response = await fetch(Backend_Auctions);
+        if (!response.ok) throw new Error("No se pudo obtener la subasta");
+        
+        const auction = await response.json();
+
+        // 3. Preparamos el objeto con el ESTADO FORZADO A 2 (Finalizada)
         const data_auction = {
             title: auction.title,
             initial_price: auction.initial_price,
@@ -284,26 +288,28 @@ window.FinishAuction = function(id) {
             images_urls: auction.images_urls,
             descripcion: auction.descripcion,
             auctioneer_id: auction.auctioneer_id,
-            auction_status: AuctionStatus,
+            auction_status: 2, // <--- Aquí forzamos el 2 (Finalizada)
             location_id: auction.location_id
-        }
-        fetch(Backend_Auctions, {
-        headers: { 'Content-Type': 'application/json' }, 
-        method:'PUT',
-        body: JSON.stringify(data_auction),
-        }).then(response => {
-            if(!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-                
-            }
-            return response.json()
-        }).then(data => {
-            console.log("Success", data)
-            window.location.replace("mis_subastas.html")
-        }).catch(error => {
-            console.error("Error", error)
-        })
-        
-    })
+        };
 
+        // 4. Enviamos la actualización al Backend
+        const putResponse = await fetch(Backend_Auctions, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'PUT',
+            body: JSON.stringify(data_auction),
+        });
+
+        if (putResponse.ok) {
+            // 5. ¡Éxito! Refrescamos la lista visualmente
+            alert("Subasta finalizada correctamente.");
+            GetAuctions(); // Volvemos a pintar las cartas con el estado nuevo
+        } else {
+            alert("Hubo un error al intentar finalizar la subasta.");
+            console.error("Error del servidor:", await putResponse.text());
+        }
+
+    } catch (error) {
+        console.error("Error crítico:", error);
+        alert("Ocurrió un error de conexión.");
+    }
 }
