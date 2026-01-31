@@ -9,7 +9,7 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null) {
     // 1. Construimos la consulta base  
     let querySQL = `
         SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
@@ -26,7 +26,16 @@ async function GetAllAuctions(status_id = null) {
         querySQL += ' WHERE a.auction_status = $1'; // Usamos $1 para Postgres
         params.push(status_id);
     }
-
+    // Filtro de búsqueda en título y descripción
+    if (filterSearch) {
+        const paramIndex = params.length + 1;
+        if (params.length > 0) {
+            querySQL += ` AND (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        } else {
+            querySQL += ` WHERE (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        }
+        params.push(`%${filterSearch}%`);
+    }
     // 3. Agregamos el ordenamiento
     querySQL += ' ORDER BY a.modification_date DESC';
 

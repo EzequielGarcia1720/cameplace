@@ -69,6 +69,7 @@ async function GetAuctions() {
         const params = new URLSearchParams();
         
         if (currentFilters.status) params.append('status', currentFilters.status);
+        if (currentFilters.search) params.append('search', currentFilters.search);
         // Agregamos parámetros solo si tienen valor
         const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`
         const response = await fetch(URL)
@@ -198,6 +199,13 @@ async function GetAuctions() {
 // Llamada inicial para cargar los datos al entrar
 GetAuctions();
 
+function ApplySearch() {
+    const input = document.querySelector('input[placeholder="Buscar entre mis subastas"]'); 
+    if (input) {
+        currentFilters.search = input.value;
+        GetAuctions();
+    }
+}
 function FilterByStatus(estado, elementoHTML) {
     currentFilters.status = estado;
     
