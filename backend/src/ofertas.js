@@ -8,19 +8,7 @@ const dbClient = new Pool({
     port: 5432,
     database: "cameplace"
 });
-
-async function GetAllOffers(querySQL, parameters) {
-    try {
-        const response = await dbClient.query(querySQL, parameters);
-        return response.rows; 
-    } catch (err) {
-        console.error("Error en GetAllOffers:", err); 
-        return undefined;
-    }
-}
-// Obtener las ofertas de acuerdo a la subasta
-async function GetOffersByAuction(id) {
-    const querySQL = `
+const OffersByAuction = `
     SELECT 
         o.id AS offer_id,
         o.title AS offer_title,           
@@ -43,54 +31,69 @@ async function GetOffersByAuction(id) {
     FROM offers o 
     LEFT JOIN auctions a ON o.auction_id = a.id 
     LEFT JOIN users u ON o.bidder_id = u.id
-    LEFT JOIN offer_type of ON o.offer_type = of.id
+    LEFT JOIN offer_type of ON o.offer_type = of.id`
 
-    WHERE o.auction_id = $1`
-
-    const response = await dbClient.query(querySQL, [id]);
-    return response.rows;
-}
-// Obtener una oferta por ID
-async function GetOffert(id) {
-    const response = await dbClient.query(
-        "SELECT * FROM offers WHERE id = $1", 
-        [id]
-    )
-    if (response.rows.length === 0)
-        return undefined
-    return response.rows[0]
-}
-
-async function GetOffert(id) {
+// Obtener todas las ofertas, con opción de filtro
+async function GetAllOffers(querySQL, parameters) {
     try {
-        const response = await dbClient.query("SELECT * FROM offers WHERE id = $1", [id]);
-        return response.rows.length > 0 ? response.rows[0] : undefined;
+        const response = await dbClient.query(querySQL, parameters);
+        return response.rows; 
+
     } catch (err) {
-        console.error("Error en GetOffert:", err);
+        console.error("Error en GetAllOffers:", err); 
         return undefined;
     }
 }
+// Obtener las ofertas de acuerdo a la subasta
+async function GetOffersByAuction(id) {
+    const querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
+    const response = await dbClient.query(querySQL, [id]);
+    if (response.rows.length === 0)
+        return undefined
+    return response.rows
 
-async function CreateOffert(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id) {
+}
+// Obtener una oferta por ID
+async function GetOffer(id) {
+    const querySQL = `${OffersByAuction} WHERE o.id = $1` 
+    const response = await dbClient.query(querySQL, [id]);
+    if (response.rows.length === 0)
+        return undefined
+    return response.rows[0] 
+}
+
+// Mejorar oferta (crear nueva oferta)
+async function CreateOffert(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
     try {
-        const query = `
-            INSERT INTO offers 
-            (offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-            RETURNING *
-        `;
-        const values = [offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id];
-        const result = await dbClient.query(query, values);
-        return result.rows[0];
-    } catch (err) {
-        console.error("Error en CreateOffert:", err);
-        throw err;
+        const result = await dbClient.query(
+            "INSERT INTO offers(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+            [id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
+        )
+        if (result.rowCount === 0) {
+            return undefined
+        }
+    } catch (e) {
+        console.log(e)
+        return undefined
+    }
+
+    return {
+        id,
+        offer_type,
+        title,
+        descripcion,
+        images_urls,
+        mount,
+        auctioneer_id,
+        bidder_id,
+        auction_id,
+        estado
     }
 }
 
 async function RemoveOffer(id) {
     try {
-        const result = await dbClient.query("DELETE FROM offers WHERE id = $1", [id]);
+        const result = await dbClient.query("DELETE FROM offers WHERE id = $1", [id])
         return result.rowCount === 1;
     } catch (err) {
         console.error("Error en RemoveOffer:", err);
@@ -98,11 +101,33 @@ async function RemoveOffer(id) {
     }
 }
 
-// --- ESTA PARTE ES CRÍTICA: SI FALTA ESTO, TUS RUTAS FALLAN ---
+// Editar estado de una subasta
+
+async function UpdateStateOfTheOffer(id) {
+
+    try {
+        QuerySQL = `
+        UPDATE offers o SET estado = CASE WHEN o.id = $1 
+        THEN 'aceptadas' ELSE 'finalizadas' END 
+        FROM auctions a WHERE a.id = o.auction_id 
+        AND o.auction_id = (SELECT o.auction_id FROM offers o WHERE o.id = $1);`
+        const result = await dbClient.query(QuerySQL,[id])
+        if (result.rowCount === 0) {
+            return undefined
+        }
+        return id
+        
+    } catch {
+        return undefined
+    }
+}
+
+// Exportamos las funciones para usarlas en otras partes de la aplicación
 module.exports = {
     GetAllOffers,
-    GetOffert,
+    GetOffer,
     CreateOffert,
     RemoveOffer,
-    GetOffersByAuction
+    GetOffersByAuction,
+    UpdateStateOfTheOffer
 }
