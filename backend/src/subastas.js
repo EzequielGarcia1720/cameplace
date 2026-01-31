@@ -13,7 +13,7 @@ async function GetAllAuctions(status_id = null) {
     // 1. Construimos la consulta base  
     let querySQL = `
         SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
-        LEFT JOIN conditions c ON a.condition = c.id 
+        LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id 
     `;
@@ -42,7 +42,7 @@ async function GetAuction(id) {
     const querySQL = `
         SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname
         FROM auctions a
-        LEFT JOIN conditions c ON a.condition = c.id 
+        LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id
         WHERE a.id = $1
