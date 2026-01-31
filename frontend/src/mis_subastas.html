@@ -291,19 +291,20 @@
                         <div class="tabs is-centered">
                             <ul>
                                 <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
-                                <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
-                                <li><a onclick="FilterByStatus('aceptadas', this)">Pausadas</a></li>
-                                <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
+                                <li><a onclick="FilterByStatus(1, this)">Activas</a></li>
+                                <li><a onclick="FilterByStatus(4, this)">Pausadas</a></li>
+                                <li><a onclick="FilterByStatus(2, this)">Finalizadas</a></li>
                             </ul>
                         </div>
-                        
                         <!-- Subastas -->
-                        <div class="grid is-col-min-12" id="my_auctions">
-                            <script src="js/mis_subastas.js"></script>
-                            <script>
-                                GetAuctions()
-                            </script>
-                        </div>
+                        <section class="section">
+                            <div class="container">
+                                <div class="columns is-multiline" id="my_auctions">
+                                    <script src="js/mis_subastas.js"></script>
+                                    <script>GetAuctions()</script>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>

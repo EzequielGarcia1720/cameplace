@@ -153,7 +153,7 @@ async function GetOffers() {
                 </div>    
             </article>
             `;
-
+            // Añadimos el HTML generado al contenedor
             let auctionElement = document.createElement("div");
             auctionElement.className = "card post mb-4"; 
             auctionElement.innerHTML = offer_html;

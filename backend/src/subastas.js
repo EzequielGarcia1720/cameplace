@@ -9,15 +9,31 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions() {
-    const response = await dbClient.query(        
-        `SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
+async function GetAllAuctions(status_id = null) {
+    // 1. Construimos la consulta base  
+    let querySQL = `
+        SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id 
-        ORDER BY a.modification_date DESC`
-    )
-    return response.rows
+    `;
+
+    // Array para los parámetros de la consulta
+    let params = [];
+
+    // 2. Agregamos el filtro si se proporcionó status_id
+    if (status_id && status_id !== '') {
+        querySQL += ' WHERE a.auction_status = $1'; // Usamos $1 para Postgres
+        params.push(status_id);
+    }
+
+    // 3. Agregamos el ordenamiento
+    querySQL += ' ORDER BY a.modification_date DESC';
+
+    // 4. Ejecutamos la consulta
+    const response = await dbClient.query(querySQL, params);
+    
+    return response.rows;
 }
 
 async function GetAuction(id) {

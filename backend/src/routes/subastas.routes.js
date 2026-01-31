@@ -10,8 +10,18 @@ const {
 
 // GET /api/v1/auctions
 router.get("/", async (req, res) => {
-    const auctions = await GetAllAuctions();
-    res.json(auctions);
+    try {
+        // Obtener el parámetro de consulta 'status' si está presente
+        const filterStatus = req.query.status; 
+        
+        // Llamamos a la función pasándole el filtro directamente
+        const auctions = await GetAllAuctions(filterStatus);
+        
+        res.json(auctions);
+    } catch (error) {
+        console.error("Error al obtener subastas:", error);
+        res.sendStatus(500);
+    }
 });
 
 // GET /api/v1/auctions/:id
