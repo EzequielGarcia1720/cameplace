@@ -8,63 +8,30 @@
         <link rel="stylesheet" href="css/componentes/perfil.css">
     </head>
     <body>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
-            <!-- Logo/boton de inicio -->
-            <div class="navbar-brand">
-                <a class="navbar-item" href="index.html">
-                <strong>CameBastas</strong>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <!-- Logo/boton de inicio -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+            <strong>CameBastas</strong>
 
-                </a>
+            </a>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <!--Menu del navbar-->
+        <div id="navbarBasicExample" class="navbar-menu">
+
+            <!-- Lado derecho -->
+            <div id="navbar-end" class="navbar-end">
             </div>
-
-            <!--Menu del navbar-->
-            <div id="navbarBasicExample" class="navbar-menu">
-
-                <!-- Lado derecho -->
-                <div class="navbar-end">
-
-                    <div class="navbar-item">
-                        <!-- dropdown -->
-                        <span class="dropdown is-right is-hoverable">
-                            <figure class="image is-32x32">
-                                <img 
-                                id="foto_perfil_navbar"
-                                class="is-rounded" 
-                                src="https://avatars.githubusercontent.com/u/231128308?v=4" 
-                                />
-                            </figure>
-                        
-                        <div class="dropdown-trigger">
-
-                            <!-- Imagen -->
-                            <span>
-
-                            </span>
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <div class="dropdown-content">
-                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
-                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
-                            <hr class="dropdown-divider" />
-                            <a class="dropdown-item"> Cerrar Sesión </a>
-                            </div>
-                        </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        </div>
+    </nav>
     
     <!--Index-->
     <div class="index container">
@@ -145,8 +112,9 @@
         </div>
     </div>
     <script src="js/scripts_perfil.js" defer></script>
-
+    <script src="js/navbar.js"></script>
     
+    </body>
     <footer>
         <div class="footer-index">
             <div class="columns">
@@ -170,5 +138,4 @@
             </div>
         </div>
     </footer>
-    </body>
 </html>
