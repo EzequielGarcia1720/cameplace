@@ -193,7 +193,7 @@ INSERT INTO auctions (
     95000.00,
     (SELECT id FROM categories WHERE name_category = 'Celulares y Telefonía' LIMIT 1),
     (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://images.samsung.com/is/image/samsung/p6pim/ar/2202/gallery/ar-galaxy-s22-ultra-s908-sm-s908ezkgmea-530402-sm-s908ezkgmea-530402-530402-frontphantomblack-450x450.jpg?$720_576_PNG$',
+    'https://http2.mlstatic.com/D_NQ_NP_895048-MLU69664239579_052023-O.webp',
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
     (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
@@ -221,7 +221,7 @@ INSERT INTO auctions (
     75000.00,
     (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
     (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://m.media-amazon.com/images/I/71vX8Lf3x4L._AC_SL1500_.jpg',
+    'https://www.cordobadigital.net/wp-content/uploads/2023/11/Xbox-Serie-X-3.webp',
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
     (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
@@ -235,7 +235,7 @@ INSERT INTO auctions (
     90000.00,
     (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
     (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ipad-pro-11-select-202104_GEO_AR?wid=940&hei=1112&fmt=png-alpha&.v=1617925248000',
+    'https://i5.walmartimages.com/asr/2acfc07e-09b1-4df0-8850-e9ffbac41678.d0e2825da1356ded69ab52c3c68ac05e.jpeg',
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
     (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
@@ -292,7 +292,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'Activas',
+    'activas',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
 ),
 (
@@ -304,7 +304,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
-    'Activas',
+    'activas',
     CURRENT_TIMESTAMP - INTERVAL '3 days'
 ),
 (
@@ -316,7 +316,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
-    'Activas',
+    'activas',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
@@ -328,6 +328,6 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
-    'Activas',
+    'activas',
     CURRENT_TIMESTAMP - INTERVAL '4 days'
 );
