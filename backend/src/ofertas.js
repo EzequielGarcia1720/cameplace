@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 
+// Configuración de base de datos
 const dbClient = new Pool({
     user: "postgres",
     password: "password",
@@ -90,13 +91,13 @@ async function CreateOffert(id, offer_type, title, descripcion, images_urls, mou
     }
 }
 
-// Eliminar una oferta por ID
 async function RemoveOffer(id) {
     try {
         const result = await dbClient.query("DELETE FROM offers WHERE id = $1", [id])
         return result.rowCount === 1;
-    } catch {
-        return undefined
+    } catch (err) {
+        console.error("Error en RemoveOffer:", err);
+        return undefined;
     }
 }
 

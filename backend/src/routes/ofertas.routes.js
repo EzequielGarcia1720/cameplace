@@ -1,7 +1,9 @@
-// OFERTAS ROUTES
-// Definimos las rutas para manejar las ofertas
 const express = require('express');
 const router = express.Router();
+
+// Importamos las funciones. 
+// IMPORTANTE: "../ofertas" asume que ofertas.js está una carpeta atrás. 
+// Si tu estructura es diferente, ajusta la ruta.
 const {
     GetAllOffers,
     CreateOffert,
@@ -9,56 +11,37 @@ const {
     GetOffersByAuction,
 } = require("../ofertas");
 
-// GET /api/v1/offers
+// GET
 router.get("/", async (req, res) => {
-    const filterStatus = req.query.status; // Esperamos 'activas', 'aceptadas', 'rechazadas', 'finalizadas'
-    const filterOrder = req.query.order; // Esperamos 'ASC' o 'DESC'
-    const filterSearch = req.query.search; // Esperamos un texto para buscar en título y descripción
-   
+    const filterStatus = req.query.status; 
+    const filterOrder = req.query.order;
+    const filterSearch = req.query.search;
+
     let querySQL = 'SELECT * FROM offers';
     let parameters = [];
 
-    //LÓGICA DE ESTADO (WHERE)
-    // ejemplo: /api/v1/offers?status=activas
     if (filterStatus) {
         querySQL += ' WHERE estado = $1'; 
-        parameters.push(filterStatus); //pushea el valor del filtro al array de parámetros
+        parameters.push(filterStatus);
     }
 
-
-    // LÓGICA DE ORDENAMIENTO (ORDER BY)
-    // Definimos un valor por defecto (DESC = más reciente primero)
-    //ejemplo: /api/v1/offers?order=ASC
-    let sortDirection = 'DESC'; 
-    
-    // Si el usuario envió algo, verificamos si es 'ASC', si no, se queda en 'DESC'
-    if (filterOrder && filterOrder.toUpperCase() === 'ASC') {
-        sortDirection = 'ASC';
-    }
-
-    
-    // LÓGICA DE BÚSQUEDA (SEARCH)
-    // ejemplo: /api/v1/offers?search=telefono
     if (filterSearch) {
-        // Calculamos la posición del parámetro (si ya hay uno, este será $2, si no, $1)
-        const paramIndex = parameters.length + 1; 
-        
-        // Si el array de parámetros tiene algo, significa que ya pusimos un WHERE antes
+        const paramIndex = parameters.length + 1;
         if (parameters.length > 0) {
             querySQL += ` AND (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
         } else {
-            // Si está vacío, somos el primer filtro, así que ponemos WHERE
             querySQL += ` WHERE (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
         }
-        
-        // Agregamos la palabra clave con los % para que funcione el ILIKE
         parameters.push(`%${filterSearch}%`);
     }
-    
-    // Dejar un espacio al inicio de " ORDER BY"
+
+    let sortDirection = 'DESC'; 
+    if (filterOrder && filterOrder.toUpperCase() === 'ASC') {
+        sortDirection = 'ASC';
+    }
     querySQL += ` ORDER BY creation_date ${sortDirection}`;
+
     try {
-        
         const result = await GetAllOffers(querySQL, parameters);
         if (result) {
             res.json(result);
@@ -66,7 +49,7 @@ router.get("/", async (req, res) => {
             res.status(500).send("No se pudo obtener datos");
         }
     } catch (err) {
-        console.error("Error en el endpoint:", err);
+        console.error(err);
         res.status(500).send("Error de servidor");
     }
 });
@@ -129,7 +112,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(offert);
 });
 
-//DELETE. /api/v1/offers/:id
+// DELETE
 router.delete("/:id", async (req, res) => {
     // Verificar si la oferta existe
     const offert = await GetOffer(req.params.id);
