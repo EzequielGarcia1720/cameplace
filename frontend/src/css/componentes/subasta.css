@@ -1,0 +1,18 @@
+.auction_columns {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    gap: 10px;
+}
+
+.auction_column {
+    background-color: var(--primary-bg-color);
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+.auction_img {
+    border-radius: 1rem;
+}
+figure.image.is-2by1 {
+    margin-bottom: 1rem;
+}
