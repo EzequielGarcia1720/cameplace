@@ -118,7 +118,10 @@ ON CONFLICT DO NOTHING;
 INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) VALUES
 ('juan_perez', 'hashed_password_123', 'juan@email.com', 'Juan', 'Pérez', 1122334455, 'Buenos Aires, Argentina'),
 ('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
-('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina')
+('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina'),
+('ana_ramirez', 'hashed_password_101', 'ana@email.com', 'Ana', 'Ramírez', 1122334488, 'Rosario, Argentina'),
+('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina')
+
 ON CONFLICT DO NOTHING;
 
 -- 
@@ -177,6 +180,76 @@ INSERT INTO auctions (
     3,
     CURRENT_TIMESTAMP - INTERVAL '1 day',
     CURRENT_TIMESTAMP
+),
+(
+    'Samsung Galaxy S23 Ultra 512GB',
+    'Samsung Galaxy S23 Ultra en excelente estado. Pantalla sin rayones, batería en buen estado. Viene con cargador rápido y funda protectora.',
+    95000.00,
+    (SELECT id FROM categories WHERE name = 'Smartphones' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Aceptable' LIMIT 1),
+    'https://images.samsung.com/is/image/samsung/p6pim/ar/2202/gallery/ar-galaxy-s22-ultra-s908-sm-s908ezkgmea-530402-sm-s908ezkgmea-530402-530402-frontphantomblack-450x450.jpg?$720_576_PNG$',
+    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    4,
+    CURRENT_TIMESTAMP - INTERVAL '4 days',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+),
+(
+    'Nintendo Switch OLED',
+    'Nintendo Switch modelo OLED, con pantalla de 7 pulgadas y almacenamiento interno de 64GB. Incluye dos juegos: The Legend of Zelda: Breath of the Wild y Mario Kart 8 Deluxe.',
+    60000.00,
+    (SELECT id FROM categories WHERE name = 'Videojuegos' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
+    'https://m.media-amazon.com/images/I/61-PblYntsL._AC_SL1500_.jpg',
+    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    5,
+    CURRENT_TIMESTAMP - INTERVAL '2 days',
+    CURRENT_TIMESTAMP
+),
+(
+    'Xbox Series X 1TB',
+    'Xbox Series X con 1TB de almacenamiento. Incluye un mando inalámbrico y sus cables originales. Estado impecable, apenas usado.',
+    75000.00,
+    (SELECT id FROM categories WHERE name = 'Consolas' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    'https://m.media-amazon.com/images/I/71vX8Lf3x4L._AC_SL1500_.jpg',
+    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    6,
+    CURRENT_TIMESTAMP - INTERVAL '6 days',
+    CURRENT_TIMESTAMP - INTERVAL '3 days'
+),
+(
+    'iPad Pro 11" 2021',
+    'iPad Pro de 11 pulgadas, modelo 2021, con 256GB de almacenamiento. Incluye Apple Pencil y funda protectora. En excelente estado.',
+    90000.00,
+    (SELECT id FROM categories WHERE name = 'Electrónica' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Buen estado' LIMIT 1),
+    'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ipad-pro-11-select-202104_GEO_AR?wid=940&hei=1112&fmt=png-alpha&.v=1617925248000',
+    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    7,
+    CURRENT_TIMESTAMP - INTERVAL '3 days',
+    CURRENT_TIMESTAMP - INTERVAL '1 day'
+),
+(
+    'Auriculares Sony WH-1000XM4',
+    'Auriculares inalámbricos Sony WH-1000XM4 con cancelación de ruido. Estado casi nuevo, con caja y accesorios originales.',
+    25000.00,
+    (SELECT id FROM categories WHERE name = 'Electrónica' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    'https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg',
+    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    8,
+    CURRENT_TIMESTAMP - INTERVAL '5 days',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
 );
 
 --
@@ -215,4 +288,40 @@ INSERT INTO offers (
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
     'activas',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
+),
+(
+    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
+    'Oferta por Nintendo Switch',
+    'Te ofrezco $50,000 más mi colección de juegos retro por la Nintendo Switch',
+    ARRAY['https://ejemplo.com/retro1.jpg', 'https://ejemplo.com/retro2.jpg'],
+    50000.00,
+    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
+    'activas',
+    CURRENT_TIMESTAMP - INTERVAL '3 days'
+),
+(
+    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
+    'Oferta por Samsung Galaxy S23',
+    'Te ofrezco $90,000 en efectivo por el Samsung Galaxy S23 Ultra',
+    ARRAY['https://ejemplo.com/samsung1.jpg'],
+    90000.00,
+    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
+    'activas',
+    CURRENT_TIMESTAMP - INTERVAL '2 days'
+),
+(
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    'Cambio por iPad Pro',
+    'Te ofrezco mi tablet Samsung Galaxy Tab S7 por el iPad Pro',
+    ARRAY['https://ejemplo.com/tab1.jpg', 'https://ejemplo.com/tab2.jpg'],
+    0.00,
+    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
+    'activas',
+    CURRENT_TIMESTAMP - INTERVAL '4 days'
 );
