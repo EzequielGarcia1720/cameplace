@@ -36,11 +36,9 @@ async function Search() {
                         </div>
 
                         <div class="content">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-                            iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-                            <a href="#">#responsive</a>
-                            <br/>
-                            ${auction.modification_date.slice(0,10)}
+                            ${auction.descripcion}
+                            <br>
+                            <p style="font-weight: bold;"> Última Modificación: ${auction.modification_date.slice(0,10)} </p>
                         </div>
                     </div>
                 </div>
@@ -77,43 +75,40 @@ async function GetAuctions() {
     const auctions = await response.json();
 
     auctions.forEach(auction => {
-        const card = `
-            <div class="cell card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img
-                            src=${auction.images_urls}
-                            alt="Placeholder image"
-                        />
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-48x48">
+            const card = `
+                <div class="cell card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
                             <img
-                                src="${auction.image_url}"
+                                src=${auction.images_urls}
                                 alt="Placeholder image"
-
                             />
                         </figure>
                     </div>
-                    <div class="media-content">
-                        <p class="title is-5">${auction.title}</p>
-                        <p class="title is-6">$${auction.initial_price}</p>
-                    </div>
-                    </div>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img
+                                        src="${auction.image_url}"
+                                        alt="Placeholder image"
+                                    />
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-5">${auction.title}</p>
+                                <p class="title is-6">$${auction.initial_price}</p>
+                            </div>
+                        </div>
 
-                    <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-                    iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-                    <a href="#">#responsive</a>
-                    <br/>
-                    ${auction.modification_date.slice(0,10)}</time>
+                        <div class="content">
+                            ${auction.descripcion}
+                            <br>
+                            <p style="font-weight: bold;"> Última Modificación: ${auction.modification_date.slice(0,10)} </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            `
+            `;
 
         let auctions_container = document.getElementById("auctions")
         let auctionactual = document.createElement("div")
