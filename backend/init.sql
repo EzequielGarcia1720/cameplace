@@ -1,8 +1,9 @@
 -- Categories
 CREATE table categories (
     id serial PRIMARY KEY,
-    name_category VARCHAR(200) NOT NULL,
+    name_category VARCHAR(200) NOT NULL
 );
+
 INSERT INTO categories (name_category) VALUES
 ('Electrónica, Audio y Video'),
 ('Computación'),
@@ -32,18 +33,20 @@ INSERT INTO categories (name_category) VALUES
 -- Offer types
 CREATE table offer_type (
     id serial PRIMARY KEY,
-    type VARCHAR(100) NOT NULL 
+    type VARCHAR(100)DEFAULT 'mixto' NOT NULL CHECK (type IN ('Dinero', 'Producto', 'Mixto')) 
 );
 
-insert into offer_type (type) values ('Dinero'), ('Producto'), ('Mixto');
+INSERT INTO offer_type (type) VALUES ('Dinero'), ('Producto'), ('Mixto');
+
 
 -- Condition of auctions
 CREATE TABLE condition (
     id serial PRIMARY KEY,
-    auction_condition VARCHAR(100) NOT NULL
+    auction_condition VARCHAR(100) DEFAULT 'Nuevo' NOT NULL CHECK (auction_condition IN ('Nuevo', 'Usado', 'Reacondicionado'))
 );
 
-INSERT INTO condition (auction_condition) values ('Nuevo'), ('Usado'), ('Reacondicionado');
+INSERT INTO condition (auction_condition) VALUES ('Nuevo'), ('Usado'), ('Reacondicionado');
+
 
 -- Status of auctions
 CREATE TABLE status (
@@ -51,9 +54,9 @@ CREATE TABLE status (
     status_name VARCHAR(100) NOT NULL
 );
 
-INSERT INTO status (status_name) VALUES ('Activa'), ('Pausada'), ('Finalizada');
--- Users
+INSERT INTO status (id,status_name) VALUES (0,'Activa'), (1,'Pausada'), (2,'Finalizada');
 
+-- Users
 CREATE TABLE users (
     id serial PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -71,7 +74,6 @@ CREATE TABLE users (
 
 
 -- Auctions
-
 CREATE TABLE auctions (
     id serial PRIMARY KEY,
     title VARCHAR(80) NOT NULL,
@@ -94,7 +96,6 @@ CREATE TABLE auctions (
 );
 
 -- Offers
-
 CREATE TABLE offers (
     id serial PRIMARY KEY,
     offer_type INT NOT NULL,
@@ -109,7 +110,7 @@ CREATE TABLE offers (
     FOREIGN KEY (bidder_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
-    estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),
+    estado VARCHAR(20) DEFAULT 'Activas' NOT NULL CHECK (estado IN ('Activas', 'Aceptadas', 'Finalizadas')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -120,29 +121,6 @@ CREATE TABLE offers (
 
 -- Datos de ejemplo
 
---
-INSERT INTO categories (name, father_category) VALUES
-('Electrónica, Audio y Video', NULL),
-('Smartphones', 1),
-('Videojuegos', NULL),
-('Consolas', 3)
-ON CONFLICT DO NOTHING;
-
-INSERT INTO condition (auction_condition) VALUES
-('Nuevo'),
-('Usado - Como nuevo'),
-('Usado - Buen estado'),
-('Usado - Aceptable')
-ON CONFLICT DO NOTHING;
-
-INSERT INTO status (status_name) VALUES
-('Activa'),
-('Pausada'),
-('Finalizada'),
-('Cancelada')
-ON CONFLICT DO NOTHING;
-
---
 INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) VALUES
 ('juan_perez', 'hashed_password_123', 'juan@email.com', 'Juan', 'Pérez', 1122334455, 'Buenos Aires, Argentina'),
 ('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
@@ -171,7 +149,7 @@ INSERT INTO auctions (
     'iPhone 15 Pro Max 256GB',
     'iPhone 15 Pro Max en perfecto estado, con todos sus accesorios originales. Incluye cargador, cable y funda de regalo. Comprado hace 3 meses, con garantía oficial Apple vigente.',
     120000.00,
-    (SELECT id FROM categories WHERE name = 'Smartphones' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Celulares y Telefonía' LIMIT 1),
     (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
     'https://i.blogs.es/f15f0b/img_2033/650_1200.jpeg',
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
@@ -185,8 +163,8 @@ INSERT INTO auctions (
     'PlayStation 5 + 2 Juegos',
     'Consola PlayStation 5 edición digital, con 2 mandos DualSense y juegos Spider-Man 2 y God of War Ragnarök. Perfecto funcionamiento, poco uso.',
     85000.00,
-    (SELECT id FROM categories WHERE name = 'Consolas' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
     'https://hips.hearstapps.com/hmg-prod/images/esq240112-digital-ecomm-playstationps5-0305-679133a09328d.jpg?crop=0.509xw:0.763xh;0.262xw,0.0765xh&resize=640:*',
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
@@ -199,8 +177,8 @@ INSERT INTO auctions (
     'Colección de Videojuegos Retro',
     'Lote de 15 videojuegos retro para diversas consolas. Incluye títulos clásicos de Nintendo, Sega y PlayStation 1. Todos en buen estado, algunos con sus cajas originales.',
     35000.00,
-    (SELECT id FROM categories WHERE name = 'Videojuegos' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Buen estado' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Juegos, Juguetes y Bebés' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Reacondicionado' LIMIT 1),
     'https://i.redd.it/e2i0bz33to061.jpg',
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
@@ -213,8 +191,8 @@ INSERT INTO auctions (
     'Samsung Galaxy S23 Ultra 512GB',
     'Samsung Galaxy S23 Ultra en excelente estado. Pantalla sin rayones, batería en buen estado. Viene con cargador rápido y funda protectora.',
     95000.00,
-    (SELECT id FROM categories WHERE name = 'Smartphones' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Aceptable' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Celulares y Telefonía' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
     'https://images.samsung.com/is/image/samsung/p6pim/ar/2202/gallery/ar-galaxy-s22-ultra-s908-sm-s908ezkgmea-530402-sm-s908ezkgmea-530402-530402-frontphantomblack-450x450.jpg?$720_576_PNG$',
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
@@ -227,7 +205,7 @@ INSERT INTO auctions (
     'Nintendo Switch OLED',
     'Nintendo Switch modelo OLED, con pantalla de 7 pulgadas y almacenamiento interno de 64GB. Incluye dos juegos: The Legend of Zelda: Breath of the Wild y Mario Kart 8 Deluxe.',
     60000.00,
-    (SELECT id FROM categories WHERE name = 'Videojuegos' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
     (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
     'https://m.media-amazon.com/images/I/61-PblYntsL._AC_SL1500_.jpg',
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
@@ -241,8 +219,8 @@ INSERT INTO auctions (
     'Xbox Series X 1TB',
     'Xbox Series X con 1TB de almacenamiento. Incluye un mando inalámbrico y sus cables originales. Estado impecable, apenas usado.',
     75000.00,
-    (SELECT id FROM categories WHERE name = 'Consolas' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
     'https://m.media-amazon.com/images/I/71vX8Lf3x4L._AC_SL1500_.jpg',
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
@@ -255,8 +233,8 @@ INSERT INTO auctions (
     'iPad Pro 11" 2021',
     'iPad Pro de 11 pulgadas, modelo 2021, con 256GB de almacenamiento. Incluye Apple Pencil y funda protectora. En excelente estado.',
     90000.00,
-    (SELECT id FROM categories WHERE name = 'Electrónica' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Buen estado' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
     'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/ipad-pro-11-select-202104_GEO_AR?wid=940&hei=1112&fmt=png-alpha&.v=1617925248000',
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
@@ -269,8 +247,8 @@ INSERT INTO auctions (
     'Auriculares Sony WH-1000XM4',
     'Auriculares inalámbricos Sony WH-1000XM4 con cancelación de ruido. Estado casi nuevo, con caja y accesorios originales.',
     25000.00,
-    (SELECT id FROM categories WHERE name = 'Electrónica' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado - Como nuevo' LIMIT 1),
+    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
+    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
     'https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg',
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
@@ -302,7 +280,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPhone%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
@@ -314,7 +292,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
 ),
 (
@@ -326,7 +304,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '3 days'
 ),
 (
@@ -338,7 +316,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
@@ -350,6 +328,6 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '4 days'
 );
