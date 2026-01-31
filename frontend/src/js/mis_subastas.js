@@ -1,8 +1,10 @@
 
 let currentFilters = {
     status: '',    // '' significa todos
-    search: '',    // Texto del buscador
-    order: 'DESC'  // Orden por defecto
+    search: '',  // Texto del buscador
+    order: 'DESC',  // Orden por defecto
+    category: '',  // Categoría seleccionada
+    type_offer: ''  // Tipo de oferta seleccionado  
 };
 //Ordenar por
 const button_recently = document.querySelector("#boton_recientes");
@@ -59,6 +61,7 @@ find_button.addEventListener("click", () => {
 
 async function GetAuctions() {
 
+    // Limpiamos el contenedor antes de agregar nuevas tarjetas
     const container = document.getElementById("my_auctions");
     container.innerHTML = ""; 
 
@@ -67,9 +70,11 @@ async function GetAuctions() {
 
             // --- CONSTRUCCIÓN DE URL DINÁMICA ---
         const params = new URLSearchParams();
-        
+        // Agregamos parámetros solo si tienen valor
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
+        if (currentFilters.type_offer) params.append('type_offer', currentFilters.type_offer);
+        if (currentFilters.category) params.append('category', currentFilters.category);
         // Agregamos parámetros solo si tienen valor
         const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`
         const response = await fetch(URL)
@@ -198,6 +203,11 @@ async function GetAuctions() {
 
 // Llamada inicial para cargar los datos al entrar
 GetAuctions();
+
+function FilterByCategory(categoryId) {
+    currentFilters.category = categoryId;
+    GetAuctions();
+}
 
 function FilterByTypeOffer() {
     // Aquí puedes implementar la lógica para filtrar por tipo de oferta

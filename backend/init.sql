@@ -1,10 +1,32 @@
 -- Categories
 CREATE table categories (
     id serial PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    father_category INT,
-    FOREIGN KEY (father_category) REFERENCES categories(id)
+    name_category VARCHAR(200) NOT NULL,
 );
+INSERT INTO categories (name_category) VALUES
+('Electrónica, Audio y Video'),
+('Computación'),
+('Celulares y Telefonía'),
+('Electrodomésticos'),
+('Hogar y Muebles'),
+('Indumentaria y Accesorios / Moda'),
+('Deportes y Fitness'),
+('Juegos, Juguetes y Bebés'),
+('Libros y Revistas'),
+('Arte y Antigüedades'),
+('Coleccionables y Hobbies'),
+('Delicatessen y Vinos'),
+('Vehículos'),
+('Motos y Otros'),
+('Maquinaria y Equipos (Industrial, Construcción, Agrícola)'),
+('Inmuebles (Bienes Raíces)'),
+('Embarcaciones y Aeronaves'),
+('Herramientas'),
+('Industrias y Oficinas'),
+('Materiales y Residuos'),
+('Derechos y Acciones'),
+('Agrícola, Rural y Campo'),
+('Otros');
 
 
 -- Offer types
@@ -21,11 +43,15 @@ CREATE TABLE condition (
     auction_condition VARCHAR(100) NOT NULL
 );
 
+INSERT INTO condition (auction_condition) values ('Nuevo'), ('Usado'), ('Reacondicionado');
+
 -- Status of auctions
 CREATE TABLE status (
     id SERIAL PRIMARY KEY,
     status_name VARCHAR(100) NOT NULL
 );
+
+INSERT INTO status (status_name) VALUES ('Activa'), ('Pausada'), ('Finalizada');
 -- Users
 
 CREATE TABLE users (
@@ -96,7 +122,7 @@ CREATE TABLE offers (
 
 --
 INSERT INTO categories (name, father_category) VALUES
-('Electrónica', NULL),
+('Electrónica, Audio y Video', NULL),
 ('Smartphones', 1),
 ('Videojuegos', NULL),
 ('Consolas', 3)

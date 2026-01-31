@@ -9,7 +9,7 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null) {
     // 1. Construimos la consulta base  
     let querySQL = `
         SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
@@ -45,6 +45,16 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
             querySQL += ` WHERE a.offer_type = $${paramIndex}`;
         }
         params.push(filterTypeOffer);
+    }
+
+    if (filterCategory) {
+        const paramIndex = params.length + 1;
+        if (params.length > 0) {
+            querySQL += ` AND a.category_id = $${paramIndex}`;
+        } else {
+            querySQL += ` WHERE a.category_id = $${paramIndex}`;
+        }
+        params.push(filterCategory);
     }
     // 3. Agregamos el ordenamiento
     querySQL += ' ORDER BY a.modification_date DESC';

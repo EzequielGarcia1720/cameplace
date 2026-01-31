@@ -15,8 +15,9 @@ router.get("/", async (req, res) => {
         const filterStatus = req.query.status; 
         const filterSearch = req.query.search;
         const filterTypeOffer = req.query.type_offer;
+        const filterCategory = req.query.category;
         // Llamamos a la función pasándole el filtro directamente
-        const auctions = await GetAllAuctions(filterStatus, filterSearch);
+        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory);
         
         res.json(auctions);
     } catch (error) {
