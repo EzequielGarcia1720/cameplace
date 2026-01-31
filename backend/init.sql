@@ -13,7 +13,7 @@ CREATE table offer_type (
     type VARCHAR(100) NOT NULL 
 );
 
-insert into offer_type (type) values ('Producto'), ('Dinero'), ('Mixto');
+insert into offer_type (type) values ('Dinero'), ('Producto'), ('Mixto');
 
 -- Condition of auctions
 CREATE TABLE condition (
@@ -79,6 +79,8 @@ CREATE TABLE offers (
     mount DECIMAL(10,2) NOT NULL,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
+    bidder_id INT NOT NULL,
+    FOREIGN KEY (bidder_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'activas' NOT NULL CHECK (estado IN ('activas', 'aceptadas', 'rechazadas', 'finalizadas')),

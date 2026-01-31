@@ -199,6 +199,12 @@ async function GetAuctions() {
 // Llamada inicial para cargar los datos al entrar
 GetAuctions();
 
+function FilterByTypeOffer() {
+    // Aquí puedes implementar la lógica para filtrar por tipo de oferta
+    // Por ejemplo, podrías actualizar currentFilters y luego llamar a GetAuctions()
+    GetAuctions();
+}
+
 function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis subastas"]'); 
     if (input) {

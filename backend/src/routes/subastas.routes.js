@@ -14,6 +14,7 @@ router.get("/", async (req, res) => {
         // Obtener el parámetro de consulta 'status' si está presente
         const filterStatus = req.query.status; 
         const filterSearch = req.query.search;
+        const filterTypeOffer = req.query.type_offer;
         // Llamamos a la función pasándole el filtro directamente
         const auctions = await GetAllAuctions(filterStatus, filterSearch);
         
