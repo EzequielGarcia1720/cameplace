@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CameBastas</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <!-- Logo/boton de inicio -->
-        <div class="navbar-brand">
-            <a class="navbar-item" href="index.html">
-            <strong>CameBastas</strong>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                    <strong>CameBastas</strong>
+                </a>
 
-            </a>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            </a>
-        </div>
-        
-        <!--Menu del navbar-->
-        <div id="navbarBasicExample" class="navbar-menu">
-
-            <!-- Lado derecho -->
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                    <!-- Boton de crear subasta -->
-                    <a class="button crear_subasta is-primary" href="crear_subasta.html">
-                        <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
-                    </a>
+                <!-- Lado derecho -->
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <!-- Boton de crear subasta -->
+                            <a class="button crear_subasta is-primary" href="crear_subasta.html">
+                                <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -50,231 +50,231 @@
                         <!-- Imagen -->
                         <span>
 
+                    <div class="navbar-item">
+                        <!-- dropdown -->
+                        <span class="dropdown is-right is-hoverable">
+                                <figure class="image is-32x32">
+                                    <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
+                                </figure>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                    <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+                                    <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                                    <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                                    <hr class="dropdown-divider" />
+                                    <a class="dropdown-item"> Cerrar Sesión </a>
+                                </div>
+                            </div>
                         </span>
-                        <span class="icon is-small">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                        </button>
                     </div>
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
-                        <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                        <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
-                        <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
-                        <hr class="dropdown-divider" />
-                        <a class="dropdown-item"> Cerrar Sesión </a>
-                        </div>
-                    </div>
-                    </span>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Index -->
-    <div class="columns">
-        <div class="column is-narrow">
-            <div class="box" style="width: 300px">
-                <div class="container1">
-                    <aside class="menu">
-                        <p class="menu-label">Filtro</p>
-                        <ul class="menu-list category-scroll">
-                            <li>
-                                <a class="is-active">Tipo de oferta</a>
-                                <ul>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Dinero
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Canje
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Mixta
-                                        </label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="is-active">Categoría</a>
-                                <ul>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Electrónica, Audio y Video
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Computación
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Celulares y Telefonía
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Electrodomésticos
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Hogar y Muebles
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Indumentaria y Accesorios / Moda
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Deportes y Fitness
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Juegos, Juguetes y Bebés
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Libros y Revistas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Arte y Antigüedades
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Coleccionables y Hobbies
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Delicatessen y Vinos
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Vehículos
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Motos y Otros
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Maquinaria y Equipos (Industrial, Construcción, Agrícola)
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Inmuebles (Bienes Raíces)
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Embarcaciones y Aeronaves
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Herramientas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Industrias y Oficinas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Materiales y Residuos
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Derechos y Acciones
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Agrícola, Rural y Campo
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Otros
-                                        </label>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <p class="menu-label">Ordenar por</p>
-                        <ul class="menu-list">
-                            <li>
-                                <a class="is-active">Cronología</a>
-                                <ul>
-                                    <li><a id="boton_recientes">Recientes</a></li>
-                                    <li><a id="boton_masantiguas">Mas antiguas</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="is-active">Actividad</a>
-                                <ul>
-                                    <li><a id="boton_mayor_cant_ofertas">Mayor cantidad de ofertas</a></li>
-                                    <li><a id="boton_menor_cant_ofertas">Menor cantidad de ofertas</a></li>
-                                </ul>
-                            <li>
-                                <a class="is-active">Valor</a>
-                                <ul>
-                                    <li><a id="boton_mayor_precio">Mayor precio</a></li>
-                                    <li><a id="boton_menor_precio">Menor precio</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </aside>
+        <!-- Index -->
+        <div class="columns">
+            <div class="column is-narrow">
+                <div class="box" style="width: 300px">
+                    <div class="container1">
+                        <aside class="menu">
+                            <p class="menu-label">Filtro</p>
+                            <ul class="menu-list category-scroll">
+                                <li>
+                                    <a class="is-active">Tipo de oferta</a>
+                                    <ul>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
+                                                Dinero
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
+                                                Producto
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
+                                                Mixta
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="is-active">Categoría</a>
+                                    <ul>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(1)"/>
+                                                Electrónica, Audio y Video
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(2)"/>
+                                                Computación
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(3)"/>
+                                                Celulares y Telefonía
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(4)"/>
+                                                Electrodomésticos
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(5)"/>
+                                                Hogar y Muebles
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(6)"/>
+                                                Indumentaria y Accesorios / Moda
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(7)"/>
+                                                Deportes y Fitness
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(8)"/>
+                                                Juegos, Juguetes y Bebés
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(9)"/>
+                                                Libros y Revistas
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(10)"/>
+                                                Arte y Antigüedades
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(11)"/>
+                                                Coleccionables y Hobbies
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(12)"/>
+                                                Delicatessen y Vinos
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(13)"/>
+                                                Vehículos
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(14)"/>
+                                                Motos y Otros
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(15)"/>
+                                                Maquinaria y Equipos (Industrial, Construcción, Agrícola)
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(16)"/>
+                                                Inmuebles (Bienes Raíces)
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(17)"/>
+                                                Embarcaciones y Aeronaves
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(18)"/>
+                                                Herramientas
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(19)"/>
+                                                Industrias y Oficinas
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(20)"/>
+                                                Materiales y Residuos
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(21)"/>
+                                                Derechos y Acciones
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(22)"/>
+                                                Agrícola, Rural y Campo
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="checkbox">
+                                                <input type="checkbox" onclick="FilterByCategory(12)"/>
+                                                Otros
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p class="menu-label">Ordenar por</p>
+                            <ul class="menu-list">
+                                <li>
+                                    <a class="is-active">Cronología</a>
+                                    <ul>
+                                        <li><a id="boton_recientes">Recientes</a></li>
+                                        <li><a id="boton_masantiguas">Mas antiguas</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="is-active">Actividad</a>
+                                    <ul>
+                                        <li><a id="boton_mayor_cant_ofertas">Mayor cantidad de ofertas</a></li>
+                                        <li><a id="boton_menor_cant_ofertas">Menor cantidad de ofertas</a></li>
+                                    </ul>
+                                <li>
+                                    <a class="is-active">Valor</a>
+                                    <ul>
+                                        <li><a id="boton_mayor_precio">Mayor precio</a></li>
+                                        <li><a id="boton_menor_precio">Menor precio</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="column">
-            <div class="box">
+            <div class="column">
+                <div class="box">
                     <div class="container2">
                         <!-- Bienvenida-->
                         <div class="titulo pt-5 pb-5">
@@ -290,7 +290,7 @@
                                         id="barra_busqueda"
                                     /> 
                                 <div class="control">
-                                    <button id="buscar_boton" class="button is-primary">Buscar</button>
+                                    <button id="buscar_boton" class="button is-primary" onclick="ApplySearch()">Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -304,12 +304,11 @@
                         <div class="tabs is-centered">
                             <ul>
                                 <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
-                                <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
-                                <li><a onclick="FilterByStatus('aceptadas', this)">Pausadas</a></li>
-                                <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
+                                <li><a onclick="FilterByStatus(1, this)">Activas</a></li>
+                                <li><a onclick="FilterByStatus(4, this)">Pausadas</a></li>
+                                <li><a onclick="FilterByStatus(2, this)">Finalizadas</a></li>
                             </ul>
                         </div>
-                        
                         <!-- Subastas -->
                         <div class="columns is-multiline" id="my_auctions">
                             <script src="js/mis_subastas.js"></script>
@@ -318,6 +317,7 @@
                             </script>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>
@@ -345,8 +345,9 @@
                             <li>Felipe Torres</li>
                             <li>Leandro Cejas</li>
                         </ul>
+                    </div>
                 </div>
             </div>
         </footer>
- 
-</body>
+    </body>
+</html>

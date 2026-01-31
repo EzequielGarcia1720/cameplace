@@ -1,9 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
-// Importamos las funciones. 
-// IMPORTANTE: "../ofertas" asume que ofertas.js está una carpeta atrás. 
-// Si tu estructura es diferente, ajusta la ruta.
 const {
     GetAllOffers,
     CreateOffert,
@@ -11,20 +7,24 @@ const {
     GetOffersByAuction,
 } = require("../ofertas");
 
-// GET
+// GET /api/v1/offers
 router.get("/", async (req, res) => {
+    // Filtros de consulta
     const filterStatus = req.query.status; 
     const filterOrder = req.query.order;
     const filterSearch = req.query.search;
 
+    // Construir la consulta SQL con filtros
     let querySQL = 'SELECT * FROM offers';
     let parameters = [];
-
+    
+    // Aplicar filtros si existen
     if (filterStatus) {
         querySQL += ' WHERE estado = $1'; 
         parameters.push(filterStatus);
     }
 
+    // Filtro de búsqueda en título y descripción
     if (filterSearch) {
         const paramIndex = parameters.length + 1;
         if (parameters.length > 0) {
@@ -35,12 +35,14 @@ router.get("/", async (req, res) => {
         parameters.push(`%${filterSearch}%`);
     }
 
+    // Ordenar resultados
     let sortDirection = 'DESC'; 
     if (filterOrder && filterOrder.toUpperCase() === 'ASC') {
         sortDirection = 'ASC';
     }
     querySQL += ` ORDER BY creation_date ${sortDirection}`;
-
+    
+    // Ejecutar la consulta
     try {
         const result = await GetAllOffers(querySQL, parameters);
         if (result) {
@@ -54,15 +56,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-/*router.get("/:id", async (req, res) => {
-    const offers = await GetOffer(req.params.id);
-    if (offers === undefined)
-        return sendStatus(404)
-    res.json(offers);
-});*/
-
-
-//POST. /api/v1/offers
+// POST /api/v1/offers
 router.post("/", async (req, res) => {
     // Validar que se haya proporcionado un cuerpo
     if (req.body === undefined)
@@ -112,7 +106,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(offert);
 });
 
-// DELETE
+// DELETE /api/v1/offers/:id
 router.delete("/:id", async (req, res) => {
     // Verificar si la oferta existe
     const offert = await GetOffer(req.params.id);

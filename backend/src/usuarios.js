@@ -9,19 +9,19 @@ const dbClient = new Pool({
 });
 
 //Verificar si el usuario existe
-async function checkUsernameExists(username) {
+async function checkEmailExists(email) {
     const res = await dbClient.query(
-        'SELECT 1 FROM users WHERE username = $1',
-        [username]
+        'SELECT 1 FROM users WHERE email = $1',
+        [email]
     );
     return res.rowCount > 0;
 }
 
 //GetUserID
-async function getUserID(username) {
+async function getUserID(email) {
     const response = await dbClient.query(
-        "SELECT id from users where username = $1",
-        [username]
+        "SELECT id from users where email = $1",
+        [email]
     )
     return response.rows[0];
 }
@@ -49,8 +49,8 @@ async function getUser(id) {
 
 //NewUser
 async function newUser(username, psswd, email, firstname, lastname, tel, biography, image_url, ubication) {
-    if (await checkUsernameExists(username)) {
-        const err = new Error('Username already exists');
+    if (await checkEmailExists(email)) {
+        const err = new Error('Email already in use');
         err.status = 409;
         throw err;
     }
@@ -107,10 +107,28 @@ async function deleteUser(userID){
     return { message: 'Usuario eliminado', id: userID };
 };
 
+//Login User
+async function loginUser(email, psswd) {
+    const response = await dbClient.query(
+        'SELECT id, username, email, image_url FROM users WHERE email = $1 AND psswd = $2',
+        [email, psswd]
+    );
+
+    if (response.rowCount === 0) {
+        const err = new Error('Email o contraseña incorrectos');
+        err.status = 401;
+        throw err;
+    }
+
+    return response.rows[0];
+};
+
 module.exports = {
     getAllUsers,
     getUser,
     newUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserID,
+    loginUser
 };
