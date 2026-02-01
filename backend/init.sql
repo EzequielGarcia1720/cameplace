@@ -110,7 +110,7 @@ CREATE TABLE offers (
     FOREIGN KEY (bidder_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
-    estado VARCHAR(20) DEFAULT 'Activas' NOT NULL CHECK (estado IN ('Activas', 'Aceptadas', 'Finalizadas')),
+    estado VARCHAR(20) DEFAULT 'Activa' NOT NULL CHECK (estado IN ('Activa', 'Aceptada', 'Finalizada')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -275,12 +275,12 @@ INSERT INTO offers (
     (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
     'Oferta por iPhone',
     'Te ofrezco $110,000 en efectivo por el iPhone',
-    ARRAY['https://ejemplo.com/of1.jpg'],
+    '',
     110000.00,
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPhone%' LIMIT 1),
-    'Activas',
+    'Aceptada',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
@@ -292,19 +292,19 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'Activas',
+    'Activa',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
 ),
 (
     (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
     'Oferta por Nintendo Switch',
     'Te ofrezco $50,000 más mi colección de juegos retro por la Nintendo Switch',
-    ARRAY['https://ejemplo.com/retro1.jpg', 'https://ejemplo.com/retro2.jpg'],
+    'https://media.istockphoto.com/id/1403098902/es/foto/gamepads-anticuados.jpg?s=612x612&w=0&k=20&c=XdX17uPUYALlol2qLY8EWQAuHrPsvVkY--TngRfJYOI=',
     50000.00,
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
-    'Activas',
+    'Finalizada',
     CURRENT_TIMESTAMP - INTERVAL '3 days'
 ),
 (
@@ -316,7 +316,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
-    'Activas',
+    'Activa',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
@@ -328,7 +328,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
-    'Activas',
+    'Aceptada',
     CURRENT_TIMESTAMP - INTERVAL '4 days'
 ),
 (
