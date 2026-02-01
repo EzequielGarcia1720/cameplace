@@ -72,9 +72,9 @@ router.post("/", async (req, res) => {
 // PUT /api/v1/users/:id
 router.put("/:id", async (req, res) => {
     const userID = req.params.id;
-    const { username, firstname, lastname, biography } = req.body;
+    const { username, firstname, lastname, biography, image_url } = req.body;
     try {
-        const updatedUser = await updateUser(userID, username, firstname, lastname, biography);
+        const updatedUser = await updateUser(userID, username, firstname, lastname, biography, image_url);
         if (!updatedUser) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }

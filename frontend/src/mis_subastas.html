@@ -8,54 +8,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
-            <!-- Logo/boton de inicio -->
-            <div class="navbar-brand">
-                <a class="navbar-item" href="index.html">
-                    <strong>CameBastas</strong>
-                </a>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <!-- Logo/boton de inicio -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+            <strong>CameBastas</strong>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <!--Menu del navbar-->
+        <div id="navbarBasicExample" class="navbar-menu">
+
+            <!-- Lado derecho -->
+            <div id="navbar-end" class="navbar-end">
             </div>
-            
-            <!--Menu del navbar-->
-            <div id="navbarBasicExample" class="navbar-menu">
-
-                <!-- Lado derecho -->
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <div class="buttons">
-                            <!-- Boton de crear subasta -->
-                            <a class="button crear_subasta is-primary" href="crear_subasta.html">
-                                <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="navbar-item">
-                        <!-- dropdown -->
-                        <span class="dropdown is-right is-hoverable">
-                                <figure class="image is-32x32">
-                                    <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
-                                </figure>
-                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content">
-                                    <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                                    <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
-                                    <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
-                                    <hr class="dropdown-divider" />
-                                    <a class="dropdown-item"> Cerrar Sesión </a>
-                                </div>
-                            </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
+        </div>
         </nav>
 
         <!-- Index -->
@@ -71,19 +46,19 @@
                                     <ul>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
                                                 Dinero
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
-                                                Canje
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
+                                                Producto
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByTypeOffer()"/>
                                                 Mixta
                                             </label>
                                         </li>
@@ -94,139 +69,139 @@
                                     <ul>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(1)"/>
                                                 Electrónica, Audio y Video
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(2)"/>
                                                 Computación
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(3)"/>
                                                 Celulares y Telefonía
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(4)"/>
                                                 Electrodomésticos
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(5)"/>
                                                 Hogar y Muebles
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(6)"/>
                                                 Indumentaria y Accesorios / Moda
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(7)"/>
                                                 Deportes y Fitness
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(8)"/>
                                                 Juegos, Juguetes y Bebés
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(9)"/>
                                                 Libros y Revistas
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(10)"/>
                                                 Arte y Antigüedades
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(11)"/>
                                                 Coleccionables y Hobbies
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(12)"/>
                                                 Delicatessen y Vinos
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(13)"/>
                                                 Vehículos
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(14)"/>
                                                 Motos y Otros
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(15)"/>
                                                 Maquinaria y Equipos (Industrial, Construcción, Agrícola)
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(16)"/>
                                                 Inmuebles (Bienes Raíces)
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(17)"/>
                                                 Embarcaciones y Aeronaves
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(18)"/>
                                                 Herramientas
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(19)"/>
                                                 Industrias y Oficinas
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(20)"/>
                                                 Materiales y Residuos
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(21)"/>
                                                 Derechos y Acciones
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(22)"/>
                                                 Agrícola, Rural y Campo
                                             </label>
                                         </li>
                                         <li>
                                             <label class="checkbox">
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" onclick="FilterByCategory(12)"/>
                                                 Otros
                                             </label>
                                         </li>
@@ -277,7 +252,7 @@
                                         id="barra_busqueda"
                                     /> 
                                 <div class="control">
-                                    <button id="buscar_boton" class="button is-primary">Buscar</button>
+                                    <button id="buscar_boton" class="button is-primary" onclick="ApplySearch()">Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -291,14 +266,13 @@
                         <div class="tabs is-centered">
                             <ul>
                                 <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
-                                <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
-                                <li><a onclick="FilterByStatus('aceptadas', this)">Pausadas</a></li>
-                                <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
+                                <li><a onclick="FilterByStatus(0, this)">Activas</a></li>
+                                <li><a onclick="FilterByStatus(1, this)">Pausadas</a></li>
+                                <li><a onclick="FilterByStatus(2, this)">Finalizadas</a></li>
                             </ul>
                         </div>
-                        
                         <!-- Subastas -->
-                        <div class="grid is-col-min-12" id="my_auctions">
+                        <div class="columns is-multiline" id="my_auctions">
                             <script src="js/mis_subastas.js"></script>
                             <script>
                                 GetAuctions()
@@ -308,32 +282,36 @@
                 </div>
             </div>
         </div>
-                    <!-- Botones de paginacion -->
-                    <nav class="pagination" role="navigation" aria-label="pagination">
-                    </nav>
-        <footer>
-            <div class="footer-index">
-                <div class="columns">
-    
-                    <!-- Columna Number One -->
-                    <div class="column has-text-centered">
-                        <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
-                        <p>Introducción al Desarrollo de Software</p>
-                        <p>Curso 01 - Camejo</p>
-                        
-                    </div>
-                    <!-- Columna Number Two -->
-                    <div class="column has-text-centered">
-                        <p><strong>Integrantes:</strong></p>
-                        <ul>
-                            <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
-                            <li>Alex Espíndola</li>
-                            <li>Felipe Torres</li>
-                            <li>Leandro Cejas</li>
-                        </ul>
-                    </div>
+    </div>
+                <!-- Botones de paginacion -->
+                <nav class="pagination" role="navigation" aria-label="pagination">
+                </nav>
+    </body>
+    <script src="js/navbar.js"></script>
+    <script src="js/login.js"></script>
+    <!-- Pie de página -->
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+
+                <!-- Columna Number One -->
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+                    
+                </div>
+                <!-- Columna Number Two -->
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
                 </div>
             </div>
-        </footer>
-    </body>
+        </div>
+    </footer>
 </html>

@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+const { get } = require("./routes/subastas.routes");
 
 const dbClient = new Pool({
     user: "postgres",
@@ -9,25 +10,88 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions() {
-    const response = await dbClient.query(        
-        `SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null) {
+    // 1. Construimos la consulta base  
+    let querySQL = `
+        SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id 
-        ORDER BY a.modification_date DESC`
-    )
-    return response.rows
+    `;
+
+    // Array para los parámetros de la consulta
+    let params = [];
+
+    // 2. Agregamos el filtro si se proporcionó status_id
+    if (status_id && status_id !== '') {
+        querySQL += ' WHERE a.auction_status = $1'; // Usamos $1 para Postgres
+        params.push(status_id);
+    }
+    // Filtro de búsqueda en título y descripción
+    if (filterSearch) {
+        const paramIndex = params.length + 1;
+        if (params.length > 0) {
+            querySQL += ` AND (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        } else {
+            querySQL += ` WHERE (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
+        }
+        params.push(`%${filterSearch}%`);
+    }
+
+    if (filterTypeOffer) {
+        const paramIndex = params.length + 1;
+        if (params.length > 0) {
+            querySQL += ` AND a.offer_type = $${paramIndex}`;
+        } else {
+            querySQL += ` WHERE a.offer_type = $${paramIndex}`;
+        }
+        params.push(filterTypeOffer);
+    }
+
+    if (filterCategory) {
+        const paramIndex = params.length + 1;
+        if (params.length > 0) {
+            querySQL += ` AND a.category_id = $${paramIndex}`;
+        } else {
+            querySQL += ` WHERE a.category_id = $${paramIndex}`;
+        }
+        params.push(filterCategory);
+    }
+    // 3. Agregamos el ordenamiento
+    querySQL += ' ORDER BY a.modification_date DESC';
+
+    // 4. Ejecutamos la consulta
+    const response = await dbClient.query(querySQL, params);
+    
+    return response.rows;
 }
 
 async function GetAuction(id) {
-    const response = await dbClient.query(
-        "SELECT a.*, o.type, count(of.id) AS count_offers FROM auctions a LEFT JOIN offer_type o ON a.offer_type = o.id LEFT JOIN offers of ON a.id = of.auction_id WHERE a.id = $1 GROUP BY a.id, o.type", 
-        [id]
-    )
-    if (response.rows.length === 0)
-        return undefined
-    return response.rows[0]
+    
+    // Consulta SQL para obtener la subasta por ID
+    const querySQL = `
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname
+        FROM auctions a
+        LEFT JOIN condition c ON a.condition = c.id 
+        LEFT JOIN status s ON a.auction_status = s.id
+        JOIN users u ON a.auctioneer_id = u.id
+        WHERE a.id = $1
+    `;
+
+    try {
+        const response = await dbClient.query(querySQL, [id]);
+        
+        //
+        if (response.rows.length === 0) {
+            return undefined;
+        }
+        
+        return response.rows[0];
+        
+    } catch (error) {
+        console.error("Error buscando la subasta individual:", error);
+        return undefined;
+    }
 }
 
 async function CreateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
@@ -92,6 +156,17 @@ async function UpdateAuction(id, title, descripcion, initial_price, category_id,
     }
 }
 
+// GET ALL Auctions where id = sesion_actual
+
+async function getAuctionsByUser(userID) {
+    const response = await dbClient.query(
+        `
+        SELECT * FROM auctions where auctioneer_id = $1
+        `,
+        [userID]
+    );
+    return response.rows;
+}
 
 module.exports = {
     GetAllAuctions,
@@ -99,4 +174,5 @@ module.exports = {
     CreateAuction,
     RemoveAuction,
     UpdateAuction,
+    getAuctionsByUser
 }

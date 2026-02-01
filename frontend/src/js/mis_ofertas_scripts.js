@@ -103,13 +103,13 @@ async function GetOffers() {
             }
 
             // Generamos el HTML completo de la oferta
-            const offer_html = `
+            const offer_html = `    
             <article class="message is-link">
                 <div class="message-header" style="align-items: center;">
                     <span class="tag is-link is-light mr-2">${fecha}</span>
 
                     <h3 style="flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 10px;">
-                        <a href="./mis_ofertas.html?id=${offer.auction_id}" style="color: inherit; text-decoration: none;">
+                        <a style="color: inherit; text-decoration: none;">
                             ${offer.title}
                         </a>
                     </h3>
@@ -153,7 +153,7 @@ async function GetOffers() {
                 </div>    
             </article>
             `;
-
+            // Añadimos el HTML generado al contenedor
             let auctionElement = document.createElement("div");
             auctionElement.className = "card post mb-4"; 
             auctionElement.innerHTML = offer_html;
@@ -166,8 +166,6 @@ async function GetOffers() {
     }
 }
 
-// Llamada inicial para cargar los datos al entrar
-GetOffers();
 
 // --- FUNCIONES DE FILTRADO (Tus otras funciones) ---
 
@@ -194,6 +192,9 @@ function FilterByStatus(estado, elementoHTML) {
 }
 
 window.DeleteOffer = function (id) {
+    if (!confirm("¿Estás seguro de que deseas cancelar esta oferta?")) {
+        return; // Si el usuario cancela, no hacemos nada
+    }
     const Backend_Offers = "http://localhost:3030/api/v1/offers/" + id
     console.log(Backend_Offers)
     fetch(Backend_Offers, {method: 'DELETE'}).then(() => GetOffers())

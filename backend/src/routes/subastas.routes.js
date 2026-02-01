@@ -5,13 +5,26 @@ const {
     GetAuction, 
     CreateAuction, 
     RemoveAuction, 
-    UpdateAuction 
+    UpdateAuction,
+    getAuctionsByUser
 } = require("../subastas");
 
 // GET /api/v1/auctions
 router.get("/", async (req, res) => {
-    const auctions = await GetAllAuctions();
-    res.json(auctions);
+    try {
+        // Obtener el parámetro de consulta 'status' si está presente
+        const filterStatus = req.query.status; 
+        const filterSearch = req.query.search;
+        const filterTypeOffer = req.query.type_offer;
+        const filterCategory = req.query.category;
+        // Llamamos a la función pasándole el filtro directamente
+        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory);
+        
+        res.json(auctions);
+    } catch (error) {
+        console.error("Error al obtener subastas:", error);
+        res.sendStatus(500);
+    }
 });
 
 // GET /api/v1/auctions/:id
@@ -21,6 +34,17 @@ router.get("/:id", async (req, res) => {
         res.sendStatus(404);
     }
     res.json(auction);
+});
+
+router.get("/user/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const auctions = await getAuctionsByUser(userId);
+        res.json(auctions);
+    } catch (error) {
+        console.error("Error al obtener subastas del usuario:", error);
+        res.sendStatus(500);
+    }
 });
 
 // POST /api/v1/auctions

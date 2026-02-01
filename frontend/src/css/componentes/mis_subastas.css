@@ -58,8 +58,8 @@
     }
 
 .columns {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .column .box {
@@ -90,18 +90,72 @@
 .card-footer {
     display: flex;
     justify-content: center;
-    padding: 10px;
 }
+
 .activo {
     background-color: lightgreen !important;
 }
+#my_auctions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.is-small {
+    width: 80px;
+    height: 40px;
+}
+
+.is-center {
+    display: flex;
+    justify-content: center;
+}
+
+.card-full-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-full-height .card-content {
+    flex-grow: 1;
+}
+
 .grid.is-col-min-12 {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
 }
 
 .cell.card {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cell.card .card-image {
+    flex-shrink: 0;
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.cell.card .card-image .image {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.cell.card .card-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 180px;
+}
+
+.cell.card .card-footer {
+    flex-shrink: 0;
+    border-top: 1px solid #e0e0e0;
+}
+.is-stretched {
+    width: 100%;
 }
