@@ -126,18 +126,11 @@ async function GetAuctions() {
                             <div class="content">
                                 Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
                             </div>
-                            <div class="columns is-vcentered is-center">
-                                    <div class="column">
-                                        <button class="button is-outlined">
-                                            <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                        </button>
-                                    </div>
-                                    <div class="column is-narrow">
-                                        <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                            <a>Finalizar</a>  
-                                        </button>
-                                    </div>
-                            </div>
+                            <button class="button is-outlined is-stretched">
+                                <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
+                            </button>
+                                    
+                       
                         </div>
                         <footer class="card-footer">
                             <p class="buttons">

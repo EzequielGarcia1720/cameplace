@@ -287,7 +287,7 @@ INSERT INTO offers (
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
     'Cambio por Xbox Series X',
     'Te ofrezco mi Xbox Series X más $20,000 por la PS5',
-    ARRAY['https://ejemplo.com/xbox1.jpg', 'https://ejemplo.com/xbox2.jpg'],
+    'https://www.digitaltrends.com/tachyon/2023/11/ps5-on-table.jpg?resize=1200%2C720',
     20000.00,
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
@@ -330,4 +330,16 @@ INSERT INTO offers (
     (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
     'Activas',
     CURRENT_TIMESTAMP - INTERVAL '4 days'
+),
+(
+    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
+    'Cambio por Xbox Series X',
+    'Te ofrezco mi Xbox Series X más $20,000 por la PS5',
+    'https://www.digitaltrends.com/tachyon/2023/11/ps5-on-table.jpg?resize=1200%2C720',
+    20000.00,
+    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
+    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
+    (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
+    'Activas',
+    CURRENT_TIMESTAMP - INTERVAL '1 day'
 );
