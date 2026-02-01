@@ -1,6 +1,6 @@
 .auction_columns {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
     gap: 10px;
 }
 
@@ -16,3 +16,4 @@
 figure.image.is-2by1 {
     margin-bottom: 1rem;
 }
+
