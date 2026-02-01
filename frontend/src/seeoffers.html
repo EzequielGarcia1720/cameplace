@@ -234,20 +234,55 @@
                     }).then(response => {
                         if(!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`)
-                            
                         }
                         return response.json()
                     }).then(data => {
                         console.log("Success", data)
-                        window.location.replace("mis_subastas.html")
+                        
                     }).catch(error => {
                         console.error("Error", error)
-                    }) 
-                    
-                }) 
-            
+                    })
+                    const urlParams_auction = new URLSearchParams(window.location.search)
+                    const id_auction = urlParams.get('id')
+                    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id_auction;
+
+                    fetch(Backend_Auctions).then((response_auctions) => {
+                        return response_auctions.json()
+                    }).then((auction) => {
+                        const data_auction = {
+                            title: auction.title,
+                            initial_price: auction.initial_price,
+                            category_id: auction.category_id,
+                            condition: auction.condition,
+                            offer_type: auction.offer_type,
+                            images_urls: auction.images_urls,
+                            descripcion: auction.descripcion,
+                            auctioneer_id: auction.auctioneer_id,
+                            auction_status: 2, 
+                            location_id: auction.location_id
+                        };
+
+                        fetch(Backend_Auctions, {
+                        headers: { 'Content-Type': 'application/json' },
+                        method: 'PUT',
+                        body: JSON.stringify(data_auction),
+                   
+                        }).then(response => {
+                            if(!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`)
+                                
+                            }
+                            return response.json()
+                        }).then(data => {
+                            console.log("Success", data)
+                            window.location.replace("mis_subastas.html")
+                        }).catch(error => {
+                            console.error("Error", error)
+                        })
+                    })
+                })
             }
-            
+                            
         </script>
         <!-- Data de las ofertas -->
         <div class="container" style="flex-grow: 1;" id="offers_container">

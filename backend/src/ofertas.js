@@ -109,7 +109,7 @@ async function UpdateStateOfTheOffer(id) {
     try {
         QuerySQL = `
         UPDATE offers o SET estado = CASE WHEN o.id = $1 
-        THEN 'Aceptadas' ELSE 'Finalizadas' END 
+        THEN 'Aceptada' ELSE 'Finalizada' END 
         FROM auctions a WHERE a.id = o.auction_id 
         AND o.auction_id = (SELECT o.auction_id FROM offers o WHERE o.id = $1);`
         const result = await dbClient.query(QuerySQL,[id])
