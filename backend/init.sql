@@ -340,6 +340,6 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'Activas',
+    'Activa',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
 );
