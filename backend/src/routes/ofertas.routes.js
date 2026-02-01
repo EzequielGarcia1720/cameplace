@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
+    GetOffer,
     GetAllOffers,
     CreateOffert,
     RemoveOffer,
@@ -77,8 +78,8 @@ router.post("/", async (req, res) => {
     // Validaciones
     if (id === undefined)
         return res.status(400).send("Number not provided");
-    if (await GetOffert(id) !== undefined)
-        return res.status(409).send("The auction already exists");
+    if (await GetOffer(id) !== undefined)
+        return res.status(409).send("The offer already exists");
     if (offer_type === undefined) 
         return res.status(400).send("Type of offer not provided");
     if (title === undefined) 
