@@ -106,9 +106,8 @@ const navbarloged = `
 
                         </span>
                         <span class="icon is-small">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            
                         </span>
-                        </button>
                     </div>
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
