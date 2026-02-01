@@ -334,7 +334,7 @@ INSERT INTO offers (
 (
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
     'Cambio por Xbox Series X',
-    'Te ofrezco mi Xbox Series X más $20,000 por la PS5',
+    'Te ofrezco mi Xbox Series X más $10,000 por la PS5',
     'https://www.digitaltrends.com/tachyon/2023/11/ps5-on-table.jpg?resize=1200%2C720',
     20000.00,
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
