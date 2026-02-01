@@ -5,7 +5,8 @@ const {
     GetAuction, 
     CreateAuction, 
     RemoveAuction, 
-    UpdateAuction 
+    UpdateAuction,
+    getAuctionsByUser
 } = require("../subastas");
 
 // GET /api/v1/auctions
@@ -33,6 +34,17 @@ router.get("/:id", async (req, res) => {
         res.sendStatus(404);
     }
     res.json(auction);
+});
+
+router.get("/user/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const auctions = await getAuctionsByUser(userId);
+        res.json(auctions);
+    } catch (error) {
+        console.error("Error al obtener subastas del usuario:", error);
+        res.sendStatus(500);
+    }
 });
 
 // POST /api/v1/auctions
