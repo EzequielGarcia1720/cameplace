@@ -102,7 +102,7 @@ CREATE TABLE offers (
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
     title varchar(80) NOT NULL,
     descripcion TEXT NOT NULL,
-    images_urls TEXT NOT NULL,
+    images_urls TEXT,
     mount DECIMAL(10,2) NOT NULL,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
@@ -292,7 +292,7 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
 ),
 (
@@ -304,30 +304,30 @@ INSERT INTO offers (
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '3 days'
 ),
 (
     (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
     'Oferta por Samsung Galaxy S23',
     'Te ofrezco $90,000 en efectivo por el Samsung Galaxy S23 Ultra',
-    ARRAY['https://ejemplo.com/samsung1.jpg'],
+    '',
     90000.00,
     (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
 ),
 (
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
     'Cambio por iPad Pro',
     'Te ofrezco mi tablet Samsung Galaxy Tab S7 por el iPad Pro',
-    ARRAY['https://ejemplo.com/tab1.jpg', 'https://ejemplo.com/tab2.jpg'],
+    'https://http2.mlstatic.com/D_669050-MLA88640534447_072025-O.jpg',
     0.00,
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
     (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
-    'activas',
+    'Activas',
     CURRENT_TIMESTAMP - INTERVAL '4 days'
 );

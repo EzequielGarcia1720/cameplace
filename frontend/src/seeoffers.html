@@ -70,6 +70,7 @@
         <script>
             const urlParams = new URLSearchParams(window.location.search)
             const id = urlParams.get('id')
+            console.log("antes de llamar get offers id", id)
             GetOffers(id)
             const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
             fetch(Backend_Auctions).then((response) => {
@@ -96,8 +97,12 @@
                     
             });
             async function GetOffers(id) {
-                console.log(id)
+                console.log("en la funcion get offers", id)
+                if (id === undefined) {
+                    return
+                }
                 const URL = "http://localhost:3030/api/v1/offers/" + id
+                console.log("url",URL)
                 const response = await fetch(URL)
                 const offers = await response.json();
                 console.log(offers)
@@ -105,7 +110,19 @@
                 offers.forEach(offer => {
                     let contenido_tags = offer.auction_offer_type
                     let amount = offer.offer_amount
-                    if (contenido_tags === 1) {
+                    let image_offer = ""
+
+                    if (image_offer && image_offer.length > 0) {
+                        image_offer = `
+                        <div class="column is-narrow">
+                            <figure class="image is-256x256" style="padding-top: 25px">
+                                <img src=${offer.offer_images} class="fixed-image">
+                            </figure>
+                        </div>`
+                    }
+
+
+                    if (contenido_tags === 2) {
                         amount = `<p class="title is-5"></p>`
                         contenido_tags = `
                         <span class="tag is-warning">
@@ -113,7 +130,7 @@
                             <span>Producto de Canje</span>
                         </span>`
                     }
-                    if (contenido_tags === 2) {
+                    if (contenido_tags === 1) {
                         amount = `<p class="title is-5">$${offer.offer_amount}</p>`
                         contenido_tags = `
                         <span class="tag is-success">
@@ -155,14 +172,8 @@
                             <!-- Cuerpo de la oferta -->
                             <div class="message-body">
                                 <div class="columns is-vcentered">
-                                
-                                    <div class="column is-narrow">
-                                        <figure class="image is-256x256" style="padding-top: 25px">
-                                            <img src=${offer.offer_images} class="fixed-image">
-                                        </figure>
-                                    </div>
-                                    
-                                    <div class="column" style="padding-left: 40px">
+                                    ${image_offer}
+                                    <div class="column" style="padding-left: 0px">
                                         <div class="card-content">
                                             <div class="media">
                                                 <div class="media-left">

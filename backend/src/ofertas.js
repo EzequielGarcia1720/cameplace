@@ -47,6 +47,7 @@ async function GetAllOffers(querySQL, parameters) {
 // Obtener las ofertas de acuerdo a la subasta
 async function GetOffersByAuction(id) {
     const querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
+    console.log("id recibido:", id)
     const response = await dbClient.query(querySQL, [id]);
     if (response.rows.length === 0)
         return undefined
@@ -108,7 +109,7 @@ async function UpdateStateOfTheOffer(id) {
     try {
         QuerySQL = `
         UPDATE offers o SET estado = CASE WHEN o.id = $1 
-        THEN 'aceptadas' ELSE 'finalizadas' END 
+        THEN 'Aceptadas' ELSE 'Finalizadas' END 
         FROM auctions a WHERE a.id = o.auction_id 
         AND o.auction_id = (SELECT o.auction_id FROM offers o WHERE o.id = $1);`
         const result = await dbClient.query(QuerySQL,[id])
