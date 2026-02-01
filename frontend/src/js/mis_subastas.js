@@ -60,34 +60,24 @@ find_button.addEventListener("click", () => {
 // Mis subastas
 
 async function GetAuctions() {
-    document.getElementById("my_auctions").innerHTML = ""
-    const URL = "http://localhost:3030/api/v1/auctions"
-    const response = await fetch(URL)
-    const auctions = await response.json();
-    auctions.forEach(auction => {
-        let status_auction = auction.auction_status
-        let card = `
-            <div>
-                <div class="cell card card-full-height" style="width: 400px; height: 780px;">
-
-    // Limpiamos el contenedor antes de agregar nuevas tarjetas
+    // 1. Limpiamos el contenedor
     const container = document.getElementById("my_auctions");
     container.innerHTML = ""; 
-
-
+    
     try {
-
+        // 2. Preparamos los parámetros (Filtros)
         const params = new URLSearchParams();
 
-        // Agregamos parámetros solo si tienen valor
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
         if (currentFilters.type_offer) params.append('type_offer', currentFilters.type_offer);
         if (currentFilters.category) params.append('category', currentFilters.category);
 
-        // Agregamos parámetros solo si tienen valor
-        const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`
-        const response = await fetch(URL)
+        // 3. Construimos la URL (UNA SOLA VEZ)
+        const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`;
+        
+        // 4. Hacemos el fetch (UNA SOLA VEZ)
+        const response = await fetch(URL);
 
         // Verificamos si la respuesta es exitosa
         if (!response.ok) {
@@ -97,77 +87,21 @@ async function GetAuctions() {
         // Parseamos la respuesta JSON
         const auctions = await response.json();
 
-        // Construimos las tarjetas de subastas
+        // 5. Construimos las tarjetas
         auctions.forEach(auction => {
-            let finish_auction = auction.auction_status
+            // CORRECCIÓN: Usamos una variable clara para el estado
+            let status_auction = auction.auction_status; 
+            
+            // Definimos la variable card vacía primero
+            let card = "";
 
-            let card = `
-                <div class="cell card">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img
-                                src=${auction.images_urls}
-                                alt="Placeholder image"
-                            />
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-4">${auction.title}</p>
-                                <p class="title is-5">$${auction.initial_price}</p>
-                            </div>
-                        </div>
-                        <div class="content">
-                            ${auction.descripcion}
-                        </div>
-                        <div class="content">
-                            Condición: ${auction.auction_condition}
-                        </div>
-                        <div class="content">
-                            Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                        </div>
-                        <div class="columns is-vcentered is-center">
-                                <div class="column">
-                                    <button class="button is-outlined">
-                                        <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                    </button>
-                                </div>
-                                <div class="column is-narrow">
-                                    <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                        <a>Finalizar</a>  
-                                    </button>
-                                </div>
-                        </div>
-                    </div>
-                    <footer class="card-footer">
-                        <p class="buttons">
-                            <a class="button is-success is-outlined is-small" href="./auction.html?id=${auction.id}">
-                                <span class="icon">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </span>
-                                <span>Editar</span> 
-                            </a>
-                            <button class="button is-dark is-outlined is-small" onclick="PauseAuction(${auction.id})">
-                                <span class="icon">
-                                    <i class="fa-solid fa-pause"></i>
-                                </span>
-                                <span>Pausar</span> 
-                            </button>
-                            <button class="button is-danger is-outlined is-small" onclick="DeleteAuction(${auction.id})">
-                                <span>Eliminar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-times"></i>
-                                </span>
-                            </button>
-                        </p>
-                    </footer>
-                </div>`
-
-        if (status_auction === 0) {
-            card = `
-                <div>
-                    <div class="cell card card-full-height" style="width: 400px; height: 780px;">
+            // --- TU LÓGICA DE ESTADOS (Con tu HTML intacto) ---
+            
+            // CASO 1: Subasta con status 0 (activada)
+            if (status_auction === 0) {
+                card = `
+        
+                    <div class="cell card card-full-height">
                         <div class="card-image">
                             <figure class="image is-4by3">
                                 <img
@@ -227,76 +161,79 @@ async function GetAuctions() {
                                 </button>
                             </p>
                         </footer>
-                    </div>`
-        }
-        if (status_auction === 1) {
-            card = `
-                <div>
-                    <div class="cell card card-full-height" style="width: 400px; height: 780px;">
-                        <div class="card-image">
-                            <figure class="image is-4by3">
-                                <img
-                                    src=${auction.images_urls}
-                                    alt="Placeholder image"
-                                />
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-4">${auction.title}</p>
-                                    <p class="title is-5">$${auction.initial_price}</p>
+                    </div>`;
+            }
+
+            // CASO 2: Subasta con status 1 (Pausada)
+            if (status_auction === 1) {
+                card = `
+                        <div class="cell card card-full-height">
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    <img
+                                        src=${auction.images_urls}
+                                        alt="Placeholder image"
+                                    />
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p class="title is-4">${auction.title}</p>
+                                        <p class="title is-5">$${auction.initial_price}</p>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    ${auction.descripcion}
+                                </div>
+                                <div class="content">
+                                    Condición: ${auction.auction_condition}
+                                </div>
+                                <div class="content">
+                                    Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
+                                </div>
+                                <div class="columns is-vcentered is-center">
+                                        <div class="column">
+                                            <button class="button is-outlined">
+                                                <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
+                                            </button>
+                                        </div>
+                                        <div class="column is-narrow">
+                                            <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
+                                                <a>Finalizar</a>  
+                                            </button>
+                                        </div>
                                 </div>
                             </div>
-                            <div class="content">
-                                ${auction.descripcion}
-                            </div>
-                            <div class="content">
-                                Condición: ${auction.auction_condition}
-                            </div>
-                            <div class="content">
-                                Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                            </div>
-                            <div class="columns is-vcentered is-center">
-                                    <div class="column">
-                                        <button class="button is-outlined">
-                                            <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                        </button>
-                                    </div>
-                                    <div class="column is-narrow">
-                                        <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                            <a>Finalizar</a>  
-                                        </button>
-                                    </div>
-                            </div>
-                        </div>
-                        <footer class="card-footer">
-                            <p class="buttons">
-                                <a class="button is-success is-outlined is-small" href="./auction.html?id=${auction.id}">
-                                    <span class="icon">
-                                        <i class="fas fa-pen-to-square"></i>
-                                    </span>
-                                    <span>Editar</span> 
-                                </a>
-                                <button class="button is-dark is-outlined is-small" onclick="PauseAuction(${auction.id})">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-pause"></i>
-                                    </span>
-                                    <span>Activar</span> 
-                                </button>
-                                <button class="button is-danger is-outlined is-small" onclick="DeleteAuction(${auction.id})">
-                                    <span>Eliminar</span>
-                                    <span class="icon is-small">
-                                        <i class="fas fa-times"></i>
-                                    </span>
-                                </button>
-                            </p>
-                        </footer>
-                    </div>`
+                            <footer class="card-footer">
+                                <p class="buttons">
+                                    <a class="button is-success is-outlined is-small" href="./auction.html?id=${auction.id}">
+                                        <span class="icon">
+                                            <i class="fas fa-pen-to-square"></i>
+                                        </span>
+                                        <span>Editar</span> 
+                                    </a>
+                                    <button class="button is-dark is-outlined is-small" onclick="PauseAuction(${auction.id})">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-play"></i>
+                                        </span>
+                                        <span>Activar</span> 
+                                    </button>
+                                    <button class="button is-danger is-outlined is-small" onclick="DeleteAuction(${auction.id})">
+                                        <span>Eliminar</span>
+                                        <span class="icon is-small">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </button>
+                                </p>
+                            </footer>
+                        </div>`;
             }
+
+            // CASO 3: Subasta Finalizada (Status 2)
             if (status_auction === 2) {
                 card = `
-                    <div class="cell card card-full-height" style="width: 400px; height: 780px;">
+                    <div class="cell card card-full-height">
                         <div class="card-image">
                             <figure class="image is-4by3">
                                 <img
@@ -324,112 +261,21 @@ async function GetAuctions() {
                         </div>
                         <footer class="card-footer">
                             <div class="content">
-                                FINALIZADA
+                                <p class="title is-6">FINALIZADA</p>
                             </div>
                         </footer>
-                    </div>`
-        }
-        let auctions_container = document.getElementById("my_auctions")
-        let auctionactual = document.createElement("div")
-        auctionactual.classname = "card post"
-        auctionactual.innerHTML = card
-        auctions_container.appendChild(auctionactual)
-    });
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-4">${auction.title}</p>
-                                <p class="title is-5">$${auction.initial_price}</p>
-                            </div>
-                        </div>
-                        <div class="content">
-                            ${auction.descripcion}
-                        </div>
-                        <div class="content">
-                            Condición: ${auction.auction_condition}
-                        </div>
-                        <div class="content">
-                            Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                        </div>
-                        <div class="columns is-vcentered">
-                                <div class="column">
-                                    <button class="button is-outlined">
-                                        <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                    </button>
-                                </div>
-                                <div class="column is-narrow">
-                                    <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                        <a>Finalizar</a>  
-                                    </button>
-                                </div>
-                        </div>
-                    </div>
-                    <footer class="card-footer">
-                        <p class="buttons">
-                            <a class="button is-success is-outlined" href="./auction.html?id=${auction.id}">
-                                <span class="icon">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </span>
-                                <span>Editar</span> 
-                            </a>
-                            <button class="button is-dark is-outlined" onclick="PauseAuction(${auction.id})">
-                                <span class="icon">
-                                    <i class="fa-solid fa-pause"></i>
-                                </span>
-                                <span>${auction.status_name}</span> 
-                            </button>
-                            <button class="button is-danger is-outlined" onclick="DeleteAuction(${auction.id})">
-                                <span>Eliminar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-times"></i>
-                                </span>
-                            </button>
-                        </p>
-                    </footer>
-                </div>`
-            if (finish_auction === 2) {
-                card = `
-                    <div class="cell card">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img
-                                src=${auction.images_urls}
-                                alt="Placeholder image"
-                            />
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                            <div class="media-content">
-                                <p class="title is-4">${auction.title}</p>
-                                <p class="title is-5">$${auction.initial_price}</p>
-                            </div>
-                        </div>
-                        <div class="content">
-                            ${auction.descripcion}
-                        </div>
-                        <div class="content">
-                            Condición: ${auction.auction_condition}
-                        </div>
-                        <div class="content">
-                            Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
-                        </div>
-                    </div>
-                    <footer class="card-footer">
-                        <div class="content">
-                            FINALIZADA
-                        </div>
-                    </footer>
-                </div>
-                `
+                    </div>`;
             }
-            let auctions_container = document.getElementById("my_auctions")
-            let auctionactual = document.createElement("div")
-            auctionactual.classname = "card post"
-            auctionactual.innerHTML = card
-            auctions_container.appendChild(auctionactual)
+
+            // Si por alguna razón no entra en ningún IF, card estará vacía y no mostrará error
+            if (card !== "") {
+                let auctionactual = document.createElement("div");
+                auctionactual.className = "card post";
+                auctionactual.innerHTML = card;
+                container.appendChild(auctionactual);
+            }
         });
+
     } catch (error) {
         console.error("Error cargando subastas:", error);
         container.innerHTML = `<div class="notification is-danger">Error al cargar las subastas. Asegúrate de que el backend esté corriendo.</div>`;
@@ -437,7 +283,6 @@ async function GetAuctions() {
 }
 
 // Inicializamos la carga de subastas
-GetAuctions();
 
 function FilterByCategory(categoryId) {
     currentFilters.category = categoryId;
