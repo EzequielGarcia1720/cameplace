@@ -17,6 +17,14 @@ async function checkEmailExists(email) {
     return res.rowCount > 0;
 }
 
+async function checkUsernameExists(username) {
+    const res = await dbClient.query(
+        'SELECT 1 FROM users WHERE username = $1',
+        [username]
+    );
+    return res.rowCount > 0;
+}
+
 //GetUserID
 async function getUserID(email) {
     const response = await dbClient.query(
@@ -65,7 +73,7 @@ async function newUser(username, psswd, email, firstname, lastname, tel, biograp
 
 
 //UpdateUser
-async function updateUser(userID, username, firstname, lastname, biography) {
+async function updateUser(userID, username, firstname, lastname, biography, image_url) {
     // Obtener el usuario actual
     const currentUser = await getUser(userID);
     if (!currentUser) {
@@ -82,8 +90,8 @@ async function updateUser(userID, username, firstname, lastname, biography) {
     }
 
     const response = await dbClient.query(
-        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4 WHERE id = $5 RETURNING *',
-        [username, firstname, lastname, biography, userID]
+        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4, image_url = $5 WHERE id = $6 RETURNING *',
+        [username, firstname, lastname, biography, image_url, userID]
     );
 
     if (response.rowCount === 0) {

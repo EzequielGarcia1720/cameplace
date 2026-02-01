@@ -96,7 +96,7 @@ const navbarloged = `
                     <!-- dropdown -->
                     <span class="dropdown is-right is-hoverable">
                         <figure class="image is-32x32">
-                            <img class="is-rounded" src="${sessionStorage.getItem('image_url')}" />
+                            <img id="foto_perfil_navbar" class="is-rounded" src="${sessionStorage.getItem('image_url')}" />
                         </figure>
                     
                     <div class="dropdown-trigger">
