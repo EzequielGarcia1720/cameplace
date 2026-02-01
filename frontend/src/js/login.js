@@ -27,6 +27,9 @@ function initLoginForm() {
                 sessionStorage.setItem('sesion_actual', userId);
                 sessionStorage.setItem('username', data.user.username);
                 sessionStorage.setItem('image_url', data.user.image_url);
+                if (sessionStorage.getItem('image_url') === 'null') {
+                    sessionStorage.setItem('image_url', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+                }
 
                 // Limpiar el formulario
                 loginForm.reset();

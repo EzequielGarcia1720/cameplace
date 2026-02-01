@@ -128,6 +128,9 @@ async function loginUser(email, psswd) {
         throw err;
     }
 
+    if (!response.rows[0].image_url || response.rows[0].image_url === null || response.rows[0].image_url === '') {
+        response.rows[0].image_url = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    }
     return response.rows[0];
 };
 

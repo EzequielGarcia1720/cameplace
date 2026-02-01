@@ -19,7 +19,8 @@
             nombre: document.getElementById('nombre_input').value,
             apellido: document.getElementById('apellido_input').value,
             usuario: document.getElementById('usuario_input').value,
-            bio: document.getElementById('biografia_textarea').value
+            bio: document.getElementById('biografia_textarea').value,
+            image_url: document.getElementById('foto_url_input').value
             };
 
         fieldset.disabled = false;
@@ -88,7 +89,7 @@ btnGuardar.addEventListener('click', async (e) => {
         document.getElementById('apellido_input').value = valoresOriginales.apellido;
         document.getElementById('usuario_input').value = valoresOriginales.usuario;
         document.getElementById('biografia_textarea').value = valoresOriginales.bio;
-        document.getElementById('foto_url_input').value = valoresOriginales.fotoUrl;
+        document.getElementById('foto_url_input').value = valoresOriginales.image_url;
 
         modoLectura();
     });
@@ -120,6 +121,9 @@ btnGuardar.addEventListener('click', async (e) => {
             document.getElementById("biografia_textarea").value = user.biography ?? "";
             document.getElementById("foto_url_input").value = user.image_url ?? "";
             document.getElementById("perfil_img").src = user.image_url
+            if(user.image_url === null || user.image_url === '') {
+                document.getElementById("perfil_img").src = sessionStorage.getItem('image_url');
+            }
         } catch (err) {
             console.error(err);
             alert("Error cargando perfil");
