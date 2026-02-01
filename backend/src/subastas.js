@@ -9,10 +9,10 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null) {
     // 1. Construimos la consulta base  
     let querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.* FROM auctions a
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id 
@@ -36,28 +36,28 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
         }
         params.push(`%${filterSearch}%`);
     }
+    //FILTRO
+    // if (filterTypeOffer) {
+    //     const paramIndex = params.length + 1;
+    //     if (params.length > 0) {
+    //         querySQL += ` AND a.offer_type = $${paramIndex}`;
+    //     } else {
+    //         querySQL += ` WHERE a.offer_type = $${paramIndex}`;
+    //     }
+    //     params.push(filterTypeOffer);
+    // }
 
-    if (filterTypeOffer) {
-        const paramIndex = params.length + 1;
-        if (params.length > 0) {
-            querySQL += ` AND a.offer_type = $${paramIndex}`;
-        } else {
-            querySQL += ` WHERE a.offer_type = $${paramIndex}`;
-        }
-        params.push(filterTypeOffer);
-    }
-
-    if (filterCategory) {
-        const paramIndex = params.length + 1;
-        if (params.length > 0) {
-            querySQL += ` AND a.category_id = $${paramIndex}`;
-        } else {
-            querySQL += ` WHERE a.category_id = $${paramIndex}`;
-        }
-        params.push(filterCategory);
-    }
+    // if (filterCategory) {
+    //     const paramIndex = params.length + 1;
+    //     if (params.length > 0) {
+    //         querySQL += ` AND a.category_id = $${paramIndex}`;
+    //     } else {
+    //         querySQL += ` WHERE a.category_id = $${paramIndex}`;
+    //     }
+    //     params.push(filterCategory);
+    // }
     // 3. Agregamos el ordenamiento
-    querySQL += ' ORDER BY a.modification_date DESC';
+    querySQL += ' ORDER BY a.creation_date DESC';
 
     // 4. Ejecutamos la consulta
     const response = await dbClient.query(querySQL, params);
@@ -69,7 +69,7 @@ async function GetAuction(id) {
     
     // Consulta SQL para obtener la subasta por ID
     const querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id
         FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
