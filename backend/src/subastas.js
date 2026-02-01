@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+const { get } = require("./routes/subastas.routes");
 
 const dbClient = new Pool({
     user: "postgres",
@@ -155,6 +156,17 @@ async function UpdateAuction(id, title, descripcion, initial_price, category_id,
     }
 }
 
+// GET ALL Auctions where id = sesion_actual
+
+async function getAuctionsByUser(userID) {
+    const response = await dbClient.query(
+        `
+        SELECT * FROM auctions where auctioneer_id = $1
+        `,
+        [userID]
+    );
+    return response.rows;
+}
 
 module.exports = {
     GetAllAuctions,
@@ -162,4 +174,5 @@ module.exports = {
     CreateAuction,
     RemoveAuction,
     UpdateAuction,
+    getAuctionsByUser
 }
