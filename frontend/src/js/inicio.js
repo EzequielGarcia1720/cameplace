@@ -107,7 +107,7 @@ async function GetAuctions() {
                         <div class="content">
                             ${auction.descripcion}
                             <br>
-                            <p style="font-weight: bold;"> Última Modificación: ${auction.modification_date.slice(0,10)} </p>
+                            <p style="font-weight: bold; color: black"> Última Modificación: ${auction.modification_date.slice(0,10)} </p>
                         </div>
                     </div>
                 </div>
