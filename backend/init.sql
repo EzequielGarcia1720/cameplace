@@ -54,7 +54,7 @@ CREATE TABLE status (
     status_name VARCHAR(100) NOT NULL
 );
 
-INSERT INTO status (id,status_name) VALUES (0,'Activa'), (1,'Pausada'), (2,'Finalizada');
+INSERT INTO status (status_name) VALUES ('Activa'), ('Pausada'), ('Finalizada');
 
 -- Users
 CREATE TABLE users (
@@ -126,7 +126,8 @@ INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) 
 ('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
 ('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina'),
 ('ana_ramirez', 'hashed_password_101', 'ana@email.com', 'Ana', 'Ramírez', 1122334488, 'Rosario, Argentina'),
-('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina')
+('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina'),
+('sofia_torres', 'hashed_password_303', 'sofia@email.com', 'Sofía', 'Torres', 1122334500, 'Tucumán, Argentina')
 
 ON CONFLICT DO NOTHING;
 
@@ -154,7 +155,7 @@ INSERT INTO auctions (
     'https://i.blogs.es/f15f0b/img_2033/650_1200.jpeg',
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
     1,
     CURRENT_TIMESTAMP - INTERVAL '5 days',
     CURRENT_TIMESTAMP - INTERVAL '1 day'
@@ -182,7 +183,7 @@ INSERT INTO auctions (
     'https://i.redd.it/e2i0bz33to061.jpg',
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Finalizada' LIMIT 1),
     3,
     CURRENT_TIMESTAMP - INTERVAL '1 day',
     CURRENT_TIMESTAMP
@@ -196,7 +197,7 @@ INSERT INTO auctions (
     'https://http2.mlstatic.com/D_NQ_NP_895048-MLU69664239579_052023-O.webp',
     (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
     4,
     CURRENT_TIMESTAMP - INTERVAL '4 days',
     CURRENT_TIMESTAMP - INTERVAL '2 days'
@@ -224,7 +225,7 @@ INSERT INTO auctions (
     'https://www.cordobadigital.net/wp-content/uploads/2023/11/Xbox-Serie-X-3.webp',
     (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
     6,
     CURRENT_TIMESTAMP - INTERVAL '6 days',
     CURRENT_TIMESTAMP - INTERVAL '3 days'
@@ -252,7 +253,7 @@ INSERT INTO auctions (
     'https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg',
     (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
     (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
+    (SELECT id FROM status WHERE status_name = 'Finalizada' LIMIT 1),
     8,
     CURRENT_TIMESTAMP - INTERVAL '5 days',
     CURRENT_TIMESTAMP - INTERVAL '2 days'

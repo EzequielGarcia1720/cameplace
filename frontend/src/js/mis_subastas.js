@@ -1,47 +1,8 @@
-
 let currentFilters = {
     status: '',    // '' significa todos
     search: '',  // Texto del buscador
-    order: 'DESC',  // Orden por defecto
-    category: '',  // Categoría seleccionada
-    type_offer: ''  // Tipo de oferta seleccionado  
 };
-//Ordenar por
-const button_recently = document.querySelector("#boton_recientes");
-const button_older = document.querySelector("#boton_masantiguas");
-const button_greater_number_of_offers = document.querySelector("#boton_mayor_cant_ofertas")
-const button_fewer_offers = document.querySelector("#boton_menor_cant_ofertas")
-const button_higher_price = document.querySelector("#boton_mayor_precio")
-const button_lower_price = document.querySelector("#boton_menor_precio")
 
-const ordenar_por = (boton1, boton2) => {
-    boton1.classList.toggle('activo');
-    boton2.classList.remove('activo');
-}   
-
-button_recently.addEventListener("click", () => {
-    ordenar_por(button_recently, button_older);
-});
-
-button_older.addEventListener("click", () => {
-    ordenar_por(button_older,button_recently)
-})
-
-button_greater_number_of_offers.addEventListener("click", () => {
-    ordenar_por(button_greater_number_of_offers, button_fewer_offers);
-});
-
-button_fewer_offers.addEventListener("click", () => {
-    ordenar_por(button_fewer_offers, button_greater_number_of_offers);
-});
-
-button_higher_price.addEventListener("click", () => {
-    ordenar_por(button_higher_price, button_lower_price);
-});
-
-button_lower_price.addEventListener("click", () => {
-    ordenar_por(button_lower_price, button_higher_price);
-});
 //Barra de busqueda
 const find_button = document.querySelector("#buscar_boton")
 const searchbar = document.querySelector("#barra_busqueda")
@@ -53,30 +14,27 @@ find_button.addEventListener("click", () => {
         alert("No se pueden realizar búsquedas vacías")
         return;
     }
-    
 })
 
-
 // Mis subastas
-
 async function GetAuctions() {
-    // 1. Limpiamos el contenedor
+
+    // Limpiamos el contenedor
     const container = document.getElementById("my_auctions");
     container.innerHTML = ""; 
     
     try {
-        // 2. Preparamos los parámetros (Filtros)
+
+        // Preparamos los parámetros (Filtros)
         const params = new URLSearchParams();
 
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
-        if (currentFilters.type_offer) params.append('type_offer', currentFilters.type_offer);
-        if (currentFilters.category) params.append('category', currentFilters.category);
 
-        // 3. Construimos la URL (UNA SOLA VEZ)
+        // Construimos la URL (UNA SOLA VEZ)
         const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`;
         
-        // 4. Hacemos el fetch (UNA SOLA VEZ)
+        // Hacemos el fetch (UNA SOLA VEZ)
         const response = await fetch(URL);
 
         // Verificamos si la respuesta es exitosa
@@ -87,18 +45,14 @@ async function GetAuctions() {
         // Parseamos la respuesta JSON
         const auctions = await response.json();
 
-        // 5. Construimos las tarjetas
+        // Construimos las tarjetas
         auctions.forEach(auction => {
-            // CORRECCIÓN: Usamos una variable clara para el estado
-            let status_auction = auction.auction_status; 
             
-            // Definimos la variable card vacía primero
+            let status_auction = auction.auction_status; 
             let card = "";
 
-            // --- TU LÓGICA DE ESTADOS (Con tu HTML intacto) ---
-            
-            // CASO 1: Subasta con status 0 (activada)
-            if (status_auction === 0) {
+            // CASO 1: Subasta con status 1 (Activada)
+            if (status_auction === 1) {
                 card = `
         
                     <div class="cell card card-full-height">
@@ -157,8 +111,8 @@ async function GetAuctions() {
                     </div>`;
             }
 
-            // CASO 2: Subasta con status 1 (Pausada)
-            if (status_auction === 1) {
+            // CASO 2: Subasta con status 2 (Pausada)
+            if (status_auction === 2) {
                 card = `
                         <div class="cell card card-full-height">
                             <div class="card-image">
@@ -186,16 +140,9 @@ async function GetAuctions() {
                                     Última modificación: ${auction.modification_date.slice(0,10)} a las ${auction.modification_date.slice(11,19)} 
                                 </div>
                                 <div class="columns is-vcentered is-center">
-                                        <div class="column">
-                                            <button class="button is-outlined">
-                                                <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
-                                            </button>
-                                        </div>
-                                        <div class="column is-narrow">
-                                            <button class="button is-outlined" onclick="FinishAuction(${auction.id})">
-                                                <a>Finalizar</a>  
-                                            </button>
-                                        </div>
+                                        <button class="button is-outlined is-stretched">
+                                            <a href="./seeoffers.html?id=${auction.id}">Ver Ofertas</a>  
+                                        </button>
                                 </div>
                             </div>
                             <footer class="card-footer">
@@ -223,8 +170,8 @@ async function GetAuctions() {
                         </div>`;
             }
 
-            // CASO 3: Subasta Finalizada (Status 2)
-            if (status_auction === 2) {
+            // CASO 3: Subasta Finalizada (Status 3)
+            if (status_auction === 3) {
                 card = `
                     <div class="cell card card-full-height">
                         <div class="card-image">
@@ -275,15 +222,18 @@ async function GetAuctions() {
     }
 }
 
-// Inicializamos la carga de subastas
-
 function FilterByCategory(categoryId) {
     currentFilters.category = categoryId;
     GetAuctions();
 }
 
-function FilterByTypeOffer() {
-    currentFilters.offer_type = document.getElementById("offer_type_filter").value;
+function FilterByTypeOffer(id, elementoHTML) {
+    if (currentFilters.offer_type == id) {
+        currentFilters.offer_type = '';
+        elementoHTML.checked = false;
+    } else {
+        currentFilters.offer_type = id;
+    }
     GetAuctions();
 }
 
@@ -320,10 +270,10 @@ window.PauseAuction = function(id) {
         return response.json();
     }).then((auction) => {
         let AuctionStatus = auction.auction_status
-        if (AuctionStatus == 1) {
-            AuctionStatus = 0
-        } else {
+        if (AuctionStatus == 2) {
             AuctionStatus = 1
+        } else {
+            AuctionStatus = 2
         }
         const data_auction = {
             title: auction.title,
@@ -383,7 +333,7 @@ window.FinishAuction = async function(id) {
             images_urls: auction.images_urls,
             descripcion: auction.descripcion,
             auctioneer_id: auction.auctioneer_id,
-            auction_status: 2, 
+            auction_status: 3, 
             location_id: auction.location_id
         };
 

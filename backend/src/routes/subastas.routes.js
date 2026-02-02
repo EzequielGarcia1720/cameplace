@@ -16,10 +16,20 @@ router.get("/", async (req, res) => {
         const filterStatus = req.query.status; 
         const filterSearch = req.query.search;
         const filterTypeOffer = req.query.type_offer;
-        const filterCategory = req.query.category;
+        const sortParam = req.query.sort;
+
+        let filterCategory = req.query.category;
+
+        if (!filterCategory) {
+            filterCategory = [];
+        } 
+        else if (!Array.isArray(filterCategory)) {
+            filterCategory = [filterCategory];
+        }
+
+        filterCategory = filterCategory.map(id => parseInt(id)).filter(id => !isNaN(id));
         // Llamamos a la función pasándole el filtro directamente
-        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory);
-        
+        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory, sortParam);
         res.json(auctions);
     } catch (error) {
         console.error("Error al obtener subastas:", error);
@@ -52,7 +62,6 @@ router.post("/", async (req, res) => {
     if (req.body === undefined)
         return res.status(400).send("No body was provided");
     
-    const id = req.body.id;
     const title = req.body.title;
     const descripcion = req.body.descripcion;
     const initial_price = req.body.initial_price;
@@ -64,10 +73,7 @@ router.post("/", async (req, res) => {
     const auction_status = req.body.auction_status;
     const location_id = req.body.location_id;
     
-    if (id === undefined)
-        return res.status(400).send("Number not provided");
-    if (await GetAuction(id) !== undefined)
-        return res.status(409).send("The auction already exists");
+
     if (title === undefined) 
         return res.status(400).send("Title not provided");
     if (descripcion === undefined) 
@@ -89,7 +95,7 @@ router.post("/", async (req, res) => {
     if (location_id === undefined) 
         return res.status(400).send("Location ID not provided");
 
-    const auction = await CreateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id);
+    const auction = await CreateAuction(title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id);
     
     if (auction === undefined)
         res.sendStatus(500);
