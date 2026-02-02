@@ -88,12 +88,15 @@ async function GetAuction(id) {
     
     // Consulta SQL para obtener la subasta por ID
     const querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id, u.image_url
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id, count(o.id) AS count_offers
         FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
         JOIN users u ON a.auctioneer_id = u.id
+        LEFT JOIN offers o ON o.auction_id = a.id
         WHERE a.id = $1
+        GROUP BY a.id, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id;
+
     `;
 
     try {
@@ -108,21 +111,21 @@ async function GetAuction(id) {
     }
 }
 
-async function CreateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
+async function CreateAuction(title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO auctions(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-            [id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id]
+            "INSERT INTO auctions(title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+            [title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id]
         )
         if  (result.rowCount === 0) {
             return undefined
         }
-    } catch {
+    } catch (e) {
+        console.log(e)
         return undefined
     }
 
     return {
-        id,
         title,
         descripcion,
         initial_price,
@@ -132,7 +135,7 @@ async function CreateAuction(id, title, descripcion, initial_price, category_id,
         auctioneer_id,
         offer_type,
         auction_status,
-        location_id,
+        location_id
     }
 }
 
