@@ -43,6 +43,83 @@
         </div> 
         <div class="column auction_column">
             <!-- Sección de Ofertar -->
+            <div class="bid-section">
+                <div class="bid-header">
+                    <h1 class="title is-4">Realizar Oferta</h1>
+                </div>
+
+                <!-- Pestañas de Tipo de Oferta -->
+                <div class="bid-tabs mt-4">
+                    <button class="bid-tab active" data-tab="cash">💰 Dinero</button>
+                    <button class="bid-tab" data-tab="trade">🔄 Producto</button>
+                    <button class="bid-tab" data-tab="mixed">💸 Mixta</button>
+                </div>
+
+                <!-- Formulario de Oferta en Dinero -->
+                <form class="bid-form active mt-5" id="cashForm">
+                    <div class="form-group">
+                        <label for="cashAmount">Monto en pesos:</label>
+                        <div class="field">
+                            <span class="input-prefix">$</span>
+                            <input class="input" type="number" id="cashAmount" min="150000" step="1000" 
+                                   placeholder="150000" required>
+                        </div>
+                        <small>Oferta mínima: $150,000</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        📨 Enviar Oferta en Dinero
+                    </button>
+                </form>
+
+                <!-- Formulario de Trueque -->
+                <form class="bid-form" id="tradeForm">
+                    <div class="form-group">
+                        <label for="tradeItem">¿Qué ofreces?</label>
+                        <input type="text" class="input" id="tradeItem" 
+                               placeholder="Ej: MacBook Pro 2020" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción del trueque:</label>
+                        <br>
+                        <textarea class="textarea" id="tradeDescription" rows="4" 
+                                  placeholder="Describe el estado, accesorios incluidos, etc..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Link de Imagen:</label>
+                        <br>
+                        <input class="input" id="tradeImageLink" 
+                                  placeholder="Proporciona un enlace a la imagen del producto" required></input>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary btn-full">
+                        🔄 Ofrecer Trueque
+                    </button>
+                </form>
+
+                <!-- Formulario Mixto -->
+                <form class="bid-form" id="mixedForm">
+                    <div class="form-group">
+                        <label for="mixedCash">Monto en dinero:</label>
+                        <div class="input-group">
+                            <span class="input-prefix">$</span>
+                            <input class="input" type="number" id="mixedCash" min="50000" step="1000" 
+                                   placeholder="50000" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mixedTrade">Item de trueque:</label>
+                        <input type="text" class="input" id="mixedTrade" 
+                               placeholder="Ej: Nintendo Switch + juegos" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-accent btn-full">
+                        💰🔄 Oferta Mixta
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
     <div class="columns mt-2 mb-5 auction_columns">
@@ -50,7 +127,7 @@
             <!-- Información de la Subasta -->
             <div class="auction-description">
                 <div class="auction-status-badge status-active">
-                    🟢 Subasta Activa
+                    🟢 Subasta Activa <!-- 🟡 Subasta Pausada-->
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">📅 Publicada:</span>
@@ -66,33 +143,30 @@
                 </div>
 
             </div>
-                <hr><!--------------------------------------------------------->
-                
-                <div class="seller-info">
-                    <img src="">
-                    <div>
-                        <strong>El Pepe</strong>
-                    </div>
+            <div class="auctioneer-info">
+                <img src="">
+                <div>
+                    <strong>El Pepe</strong>
                 </div>
+            </div>
 
-                <div class="auction-meta">
-                </div>
-
+            <div class="auction-meta">
                 <div class="product-description">
                     <h3>Descripción</h3>
                     <p>PlayStation 5 en perfecto estado, con muy poco uso. Incluye:</p>
-                    <ul>
-                        <li>Consola PS5 Standard</li>
-                        <li>Control DualSense blanco</li>
-                        <li>Cables HDMI y de alimentación</li>
-                        <li>Base incluida</li>
-                        <li>Caja original</li>
-                    </ul>
                     <p>La vendo porque me mudó y necesito el dinero. Acepto trueque por laptop gaming o iPhone.</p>
                 </div>
+            </div>
+
         </div>
         <div class="column auction_column">
             <!-- Lista de Ofertas Recientes -->
+            <div class="current-stats">
+                <div class="stat">
+                    <span class="stat-label"><strong>Ofertas recibidas:</strong></span>
+                    <span class="stat-value">8</span>
+                </div>
+            </div>
         </div>
     </div>
 <script src="js/navbar.js"></script>
