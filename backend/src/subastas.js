@@ -1,6 +1,4 @@
 const { Pool } = require("pg");
-const { get } = require("./routes/subastas.routes");
-
 const dbClient = new Pool({
     user: "postgres",
     password: "password",
@@ -10,60 +8,80 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null) {
-    // 1. Construimos la consulta base  
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null) {
+    // Construimos la consulta base  
     let querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id FROM auctions a
+        SELECT 
+            a.*, 
+            c.auction_condition, 
+            s.status_name, 
+            u.username, u.email, u.firstname, u.lastname, u.image_url,
+            COUNT(o.id) as cantidad_ofertas
+        FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
-        JOIN users u ON a.auctioneer_id = u.id 
+        JOIN users u ON a.auctioneer_id = u.id
+        LEFT JOIN offers o ON a.id = o.auction_id
     `;
 
     // Array para los parámetros de la consulta
     let params = [];
+    let whereClauses = [];
 
-    // 2. Agregamos el filtro si se proporcionó status_id
+    // Agregamos el filtro si se proporcionó status_id
     if (status_id && status_id !== '') {
-        querySQL += ' WHERE a.auction_status = $1'; // Usamos $1 para Postgres
         params.push(status_id);
+        whereClauses.push(`a.auction_status = $${params.length}`);
     }
+
+
     // Filtro de búsqueda en título y descripción
-    if (filterSearch) {
-        const paramIndex = params.length + 1;
-        if (params.length > 0) {
-            querySQL += ` AND (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
-        } else {
-            querySQL += ` WHERE (title ILIKE $${paramIndex} OR descripcion ILIKE $${paramIndex})`;
-        }
+    if (filterSearch && filterSearch !== '') {
         params.push(`%${filterSearch}%`);
+        whereClauses.push(`(a.title ILIKE $${params.length} OR a.descripcion ILIKE $${params.length})`);
     }
-    //FILTRO
-    // if (filterTypeOffer) {
-    //     const paramIndex = params.length + 1;
-    //     if (params.length > 0) {
-    //         querySQL += ` AND a.offer_type = $${paramIndex}`;
-    //     } else {
-    //         querySQL += ` WHERE a.offer_type = $${paramIndex}`;
-    //     }
-    //     params.push(filterTypeOffer);
-    // }
 
-    // if (filterCategory) {
-    //     const paramIndex = params.length + 1;
-    //     if (params.length > 0) {
-    //         querySQL += ` AND a.category_id = $${paramIndex}`;
-    //     } else {
-    //         querySQL += ` WHERE a.category_id = $${paramIndex}`;
-    //     }
-    //     params.push(filterCategory);
-    // }
-    // 3. Agregamos el ordenamiento
-    querySQL += ' ORDER BY a.creation_date DESC';
+    // Filtro de categoría
+    if (filterCategory && filterCategory.length> 0) {
+        params.push(filterCategory);
+        whereClauses.push(`a.category_id = ANY($${params.length}::int[])`);
+    }
 
-    // 4. Ejecutamos la consulta
-    const response = await dbClient.query(querySQL, params);
-    
-    return response.rows;
+    // Filtro por tipo de oferta
+    if (filterTypeOffer && filterTypeOffer !== '') {
+        params.push(filterTypeOffer);
+        whereClauses.push(`a.offer_type = $${params.length}`);
+    }
+    // Agregamos las cláusulas WHERE si existen
+    if (whereClauses.length > 0) {
+        querySQL += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    // Agregamos el ordenamiento
+    querySQL += ` GROUP BY a.id, c.id, s.id, u.id `;
+
+    switch (sortParam) {
+        case 'antiguas':
+            querySQL += ' ORDER BY a.creation_date ASC';
+            break;
+        case 'mayor_ofertas':
+            querySQL += ' ORDER BY cantidad_ofertas DESC';
+            break;
+        case 'menor_ofertas':
+            querySQL += ' ORDER BY cantidad_ofertas ASC';
+            break;
+        case 'recientes':
+        default:
+            querySQL += ' ORDER BY a.creation_date DESC';
+    }
+
+    try {
+        const response = await dbClient.query(querySQL, params);
+        return response.rows;
+    } catch (error) {
+        console.error("Error al obtener subastas:", error);
+        return [];
+    }
 }
 
 async function GetAuction(id) {
@@ -83,14 +101,10 @@ async function GetAuction(id) {
 
     try {
         const response = await dbClient.query(querySQL, [id]);
-        
-        //
         if (response.rows.length === 0) {
             return undefined;
         }
-        
         return response.rows[0];
-        
     } catch (error) {
         console.error("Error buscando la subasta individual:", error);
         return undefined;

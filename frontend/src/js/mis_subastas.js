@@ -1,49 +1,8 @@
-
 let currentFilters = {
     status: '',    // '' significa todos
     search: '',  // Texto del buscador
-    //filtro
-    // order: 'DESC',  // Orden por defecto
-    // category: '',  // Categoría seleccionada
-    // type_offer: ''  // Tipo de oferta seleccionado  
 };
-//Ordenar por
-//filtro
-// const button_recently = document.querySelector("#boton_recientes");
-// const button_older = document.querySelector("#boton_masantiguas");
-// const button_greater_number_of_offers = document.querySelector("#boton_mayor_cant_ofertas")
-// const button_fewer_offers = document.querySelector("#boton_menor_cant_ofertas")
-// const button_higher_price = document.querySelector("#boton_mayor_precio")
-// const button_lower_price = document.querySelector("#boton_menor_precio")
 
-// const ordenar_por = (boton1, boton2) => {
-//     boton1.classList.toggle('activo');
-//     boton2.classList.remove('activo');
-// }   
-
-// button_recently.addEventListener("click", () => {
-//     ordenar_por(button_recently, button_older);
-// });
-
-// button_older.addEventListener("click", () => {
-//     ordenar_por(button_older,button_recently)
-// })
-
-// button_greater_number_of_offers.addEventListener("click", () => {
-//     ordenar_por(button_greater_number_of_offers, button_fewer_offers);
-// });
-
-// button_fewer_offers.addEventListener("click", () => {
-//     ordenar_por(button_fewer_offers, button_greater_number_of_offers);
-// });
-
-// button_higher_price.addEventListener("click", () => {
-//     ordenar_por(button_higher_price, button_lower_price);
-// });
-
-// button_lower_price.addEventListener("click", () => {
-//     ordenar_por(button_lower_price, button_higher_price);
-// });
 //Barra de busqueda
 const find_button = document.querySelector("#buscar_boton")
 const searchbar = document.querySelector("#barra_busqueda")
@@ -55,31 +14,27 @@ find_button.addEventListener("click", () => {
         alert("No se pueden realizar búsquedas vacías")
         return;
     }
-    
 })
 
-
 // Mis subastas
-
 async function GetAuctions() {
-    // 1. Limpiamos el contenedor
+
+    // Limpiamos el contenedor
     const container = document.getElementById("my_auctions");
     container.innerHTML = ""; 
     
     try {
-        // 2. Preparamos los parámetros (Filtros)
+
+        // Preparamos los parámetros (Filtros)
         const params = new URLSearchParams();
 
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
-        //filtro
-        // if (currentFilters.type_offer) params.append('type_offer', currentFilters.type_offer);
-        // if (currentFilters.category) params.append('category', currentFilters.category);
 
-        // 3. Construimos la URL (UNA SOLA VEZ)
+        // Construimos la URL (UNA SOLA VEZ)
         const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`;
         
-        // 4. Hacemos el fetch (UNA SOLA VEZ)
+        // Hacemos el fetch (UNA SOLA VEZ)
         const response = await fetch(URL);
 
         // Verificamos si la respuesta es exitosa
@@ -90,12 +45,13 @@ async function GetAuctions() {
         // Parseamos la respuesta JSON
         const auctions = await response.json();
 
-        // 5. Construimos las tarjetas
+        // Construimos las tarjetas
         auctions.forEach(auction => {
             
             let status_auction = auction.auction_status; 
             let card = "";
 
+            // CASO 1: Subasta con status 1 (Activada)
             if (status_auction === 1) {
                 card = `
         
@@ -266,17 +222,20 @@ async function GetAuctions() {
     }
 }
 
-// Inicializamos la carga de subastas
-//FILTRO
-// function FilterByCategory(categoryId) {
-//     currentFilters.category = categoryId;
-//     GetAuctions();
-// }
+function FilterByCategory(categoryId) {
+    currentFilters.category = categoryId;
+    GetAuctions();
+}
 
-// function FilterByTypeOffer() {
-//     currentFilters.offer_type = document.getElementById("offer_type_filter").value;
-//     GetAuctions();
-// }
+function FilterByTypeOffer(id, elementoHTML) {
+    if (currentFilters.offer_type == id) {
+        currentFilters.offer_type = '';
+        elementoHTML.checked = false;
+    } else {
+        currentFilters.offer_type = id;
+    }
+    GetAuctions();
+}
 
 function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis subastas"]'); 

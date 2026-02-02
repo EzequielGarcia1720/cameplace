@@ -15,12 +15,21 @@ router.get("/", async (req, res) => {
         // Obtener el parámetro de consulta 'status' si está presente
         const filterStatus = req.query.status; 
         const filterSearch = req.query.search;
-        //FILTRO
-        // const filterTypeOffer = req.query.type_offer;
-        // const filterCategory = req.query.category;
+        const filterTypeOffer = req.query.type_offer;
+        const sortParam = req.query.sort;
+
+        let filterCategory = req.query.category;
+
+        if (!filterCategory) {
+            filterCategory = [];
+        } 
+        else if (!Array.isArray(filterCategory)) {
+            filterCategory = [filterCategory];
+        }
+
+        filterCategory = filterCategory.map(id => parseInt(id)).filter(id => !isNaN(id));
         // Llamamos a la función pasándole el filtro directamente
-        const auctions = await GetAllAuctions(filterStatus, filterSearch);
-        
+        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory, sortParam);
         res.json(auctions);
     } catch (error) {
         console.error("Error al obtener subastas:", error);
