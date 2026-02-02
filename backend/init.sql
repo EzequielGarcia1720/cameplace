@@ -126,7 +126,8 @@ INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) 
 ('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
 ('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina'),
 ('ana_ramirez', 'hashed_password_101', 'ana@email.com', 'Ana', 'Ramírez', 1122334488, 'Rosario, Argentina'),
-('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina')
+('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina'),
+('sofia_torres', 'hashed_password_303', 'sofia@email.com', 'Sofía', 'Torres', 1122334500, 'Tucumán, Argentina')
 
 ON CONFLICT DO NOTHING;
 

@@ -97,21 +97,21 @@ async function GetAuction(id) {
     }
 }
 
-async function CreateAuction(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
+async function CreateAuction(title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO auctions(id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-            [id, title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id]
+            "INSERT INTO auctions(title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+            [title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id]
         )
         if  (result.rowCount === 0) {
             return undefined
         }
-    } catch {
+    } catch (e) {
+        console.log(e)
         return undefined
     }
 
     return {
-        id,
         title,
         descripcion,
         initial_price,
@@ -121,7 +121,7 @@ async function CreateAuction(id, title, descripcion, initial_price, category_id,
         auctioneer_id,
         offer_type,
         auction_status,
-        location_id,
+        location_id
     }
 }
 

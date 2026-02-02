@@ -8,172 +8,194 @@
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
-            <!-- Logo/boton de inicio -->
-            <div class="navbar-brand">
-                <a class="navbar-item" href="index.html">
-                <strong>CameBastas</strong>
+        <!-- Logo/boton de inicio -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+            <strong>CameBastas</strong>
 
-                </a>
+            </a>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <!--Menu del navbar-->
+        <div id="navbarBasicExample" class="navbar-menu">
+
+            <!-- Lado derecho -->
+            <div id="navbar-end" class="navbar-end">
             </div>
-
-            <!--Menu del navbar-->
-            <div id="navbarBasicExample" class="navbar-menu">
-
-                <!-- Lado derecho -->
-                <div class="navbar-end">
-
-                    <div class="navbar-item">
-                        <!-- dropdown -->
-                        <span class="dropdown is-right is-hoverable">
-                            <figure class="image is-32x32">
-                                <img class="is-rounded" src="https://avatars.githubusercontent.com/u/231128308?v=4" />
-                            </figure>
-                        
-                        <div class="dropdown-trigger">
-
-                            <!-- Imagen -->
-                            <span>
-
-                            </span>
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                            </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <div class="dropdown-content">
-                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
-                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
-                            <hr class="dropdown-divider" />
-                            <a class="dropdown-item"> Cerrar Sesión </a>
-                            </div>
-                        </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
+        </div>
         </nav>
         <!--Index-->
-        <div class="index container">
+        <div class="index container" id="create_auction">
             <!-- Título -->
             <div class="titulo pt-5 pb-5">
                 <h1 class="title has-text-centered">CREAR SUBASTA</h1>
             </div>
              <!-- Formulario de creación de subasta -->
-            <div class="field">
-                <label class="label">Título</label>
-                <div class="control">
-                    <input id="titulo_input" class="input" type="text" placeholder="Escriba el título de la subasta">
-                </div>
-            </div>
-            
-            <!-- Precio Inicial -->
-            <div class="field">
-                <label class="label">Precio Inicial</label>
-                <div class="control">
-                    <input id="precio_input" class="input" type="number" placeholder="Ingrese el precio inicial" min="0" step="0.01">
-                </div>
-            </div>
-            
-            <!-- Categoría -->
-            <div class="field">
-                <label class="label">Categoría</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="categoria_select">
-                            <option value="" disabled selected>Selecciona una Categoría</option>
-                            <option>Electrónica, Audio y Video</option>
-                            <option>Computación</option>
-                            <option>Celulares y Telefonía</option>
-                            <option>Electrodomésticos</option>
-                            <option>Hogar y Muebles</option>
-                            <option>Indumentaria y Accesorios / Moda</option>
-                            <option>Deportes y Fitness</option>
-                            <option>Juegos, Juguetes y Bebés</option>
-                            <option>Libros y Revistas</option>
-                            <option>Arte y Antigüedades</option>
-                            <option>Coleccionables y Hobbies</option>
-                            <option>Delicatessen y Vinos</option>
-                            <option>Vehículos</option>
-                            <option>Motos y Otros</option>
-                            <option>Maquinaria y Equipos (Industrial, Construcción, Agrícola)</option>
-                            <option>Inmuebles (Bienes Raíces)</option>
-                            <option>Embarcaciones y Aeronaves</option>
-                            <option>Herramientas</option>
-                            <option>Industrias y Oficinas</option>
-                            <option>Materiales y Residuos</option>
-                            <option>Derechos y Acciones</option>
-                            <option>Agrícola, Rural y Campo</option>
-                            <option>Otros</option>
-                        </select>
-                    </div>
-                </div>
-            
-            <!-- Condición -->
-            <div class="field">
-                <label class="label">Condición</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="condicion_select">
-                            <option value="" disabled selected>Selecciona una Condición</option>
-                            <option>Nuevo</option>
-                            <option>Usado</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        
-            <!-- Tipo de canje -->
-            <div class="field">
-                <label class="label">Tipo de canje</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="canje_select">
-                            <option value="" disabled selected>Selecciona un Tipo de canje</option>
-                            <option>Solo Dinero</option>
-                            <option>Solo Artículos</option>
-                            <option>Dinero y Artículos</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Imagen -->
-            <div class="field">
-                <label class="label">Imagen</label>
-                <div class="control">
-                    <input id="imagen_input" class="input" type="url" placeholder="Ingrese el link de la imagen">
-                </div>
-            </div>
-            
-            <!-- Descripción -->
-            <div class="field">
-                <label class="label">Descripción</label>
-                <div class="control">
-                    <textarea id="descripcion_textarea" class="textarea" placeholder="Ingrese una descripción"></textarea>
-                </div>
-            </div>
-            <!-- Botones -->
-            <div class="field is-grouped">
-                <div class="control">
-                    <button id="create_button" class="button is-primary">Crear Subasta</button>
-                </div>
-                <div class="control">
-                    <button id="cancel_button" class="button is-primary">Cancelar</button>
-                </div>
-            </div>
-            </div>
-        </div>  
+            <script>
+                const form = `
+                        <div class="field">
+                            <label class="label">Título</label>
+                            <div class="control">
+                                <input class="input" type="text" id="auction_title" placeholder="Escriba el título de la subasta">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Precio Inicial</label>
+                            <div class="control">
+                                <input class="input" type="number" id="auction_initial_price" placeholder="Ingrese el precio inicial" min="0" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label class="label">Categoría</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="select_categories">
+                                        <option value="" disabled selected>Selecciona una Categoría</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Condición</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select id="select_conditions">
+                                            <option value="" disabled selected>Selecciona una Condición</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Tipo de canje</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select id="select_offers_type">
+                                        <option value="" disabled selected>Selecciona un Tipo de canje</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Imagen</label>
+                            <div class="control">
+                                <input class="input" type="link" id="auction_image" placeholder="Ingrese el link de la imagen">
+                            </div>
+                        </div>
+                    
+                        <div class="field">
+                            <label class="label">Descripción</label>
+                            <div class="control">
+                                <textarea class="textarea" id="auction_description" placeholder="Ingrese una descripción"></textarea>
+                            </div>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-primary" onclick="CreateAuction()">Crear subasta</button>
+                            </div>
+                            <div class="control">
+                                <a class="button is-primary" href="index.html">Cancelar</a>
+                            </div>
+                        </div>`
+                    // Relleno cada dropdown con su respectivo contenido
+                    const backend_categories = "http://localhost:3030/api/v1/categories"
+                    fetch(backend_categories).then((response) => {
+                        return response.json()
+                    }).then((categories) => {
+                        const dropdown_categories = document.getElementById("select_categories")
+                        categories.forEach(category => {
+                            const NewCategory = document.createElement("option")
+                            NewCategory.value = category.id
+                            NewCategory.innerText = category.name_category
     
-    <script src="js/crear_subasta.js"></script>
+                            dropdown_categories.appendChild(NewCategory)
+                        });
+                        
+                    })
+
+                    const backend_offers_type = "http://localhost:3030/api/v1/offers_type"
+                    fetch(backend_offers_type).then((response) => {
+                        return response.json()
+                    }).then((offers_type) => {
+                        const dropdown_offers_type = document.getElementById("select_offers_type")
+                        offers_type.forEach(offer_type => {
+                            const NewOfferType = document.createElement("option")
+                            NewOfferType.value = offer_type.id
+                            NewOfferType.innerText = offer_type.type
+                           
+                            dropdown_offers_type.appendChild(NewOfferType)
+                        });
+                    })
+
+                    const backend_conditions = "http://localhost:3030/api/v1/conditions"
+                    fetch(backend_conditions).then((response) => {
+                        return response.json()
+                    }).then((conditions) => {
+                        const dropdown_conditions = document.getElementById("select_conditions")
+                        conditions.forEach(condition => {
+                            const NewCondition = document.createElement("option")
+                            NewCondition.value = condition.id
+                            NewCondition.innerText = condition.auction_condition
+                            
+                            dropdown_conditions.appendChild(NewCondition)
+                        });
+                    })
+                    // Appendeo el formulario de edición al contenedor
+                    let form_by_ID = document.getElementById("create_auction")
+                    let auction_edit = document.createElement("div")
+                    auction_edit.classname = "form"
+                    auction_edit.innerHTML = form
+                    form_by_ID.appendChild(auction_edit)
+                window.CreateAuction = function() {
+                    data_auction = {
+                        title: document.getElementById("auction_title").value,
+                        descripcion: document.getElementById("auction_description").value,
+                        initial_price: document.getElementById("auction_initial_price").value,
+                        category_id: document.getElementById("select_categories").value,
+                        condition: document.getElementById("select_conditions").value,
+                        images_urls: document.getElementById("auction_image").value,
+                        auctioneer_id: sessionStorage.getItem("sesion_actual"),
+                        offer_type: document.getElementById("select_offers_type").value,
+                        auction_status: 1,
+                        location_id: 1
+                    }
+
+                    if (data_auction.title.length === 0 || data_auction.initial_price <= 0 || data_auction.images_urls.length === 0 || data_auction.descripcion.length === 0 || data_auction.category_id.length === 0 || data_auction.condition.length === 0 || data_auction.offer_type.length === 0) {
+                        alert("Todos los campos son obligatorios y el precio inicial debe ser mayor a 0")
+                    } else {
+                        fetch("http://localhost:3030/api/v1/auctions", {
+                        headers: { 'Content-Type': 'application/json' }, 
+                        method: 'POST',
+                        body: JSON.stringify(data_auction),
+                        }).then(response => {
+                            if(!response.ok) {
+                                console.log(auctioneer_id)
+                                throw new Error(`HTTP error! status: ${response.status}`)
+                            
+                            }
+                            return response.json()
+                        }).then(data => {
+                            console.log("Success", data)
+                            window.location.replace("index.html")
+                        }).catch(error => {
+                            console.error("Error", error)
+                        })
+                    }
+                }
+
+            </script>
+
+        </div>
+    <script src="js/login.js"></script>
+    <script src="js/navbar.js"></script>
     </body>
     <footer>
     <div class="footer-index">
