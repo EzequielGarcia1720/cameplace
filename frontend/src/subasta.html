@@ -60,11 +60,10 @@
                     <div class="form-group">
                         <label for="cashAmount">Monto en pesos:</label>
                         <div class="field">
-                            <span class="input-prefix">$</span>
                             <input class="input" type="number" id="cashAmount" min="150000" step="1000" 
                                    placeholder="150000" required>
                         </div>
-                        <small>Oferta mínima: $150,000</small>
+                        <small>Oferta mínima: $150.000</small>
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-full">
@@ -102,10 +101,9 @@
                 <form class="bid-form" id="mixedForm">
                     <div class="form-group">
                         <label for="mixedCash">Monto en dinero:</label>
-                        <div class="input-group">
-                            <span class="input-prefix">$</span>
-                            <input class="input" type="number" id="mixedCash" min="50000" step="1000" 
-                                   placeholder="50000" required>
+                        <div class="field">
+                            <input class="input" type="number" id="cashAmount" min="150000" step="1000" 
+                                   placeholder="150000" required>
                         </div>
                     </div>
                     
@@ -113,6 +111,13 @@
                         <label for="mixedTrade">Item de trueque:</label>
                         <input type="text" class="input" id="mixedTrade" 
                                placeholder="Ej: Nintendo Switch + juegos" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Link de Imagen:</label>
+                        <br>
+                        <input class="input" id="mixedImageLink" 
+                                  placeholder="Proporciona un enlace a la imagen del producto" required></input>
                     </div>
 
                     <button type="submit" class="btn btn-accent btn-full">
