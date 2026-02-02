@@ -8,13 +8,20 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null) {
     // Construimos la consulta base  
     let querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id, u.image_url FROM auctions a
+        SELECT 
+            a.*, 
+            c.auction_condition, 
+            s.status_name, 
+            u.username, u.email, u.firstname, u.lastname, u.image_url,
+            COUNT(o.id) as cantidad_ofertas
+        FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
-        JOIN users u ON a.auctioneer_id = u.id 
+        JOIN users u ON a.auctioneer_id = u.id
+        LEFT JOIN offers o ON a.id = o.auction_id
     `;
 
     // Array para los parámetros de la consulta
@@ -51,7 +58,22 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
     }
 
     // Agregamos el ordenamiento
-    querySQL += ' ORDER BY a.creation_date DESC';
+    querySQL += ` GROUP BY a.id, c.id, s.id, u.id `;
+
+    switch (sortParam) {
+        case 'antiguas':
+            querySQL += ' ORDER BY a.creation_date ASC';
+            break;
+        case 'mayor_ofertas':
+            querySQL += ' ORDER BY cantidad_ofertas DESC';
+            break;
+        case 'menor_ofertas':
+            querySQL += ' ORDER BY cantidad_ofertas ASC';
+            break;
+        case 'recientes':
+        default:
+            querySQL += ' ORDER BY a.creation_date DESC';
+    }
 
     try {
         const response = await dbClient.query(querySQL, params);
