@@ -1,143 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CameBastas</title>
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <!-- Logo/boton de inicio -->
-        <div class="navbar-brand">
-            <a class="navbar-item" href="index.html">
-            <strong>CameBastas</strong>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CameBastas</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!-- Logo/boton de inicio -->
+            <div class="navbar-brand">
+                <a class="navbar-item" href="index.html">
+                <strong>CameBastas</strong>
 
-            </a>
+                </a>
 
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            </a>
-        </div>
-        
-        <!--Menu del navbar-->
-        <div id="navbarBasicExample" class="navbar-menu">
-
-            <!-- Lado derecho -->
-            <div id="navbar-end" class="navbar-end">
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                </a>
             </div>
-        </div>
-        </nav>
+            
+            <!--Menu del navbar-->
+            <div id="navbarBasicExample" class="navbar-menu">
 
-    <!-- Index -->
-    <div class="index container">
-        
-        <!-- Bienvenida-->
-        <div class="titulo pt-5 pb-5">
-            <h1 class="title has-text-centered">Bienvenido a Camebastas</h1>
-            <h2 class="subtitle has-text-centered">El mejor lugar para subastar tus productos.</h2>
-        </div>
-        <div class="subindex">
-            <!-- Barra de busqueda -->
-            <div class="searchbar">
-                <input
-                        id="search_input"
-                        class="input is-primary"
-                        type="text"
-                        placeholder="Buscador de subastas"
-                    /> 
-                <div class="control">
-                    <button id="search_button" class="button is-primary">Buscar</button>
+                <!-- Lado derecho -->
+                <div id="navbar-end" class="navbar-end">
                 </div>
             </div>
-        </div>
+            </nav>
 
-        <!-- Botones de paginacion -->
-        <nav class="pagination" role="navigation" aria-label="pagination">
-        <div class="navbar-end"> 
-            <a href="#" class="pagination-previous">Previous</a>
-            <a href="#" class="pagination-next">Next page</a>
-        </div>
-        </nav>
-        
-        <!-- Subastas -->
-        <div id="auctions" class="grid is-col-min-12"> 
-            <!-- <div class="cell card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                    <img
-                        src="https://bulma.io/assets/images/placeholders/1280x960.png"
-                        alt="Placeholder image"
-                    />
-                    </figure>
+            <!-- Index -->
+            <div class="columns">
+                <div class="column is-narrow">
+                    <div class="box" style="width: 300px">
+                        <div class="container1">
+                            <aside class="menu">
+                                <p class="menu-label">Filtro</p>
+                                <ul class="menu-list category-scroll">
+                                    <li>
+                                        <a class="is-active">Tipo de oferta</a>
+                                        <ul>
+                                            <li>
+                                                <label class="radio">
+                                                    <input type="radio" name="type_offer" onclick="FilterByTypeOffer(1, this)"/>
+                                                    Dinero
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="radio">
+                                                    <input type="radio" name="type_offer" onclick="FilterByTypeOffer(2, this)"/>
+                                                    Producto
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="radio">
+                                                    <input type="radio" name="type_offer" onclick="FilterByTypeOffer(3, this)"/>
+                                                    Mixta
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a class="is-active">Categoría</a>
+                                        <ul>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(1, this)"/>
+                                                    Electrónica, Audio y Video
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(2, this)"/>
+                                                    Computación
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(3, this)"/>
+                                                    Celulares y Telefonía
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(4, this)"/>
+                                                    Electrodomésticos
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(5, this)"/>
+                                                    Hogar y Muebles
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(6, this)"/>
+                                                    Indumentaria y Accesorios / Moda
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(7, this)"/>
+                                                    Deportes y Fitness
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(8, this)"/>
+                                                    Juegos, Juguetes y Bebés
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(9, this)"/>
+                                                    Libros y Revistas
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(10, this)"/>
+                                                    Arte y Antigüedades
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(11, this)"/>
+                                                    Coleccionables y Hobbies
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(12, this)"/>
+                                                    Delicatessen y Vinos
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(13, this)"/>
+                                                    Vehículos
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(14, this)"/>
+                                                    Motos y Otros
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(15, this)"/>
+                                                    Maquinaria y Equipos (Industrial, Construcción, Agrícola)
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(16, this)"/>
+                                                    Inmuebles (Bienes Raíces)
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(17, this)"/>
+                                                    Embarcaciones y Aeronaves
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(18, this)"/>
+                                                    Herramientas
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(19, this)"/>
+                                                    Industrias y Oficinas
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(20, this)"/>
+                                                    Materiales y Residuos
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(21, this)"/>
+                                                    Derechos y Acciones
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(22, this)"/>
+                                                    Agrícola, Rural y Campo
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="checkbox">
+                                                    <input type="checkbox" onclick="FilterByCategory(23, this)"/>
+                                                    Otros
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <p class="menu-label">Ordenar por</p>
+                                <ul class="menu-list">
+                                    <li>
+                                        <a class="is-active">Cronología</a>
+                                        <ul>
+                                            <li><a id="boton_recientes">Recientes</a></li>
+                                            <li><a id="boton_masantiguas">Mas antiguas</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a class="is-active">Actividad</a>
+                                        <ul>
+                                            <li><a id="boton_mayor_cant_ofertas">Mayor cantidad de ofertas</a></li>
+                                            <li><a id="boton_menor_cant_ofertas">Menor cantidad de ofertas</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </aside>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-content">
-                    <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-48x48">
-                        <img
-                            src="https://bulma.io/assets/images/placeholders/96x96.png"
-                            alt="Placeholder image"
-                        />
-                        </figure>
-                    </div>
-                    <div class="media-content">
-                        <p class="title is-5">John Smith</p>
-                        <p class="subtitle is-6">@johnsmith</p>
-                    </div>
-                    </div>
-
-                    <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
-                    iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
-                    <a href="#">#responsive</a>
-                    <br />
-                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                <div class="column">
+                    <div class="box">           
+                        <div class="container2">
+                            <!-- Bienvenida-->
+                            <div class="titulo pt-5 pb-5">
+                                <h1 class="title has-text-centered">Bienvenido a Camebastas</h1>
+                                <h2 class="subtitle has-text-centered">El mejor lugar para subastar tus productos.</h2>
+                            </div>
+                            <div class="subindex">
+                                <!-- Barra de busqueda -->
+                                <div class="searchbar">
+                                    <input
+                                            id="search_input"
+                                            class="input is-primary"
+                                            type="text"
+                                            placeholder="Buscador de subastas"
+                                        /> 
+                                    <div class="control">
+                                        <button id="search_button" class="button is-primary" onclick="ApplySearch()">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns is-multiline" id="auctions_container"></div>
+                            <!-- Botones de paginacion -->
+                            <nav class="pagination" role="navigation" aria-label="pagination">
+                                <div class="navbar-end"> 
+                                    <a href="#" class="pagination-previous">Previous</a>
+                                    <a href="#" class="pagination-next">Next page</a>
+                                </div>
+                            </nav>
+                            <!-- Subastas -->
+                            <div id="auctions" class="grid is-col-min-12"> 
+                                <script src="js/inicio.js"></script>
+                                <script>
+                                    GetAuctions()
+                                    </script>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div> -->
-            <script src="js/inicio.js"></script>
-            <script>
-                GetAuctions()
-            </script>
-        </div>
-
-        <!-- Botones de paginacion -->
-        <nav class="pagination" role="navigation" aria-label="pagination">
-        <div class="navbar-end"> 
-            <a href="#" class="pagination-previous">Previous</a>
-            <a href="#" class="pagination-next">Next page</a>
-        </div>
-        </nav>
-    </div>
-</body>
-<footer>
-    <div class="footer-index">
-        <div class="columns">
-            <!-- Columna Number One -->
-            <div class="column has-text-centered">
-                <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
-                <p>Introducción al Desarrollo de Software</p>
-                <p>Curso 01 - Camejo</p>
-                
             </div>
-            <!-- Columna Number Two -->
-            <div class="column has-text-centered">
-                <p><strong>Integrantes:</strong></p>
-                <ul>
-                    <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
-                    <li>Alex Espíndola</li>
-                    <li>Felipe Torres</li>
-                    <li>Leandro Cejas</li>
-                </ul>
-            </div>
-
+            <!-- Botones de paginacion -->
+            <nav class="pagination" role="navigation" aria-label="pagination">
+                <div class="navbar-end"> 
+                    <a href="#" class="pagination-previous">Previous</a>
+                    <a href="#" class="pagination-next">Next page</a>
+                </div>
+            </nav>
         </div>
-    </div>
-</footer>
-<script src="js/navbar.js"></script>
-<script src="js/login.js"></script>
+    </body>
+    <footer>
+        <div class="footer-index">
+            <div class="columns">
+                <!-- Columna Number One -->
+                <div class="column has-text-centered">
+                    <a href="https://intro-camejo.github.io/web/trabajos-practicos"><strong>Trabajo Práctico Final</strong></a>
+                    <p>Introducción al Desarrollo de Software</p>
+                    <p>Curso 01 - Camejo</p>
+                    
+                </div>
+                <!-- Columna Number Two -->
+                <div class="column has-text-centered">
+                    <p><strong>Integrantes:</strong></p>
+                    <ul>
+                        <li><a class="has-text-white" href="https://www.instagram.com/mellamanzeki_/">Ezequiel Gonzalo García</a></li>
+                        <li>Alex Espíndola</li>
+                        <li>Felipe Torres</li>
+                        <li>Leandro Cejas</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+    <script src="js/navbar.js"></script>
+    <script src="js/login.js"></script>
 </html>
