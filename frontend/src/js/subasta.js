@@ -45,14 +45,14 @@ async function loadAuctionDetails() {
                                 <h1 class="title is-4">Realizar Oferta</h1>
                             </div>
                             ${auction.auction_status === 3 ? `
-                                <div class="auction-ended-message" style="text-align:center; color:#d9534f; font-size:1.3em; margin:2em 0;">
+                                <div class="auction-ended-message ended-message-style">
                                     <strong>SUBASTA FINALIZADA</strong>
-                                    <p style="color:grey;">No se pueden realizar más ofertas.</p>
+                                    <p class="text-grey">No se pueden realizar más ofertas.</p>
                                 </div>
                             ` : auction.auction_status === 2 ? `
-                                <div class="auction-paused-message" style="text-align:center; color:#f0ad4e; font-size:1.3em; margin:2em 0;">
+                                <div class="auction-paused-message paused-message-style">
                                     <strong>SUBASTA PAUSADA</strong>
-                                    <p style="color:grey;">Las ofertas están temporalmente deshabilitadas.</p>
+                                    <p class="text-grey">Las ofertas están temporalmente deshabilitadas.</p>
                                 </div>
                             ` : `
                                 <!-- Pestañas de Tipo de Oferta -->
@@ -63,12 +63,12 @@ async function loadAuctionDetails() {
                                 </div>
 
                                 <!-- Mensaje inicial -->
-                                <div id="selectOfferMsg" class="select-offer-message" style="color:grey;text-align:center; margin:2em 0; font-size:1.1em;">
+                                <div id="selectOfferMsg" class="select-offer-message select-offer-style">
                                     Selecciona el tipo de oferta que deseas realizar
                                 </div>
 
                                 <!-- Formulario de Oferta en Dinero -->
-                                <form class="bid-form mt-5" id="cashForm" style="display:none;">
+                                <form class="bid-form mt-5" id="cashForm" hidden>
                                     <div class="form-group">
                                         <label for="cashAmount">Monto en pesos:</label>
                                         <div class="field">
@@ -83,7 +83,7 @@ async function loadAuctionDetails() {
                                 </form>
 
                                 <!-- Formulario de Trueque -->
-                                <form class="bid-form" id="tradeForm" style="display:none;">
+                                <form class="bid-form" id="tradeForm" hidden>
                                     <div class="form-group">
                                         <label for="tradeItem">¿Qué ofreces?</label>
                                         <input type="text" class="input" id="tradeItem" 
@@ -107,7 +107,7 @@ async function loadAuctionDetails() {
                                 </form>
 
                                 <!-- Formulario Mixto -->
-                                <form class="bid-form" id="mixedForm" style="display:none;">
+                                <form class="bid-form" id="mixedForm" hidden>
                                     <div class="form-group">
                                         <label for="mixedCash">Monto en dinero:</label>
                                         <div class="field">
@@ -163,7 +163,7 @@ async function loadAuctionDetails() {
                             <img src="${auction.image_url || `https://ui-avatars.com/api/?name=${auction.firstname || ''}+${auction.lastname || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
                             <div>
                                 <strong>${auction.firstname || ''} ${auction.lastname || ''}</strong>
-                                <p style="color: gray;"> @${auction.username || ''}</p>
+                                <p class="text-grey"> @${auction.username || ''}</p>
                             </div>
                         </div>
 
@@ -182,16 +182,16 @@ async function loadAuctionDetails() {
                                 <span class="stat-label"><strong>Ofertas recibidas:</strong></span>
                                 <span class="stat-value">${auction.count_offers}</span>
                             </div>
-                            <div class="offer-type-indicators" style="display:flex; gap:10px; margin-top:8px;">
-                                <div style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="offer-type-indicators offer-type-indicators-style">
+                                <div class="indicator-col-style">
                                     <span class="cash_indicator"></span>
                                     <span class="cash_indicator_label" >Dinero</span>
                                 </div>
-                                <div style="display:flex; flex-direction:column; align-items:center;">
+                                <div class="indicator-col-style">
                                     <span class="trade_indicator"></span>
                                     <span class="trade_indicator_label">Producto</span>
                                 </div>
-                                <div style="display:flex; flex-direction:column; align-items:center;">
+                                <div class="indicator-col-style">
                                     <span class="mixed_indicator"></span>
                                     <span class="mixed_indicator_label">Mixta</span>
                                 </div>
@@ -201,26 +201,7 @@ async function loadAuctionDetails() {
                         <div class="recent-bids">
                             <h3>📊 Ofertas Recientes</h3>
                             <div class="bids-list">
-                                <div class="bid-item cash-bid">
-                                    <div class="bid-amount">$180,000</div>
-                                    <div class="bidder">María González</div>
-                                    <div class="bid-time">Hace 2 horas</div>
-                                </div>
-                                <div class="bid-item trade-bid">
-                                    <div class="bid-amount">MacBook Air M1</div>
-                                    <div class="bidder">Juan Pérez</div>
-                                    <div class="bid-time">Hace 5 horas</div>
-                                </div>
-                                <div class="bid-item cash-bid">
-                                    <div class="bid-amount">$160,000</div>
-                                    <div class="bidder">Ana López</div>
-                                    <div class="bid-time">Hace 1 día</div>
-                                </div>
-                                <div class="bid-item mixed-bid">
-                                    <div class="bid-amount">$80,000 + iPhone 12</div>
-                                    <div class="bidder">Roberto Silva</div>
-                                    <div class="bid-time">Hace 1 día</div>
-                                </div>
+                            <!-- Ofertas recientes se cargarán acá -->
                             </div>
                             <a href="#" class="view-all-bids">Ver todas las ofertas (${auction.count_offers || 0}) </a>
                         </div>
