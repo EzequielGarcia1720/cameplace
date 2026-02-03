@@ -99,7 +99,7 @@ async function GetAuctions() {
                                 </figure>
                             </div>
                             <div class="media-content">
-                                <p class="title is-5">${auction.title}</p>
+                                <a href="subasta.html?id=${auction.id}" class="title is-5">${auction.title}</a>
                                 <p class="title is-6">$${auction.initial_price}</p>
                             </div>
                         </div>

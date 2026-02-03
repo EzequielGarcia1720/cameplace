@@ -46,9 +46,21 @@ async function GetAllOffers(querySQL, parameters) {
 }
 // Obtener las ofertas de acuerdo a la subasta
 async function GetOffersByAuction(id) {
-    const querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
-    console.log("id recibido:", id)
-    const response = await dbClient.query(querySQL, [id]);
+    // Permite un segundo parámetro opcional para el límite
+    let querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
+    let params = [id];
+    if (arguments.length > 1 && arguments[1]) {
+        const limit = parseInt(arguments[1]);
+        if (!isNaN(limit) && limit > 0) {
+            querySQL += ` ORDER BY o.creation_date DESC LIMIT $2`;
+            params.push(limit);
+        } else {
+            querySQL += ` ORDER BY o.creation_date DESC`;
+        }
+    } else {
+        querySQL += ` ORDER BY o.creation_date DESC`;
+    }
+    const response = await dbClient.query(querySQL, params);
     if (response.rows.length === 0)
         return undefined
     return response.rows
@@ -64,31 +76,19 @@ async function GetOffer(id) {
 }
 
 // Mejorar oferta (crear nueva oferta)
-async function CreateOffert(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
+async function CreateOffert(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO offers(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-            [id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
+            "INSERT INTO offers(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+            [offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
         )
         if (result.rowCount === 0) {
             return undefined
         }
+        return result.rows[0];
     } catch (e) {
         console.log(e)
         return undefined
-    }
-
-    return {
-        id,
-        offer_type,
-        title,
-        descripcion,
-        images_urls,
-        mount,
-        auctioneer_id,
-        bidder_id,
-        auction_id,
-        estado
     }
 }
 
