@@ -72,7 +72,7 @@ async function loadAuctionDetails() {
                                     <div class="form-group">
                                         <label for="cashAmount">Monto en pesos:</label>
                                         <div class="field">
-                                            <input class="input" type="number" id="cashAmount" min="${auction.initial_price}" step="1000" 
+                                            <input class="input" type="number" id="cashAmount" min="${auction.initial_price}"  
                                                 placeholder="${auction.initial_price}" required>
                                         </div>
                                         <small>Oferta mínima: $${auction.initial_price}</small>
@@ -203,7 +203,7 @@ async function loadAuctionDetails() {
                             <div class="bids-list">
                             <!-- Ofertas recientes se cargarán acá -->
                             </div>
-                            <a href="#" class="view-all-bids">Ver todas las ofertas (${auction.count_offers || 0}) </a>
+                            <a id="viewAllBids" class="view-all-bids">Ver todas las ofertas (${auction.count_offers || 0}) </a>
                         </div>
                     </div>
                 </div>
@@ -419,45 +419,45 @@ async function getrecentBids(auctionId) {
                         bidDiv.classList.add('bid-item', bidTypeClass, 'recent-bid-horizontal');
                         // Si es producto o mixta, el título es botón y abre modal
                         if (bid.offer_type_id === 2 || bid.offer_type_id === 3) {
-                                const modalId = `modal-bid-${bid.offer_id || Math.random().toString(36).substr(2, 9)}`;
-                    bidDiv.innerHTML = `
-                            <button class="bid-amount" style="background:none;border:none;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left;font-weight:bold;" data-bid-modal="${modalId}">${offer_title}</button>
-                            <span class="bidder">${bidderName}</span>
-                            <span class="bid-time">${bidTime}</span>
-                            <div class="modal" id="${modalId}">
-                                <div class="modal-background" data-close-modal></div>
-                                <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Detalle de la Oferta</p>
-                                        <button class="delete" aria-label="close" data-close-modal></button>
-                                    </header>
-                                    <section class="modal-card-body" style="color:#222;background:#fff;">
-                                        <figure class="image is-4by3">
-                                            <img class="auction_img" src="${bid.offer_images || ''}" alt="Imagen oferta" >
-                                        </figure>
-                                        <h3 class=" mt-2">Título:</h3>
-                                        <p class="title "> ${bid.offer_title || ''}</p>
-                                        ${bid.offer_type_id === 3 ? `<p class="subtitle"><strong>Dinero:</strong> $${Number(bid.offer_amount).toLocaleString()}</p>` : ''}
-                                        <div class="auctioneer-info">
-                                            <img src="${bid.image_user || `https://ui-avatars.com/api/?name=${bid.name_user || ''}+${bid.lastname_user || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
-                                            <div>
-                                                <strong>${bid.name_user || ''} ${bid.lastname_user || ''}</strong>
-                                                <p class="text-grey"> @${bid.bidder}</p>
-                                            </div>
+                                const modalId = `modal-bid-${bid.offer_id}`;
+                                bidDiv.innerHTML = `
+                                    <button class="bid-amount" style="background:none;border:none;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left;font-weight:bold;" data-bid-modal="${modalId}">${offer_title}</button>
+                                    <span class="bidder">${bidderName}</span>
+                                    <span class="bid-time">${bidTime}</span>
+                                    <div class="modal" id="${modalId}">
+                                        <div class="modal-background" data-close-modal></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Detalle de la Oferta</p>
+                                                <button class="delete" aria-label="close" data-close-modal></button>
+                                            </header>
+                                            <section class="modal-card-body" style="color:#222;background:#fff;">
+                                                <figure class="image is-4by3">
+                                                    <img class="auction_img" src="${bid.offer_images || ''}" alt="Imagen oferta" >
+                                                </figure>
+                                                <h3 style="margin-bottom:inherit" class=" mt-2">Título:</h3>
+                                                <p class="title "> ${bid.offer_title || ''}</p>
+                                                ${bid.offer_type_id === 3 ? `<p class="subtitle"><strong>Dinero:</strong> $${Number(bid.offer_amount).toLocaleString()}</p>` : ''}
+                                                <div class="auctioneer-info">
+                                                    <img src="${bid.image_user || `https://ui-avatars.com/api/?name=${bid.name_user || ''}+${bid.lastname_user || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
+                                                    <div>
+                                                        <strong>${bid.name_user || ''} ${bid.lastname_user || ''}</strong>
+                                                        <p class="text-grey"> @${bid.bidder}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="product-description">
+                                                    <h3>Descripción</h3>
+                                                    <p>${bid.offer_description || ''}</p>
+                                                </div>
+                                                <hr>
+                                                <p class="mt-2 text-grey">Ofertado hace ${bidTime}</p>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="btn" data-close-modal>Cerrar</button>
+                                            </footer>
                                         </div>
-                                        <div class="product-description">
-                                            <h3>Descripción</h3>
-                                            <p>${bid.offer_description || ''}</p>
-                                        </div>
-                                        <hr>
-                                        <p class="mt-2 text-grey">Ofertado hace ${bidTime}</p>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="btn" data-close-modal>Cerrar</button>
-                                    </footer>
-                                </div>
-                            </div>
-                    `;
+                                    </div>
+                                `;
                                 bidsContainer.appendChild(bidDiv);
                                 // Listeners para abrir/cerrar el modal
                                 const btn = bidDiv.querySelector('[data-bid-modal]');
@@ -479,6 +479,148 @@ async function getrecentBids(auctionId) {
                                 bidsContainer.appendChild(bidDiv);
                         }
         });
+
+        // Listener para "Ver todas las ofertas" en un modal
+        const vermas = document.getElementById("viewAllBids");
+        if (vermas) {
+            // Si el modal no existe, crearlo
+            let allBidsModal = document.getElementById("allBidsModal");
+            if (!allBidsModal) {
+                allBidsModal = document.createElement("div");
+                allBidsModal.id = "allBidsModal";
+                allBidsModal.className = "modal";
+                allBidsModal.innerHTML = `
+                    <div class="modal-background" data-close-allbids></div>
+                    <div class="modal-card" style="width:90vw;max-width:900px;">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Todas las Ofertas</p>
+                            <button class="delete" aria-label="close" data-close-allbids></button>
+                        </header>
+                        <section class="modal-card-body" style="background:#fff;max-height:70vh;overflow-y:auto;">
+                            <div id="all-bids-list"></div>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button class="btn" data-close-allbids>Cerrar</button>
+                        </footer>
+                    </div>
+                `;
+                document.body.appendChild(allBidsModal);
+                // Listeners para cerrar el modal
+                allBidsModal.querySelectorAll('[data-close-allbids]').forEach(el => {
+                    el.addEventListener('click', () => {
+                        allBidsModal.classList.remove('is-active');
+                    });
+                });
+            }
+            vermas.addEventListener("click", async () => {
+                // Mostrar el modal
+                allBidsModal.classList.add('is-active');
+                const allBidsList = document.getElementById('all-bids-list');
+                allBidsList.innerHTML = '<div class="loading-offers">Cargando ofertas...</div>';
+                try {
+                    // Obtener todas las ofertas de la subasta
+                    const response = await fetch(`http://localhost:3030/api/v1/offers/${auctionId}`);
+                    if (!response.ok) throw new Error('Error al obtener todas las ofertas');
+                    const allBids = await response.json();
+                    if (!allBids || allBids.length === 0) {
+                        allBidsList.innerHTML = '<div class="no-offers-message">No hay ofertas.</div>';
+                        return;
+                    }
+                    allBidsList.innerHTML = '';
+                    allBids.forEach(bid => {
+                        // Determina el tipo de oferta para la clase
+                        let bidTypeClass = '';
+                        if (bid.offer_type_id === 1) bidTypeClass = 'cash-bid';
+                        else if (bid.offer_type_id === 2) bidTypeClass = 'trade-bid';
+                        else if (bid.offer_type_id === 3) bidTypeClass = 'mixed-bid';
+
+                        // Formatea el monto/descripcion según el tipo
+                        let offer_title = '';
+                        if (bid.offer_type_id === 1) offer_title = `$${Number(bid.offer_amount).toLocaleString()}`;
+                        else if (bid.offer_type_id === 2) offer_title = bid.offer_title;
+                        else if (bid.offer_type_id === 3) offer_title = `$${Number(bid.offer_amount).toLocaleString()} + ${bid.offer_title}`;
+
+                        // Concatenar nombre y apellido del ofertante
+                        let bidderName = '';
+                        if (bid.name_user || bid.lastname_user) {
+                            bidderName = `${bid.name_user || ''} ${bid.lastname_user || ''}`.trim();
+                        } else {
+                            bidderName = 'Usuario desconocido';
+                        }
+
+                        // Formatea el tiempo en formato relativo
+                        let bidTime = timeAgo(bid.offer_date);
+
+                        const bidDiv = document.createElement('div');
+                        bidDiv.classList.add('bid-item', bidTypeClass, 'recent-bid-horizontal');
+                        // Si es producto o mixta, el título es botón y abre modal
+                        if (bid.offer_type_id === 2 || bid.offer_type_id === 3) {
+                            const modalId = `modal-bid-all-${bid.offer_id}`;
+                            bidDiv.innerHTML = `
+                                <button class="bid-amount" style="background:none;border:none;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left;font-weight:bold;" data-bid-modal="${modalId}">${offer_title}</button>
+                                <span class="bidder">${bidderName}</span>
+                                <span class="bid-time">${bidTime}</span>
+                                <div class="modal" id="${modalId}">
+                                    <div class="modal-background" data-close-modal></div>
+                                    <div class="modal-card">
+                                        <header class="modal-card-head">
+                                            <p class="modal-card-title">Detalle de la Oferta</p>
+                                            <button class="delete" aria-label="close" data-close-modal></button>
+                                        </header>
+                                        <section class="modal-card-body" style="color:#222;background:#fff;">
+                                            <figure class="image is-4by3">
+                                                <img class="auction_img" src="${bid.offer_images || ''}" alt="Imagen oferta" >
+                                            </figure>
+                                            <h3 class=" mt-2">Título:</h3>
+                                            <p class="title "> ${bid.offer_title || ''}</p>
+                                            ${bid.offer_type_id === 3 ? `<p class="subtitle"><strong>Dinero:</strong> $${Number(bid.offer_amount).toLocaleString()}</p>` : ''}
+                                            <div class="auctioneer-info">
+                                                <img src="${bid.image_user || `https://ui-avatars.com/api/?name=${bid.name_user || ''}+${bid.lastname_user || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
+                                                <div>
+                                                    <strong>${bid.name_user || ''} ${bid.lastname_user || ''}</strong>
+                                                    <p class="text-grey"> @${bid.bidder}</p>
+                                                </div>
+                                            </div>
+                                            <div class="product-description">
+                                                <h3>Descripción</h3>
+                                                <p>${bid.offer_description || ''}</p>
+                                            </div>
+                                            <hr>
+                                            <p class="mt-2 text-grey">Ofertado hace ${bidTime}</p>
+                                        </section>
+                                        <footer class="modal-card-foot">
+                                            <button class="btn" data-close-modal>Cerrar</button>
+                                        </footer>
+                                    </div>
+                                </div>
+                            `;
+                            allBidsList.appendChild(bidDiv);
+                            // Listeners para abrir/cerrar el modal
+                            const btn = bidDiv.querySelector('[data-bid-modal]');
+                            const modal = bidDiv.querySelector(`#${modalId}`);
+                            btn.addEventListener('click', () => {
+                                modal.classList.add('is-active');
+                            });
+                            modal.querySelectorAll('[data-close-modal]').forEach(el => {
+                                el.addEventListener('click', () => {
+                                    modal.classList.remove('is-active');
+                                });
+                            });
+                        } else {
+                            bidDiv.innerHTML = `
+                                <span class="bid-amount">${offer_title}</span>
+                                <span class="bidder">${bidderName}</span>
+                                <span class="bid-time">${bidTime}</span>
+                            `;
+                            allBidsList.appendChild(bidDiv);
+                        }
+                    });
+                } catch (err) {
+                    allBidsList.innerHTML = '<div class="error-offers-message">Error al cargar todas las ofertas.</div>';
+                    console.error(err);
+                }
+            });
+        }
     } catch (err) {
         bidsContainer.innerHTML = '<div class="error-offers-message">Error al cargar ofertas recientes.</div>';
         console.error(err);
