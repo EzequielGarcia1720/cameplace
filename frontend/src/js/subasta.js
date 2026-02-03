@@ -435,7 +435,8 @@ async function getrecentBids(auctionId) {
                                         <figure class="image is-4by3">
                                             <img class="auction_img" src="${bid.offer_images || ''}" alt="Imagen oferta" >
                                         </figure>
-                                        <p class="title mt-2"> ${bid.offer_title || ''}</p>
+                                        <h3 class=" mt-2">Título:</h3>
+                                        <p class="title "> ${bid.offer_title || ''}</p>
                                         ${bid.offer_type_id === 3 ? `<p class="subtitle"><strong>Dinero:</strong> $${Number(bid.offer_amount).toLocaleString()}</p>` : ''}
                                         <div class="auctioneer-info">
                                             <img src="${bid.image_user || `https://ui-avatars.com/api/?name=${bid.name_user || ''}+${bid.lastname_user || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
@@ -452,7 +453,7 @@ async function getrecentBids(auctionId) {
                                         <p class="mt-2 text-grey">Ofertado hace ${bidTime}</p>
                                     </section>
                                     <footer class="modal-card-foot">
-                                        <button class="button is-link" data-close-modal>Cerrar</button>
+                                        <button class="btn" data-close-modal>Cerrar</button>
                                     </footer>
                                 </div>
                             </div>
