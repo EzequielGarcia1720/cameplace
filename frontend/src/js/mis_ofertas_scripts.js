@@ -199,7 +199,7 @@ function FilterByStatus(estado, elementoHTML) {
 // --- FUNCIÓN DE ELIMINAR OFERTA ---
 window.DeleteOffer = function (id) {
     const Backend_Offers = "http://localhost:3030/api/v1/offers/" + id
-    console.log(Backend_Offers)
+    console.log(Backend_Offers) 
     fetch(Backend_Offers, {method: 'DELETE'}).then(() => GetOffers())
 }
 // --- FUNCIONES MODAL REOFERTAR ---
@@ -207,14 +207,19 @@ let currentAuctionId = null;
 
 function openOfferModal(auction_id) {
     currentAuctionId = auction_id;
+
     document.getElementById("offer_amount").value = "";
     document.getElementById("offer_description").value = "";
     document.getElementById("offer_image").value = "";
-    document.getElementById("offer_type").value = "2";
-    document.getElementById("mount_field").style.display = "block";
+
+    const offerTypeSelect = document.getElementById("offer_type");
+    offerTypeSelect.value = "2";
+
+    offerTypeSelect.dispatchEvent(new Event("change"));
 
     document.getElementById("offerModal").classList.add("is-active");
 }
+
 
 
 function closeOfferModal() {
@@ -225,18 +230,39 @@ function closeOfferModal() {
 const offerTypeSelect = document.getElementById("offer_type");
 const mountField = document.getElementById("mount_field");
 
+const imageInput = document.getElementById("offer_image");
+const imageField = imageInput.closest(".field");
+
+const descriptionInput = document.getElementById("offer_description");
+const descriptionField = descriptionInput.closest(".field");
+
 if (offerTypeSelect) {
     offerTypeSelect.addEventListener("change", () => {
         const type = offerTypeSelect.value;
 
-        // oculta el monto si es canje
+        // --- MONTO ---
         if (type === "1") {
             mountField.style.display = "none";
+            document.getElementById("offer_amount").value = "";
         } else {
             mountField.style.display = "block";
         }
+
+        // --- IMAGEN + DESCRIPCIÓN ---
+        if (type === "1" || type === "3") {
+            imageField.style.display = "block";
+            descriptionField.style.display = "block";
+        } else {
+            imageField.style.display = "none";
+            descriptionField.style.display = "none";
+
+            imageInput.value = "";
+            descriptionInput.value = "";
+        }
     });
 }
+
+
 
 // --- FUNCION ENVIAR REOFERTA ---
 async function submitOffer() {
@@ -244,8 +270,14 @@ async function submitOffer() {
     const mount = document.getElementById("offer_amount").value;
     const descripcion = document.getElementById("offer_description").value;
     const imageUrl = document.getElementById("offer_image").value;
+    const title = document.getElementById("offer_title").value;
 
     // Validaciones
+    if (!title) {
+        alert("El titulo es obligatorio");
+        return;
+    }
+
     if (!descripcion) {
         alert("La descripción es obligatoria");
         return;
@@ -255,6 +287,13 @@ async function submitOffer() {
         alert("Ingresá un monto");
         return;
     }
+
+    if ((offer_type === "1" || offer_type === "3") && !imageUrl) {
+    alert("La URL de la imagen es obligatoria para canje o mixto");
+    return;
+    }
+
+
 
     const data = {
         offer_type: Number(offer_type),
