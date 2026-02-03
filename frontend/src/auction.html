@@ -68,8 +68,9 @@
         <div class="titulo pt-5 pb-5">
             <h1 class="title has-text-centered">EDITAR SUBASTA</h1>
         </div>
-        <!-- Formulario de creación de subasta -->
+        <!-- Formulario de edición de subasta -->
         <script>
+            // Obtengo los datos de la subasta de acuerdo al ID
             const urlParams = new URLSearchParams(window.location.search)
             const id = urlParams.get('id')
             const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
@@ -145,7 +146,7 @@
                                 <a class="button is-primary" href="./mis_subastas.html">Cancelar</a>
                             </div>
                         </div>`
-                    
+                    // Relleno cada dropdown con su respectivo contenido
                     const backend_categories = "http://localhost:3030/api/v1/categories"
                     fetch(backend_categories).then((response) => {
                         return response.json()
@@ -154,7 +155,7 @@
                         categories.forEach(category => {
                             const NewCategory = document.createElement("option")
                             NewCategory.value = category.id
-                            NewCategory.innerText = category.name
+                            NewCategory.innerText = category.name_category
                             if (category.id == data.category_id)
                                 NewCategory.selected = true
 
@@ -192,13 +193,14 @@
                             dropdown_conditions.appendChild(NewCondition)
                         });
                     })
-
+                    // Appendeo el formulario de edición al contenedor
                     let form_by_ID = document.getElementById("form_auction_by_ID")
                     let auction_edit = document.createElement("div")
                     auction_edit.classname = "form"
                     auction_edit.innerHTML = form
                     form_by_ID.appendChild(auction_edit)
                 });
+                // Confirma los cambios al editar la subasta
                 function EditAuction() {
                     const data_auction = {
                         title: document.getElementById("auction_title").value,
@@ -238,6 +240,7 @@
                 } 
         </script>
     </div>
+    <!-- Pie de página -->
     <footer>
         <div class="footer-index">
             <div class="columns">
