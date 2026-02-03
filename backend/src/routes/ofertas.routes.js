@@ -64,7 +64,6 @@ router.post("/", async (req, res) => {
         return res.status(400).send("No body was provided");
     
     // Extraer los campos del cuerpo de la solicitud
-    const id = req.body.id;
     const offer_type = req.body.offer_type;
     const title = req.body.title;
     const descripcion = req.body.descripcion;
@@ -75,32 +74,28 @@ router.post("/", async (req, res) => {
     const auction_id = req.body.auction_id;
     const estado = req.body.estado
 
-    // Validaciones
-    if (id === undefined)
-        return res.status(400).send("Number not provided");
-    if (await GetOffer(id) !== undefined)
-        return res.status(409).send("The offer already exists");
-    if (offer_type === undefined) 
+    // Validaciones mínimas: solo los campos realmente obligatorios
+    if (offer_type === undefined || offer_type === null)
         return res.status(400).send("Type of offer not provided");
-    if (title === undefined) 
+    if (title === undefined || title === null)
         return res.status(400).send("Title not provided");
-    if (descripcion === undefined) 
+    if (descripcion === undefined || descripcion === null)
         return res.status(400).send("Descripcion not provided");
-    if (mount === undefined) 
+    if (mount === undefined || mount === null)
         return res.status(400).send("Mount not provided");
-    if (auctioneer_id === undefined) 
+    if (auctioneer_id === undefined || auctioneer_id === null)
         return res.status(400).send("Auctioneer ID not provided");
-    if (bidder_id === undefined) 
+    if (bidder_id === undefined || bidder_id === null)
         return res.status(400).send("Bidder ID not provided");
-    if (auction_id === undefined) 
+    if (auction_id === undefined || auction_id === null)
         return res.status(400).send("Auction ID not provided");
-    if (images_urls === undefined)
-        return res.status(400).send("Image not provided")
-    if (estado === undefined)
-        return res.status(400).send("State not provided")
+    // images_urls y estado pueden ser string vacío
+    // Si no vienen, poner string vacío por defecto
+    const safe_images_urls = images_urls !== undefined && images_urls !== null ? images_urls : "";
+    const safe_estado = estado !== undefined && estado !== null ? estado : "Activa";
 
     // Crear la oferta
-    const offert = await CreateOffert(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado)
+    const offert = await CreateOffert(offer_type, title, descripcion, safe_images_urls, mount, auctioneer_id, bidder_id, auction_id, safe_estado)
     // Verificar si la creación fue exitosa
     if (offert === undefined)
         res.sendStatus(500);

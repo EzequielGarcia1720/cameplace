@@ -64,31 +64,19 @@ async function GetOffer(id) {
 }
 
 // Mejorar oferta (crear nueva oferta)
-async function CreateOffert(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
+async function CreateOffert(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
     try {
         const result = await dbClient.query(
-            "INSERT INTO offers(id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-            [id, offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
+            "INSERT INTO offers(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+            [offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
         )
         if (result.rowCount === 0) {
             return undefined
         }
+        return result.rows[0];
     } catch (e) {
         console.log(e)
         return undefined
-    }
-
-    return {
-        id,
-        offer_type,
-        title,
-        descripcion,
-        images_urls,
-        mount,
-        auctioneer_id,
-        bidder_id,
-        auction_id,
-        estado
     }
 }
 

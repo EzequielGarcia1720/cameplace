@@ -77,7 +77,7 @@ async function loadAuctionDetails() {
                                         </div>
                                         <small>Oferta mínima: $${auction.initial_price}</small>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-full">
+                                    <button id="cashSubmit" type="submit" class="btn btn-primary btn-full">
                                         📨 Enviar Oferta en Dinero
                                     </button>
                                 </form>
@@ -101,7 +101,7 @@ async function loadAuctionDetails() {
                                         <input class="input" id="tradeImageLink" 
                                                 placeholder="Proporciona un enlace a la imagen del producto" required></input>
                                     </div>
-                                    <button type="submit" class="btn btn-secondary btn-full">
+                                    <button id="tradeSubmit" type="submit" class="btn btn-secondary btn-full">
                                         🔄 Ofrecer Trueque
                                     </button>
                                 </form>
@@ -111,7 +111,7 @@ async function loadAuctionDetails() {
                                     <div class="form-group">
                                         <label for="mixedCash">Monto en dinero:</label>
                                         <div class="field">
-                                            <input class="input" type="number" id="cashAmount" min="${auction.initial_price}" step="1000" 
+                                            <input class="input" type="number" id="mixedCashAmount" min="${auction.initial_price}" step="1000" 
                                                 placeholder="${auction.initial_price}" required>
                                         </div>
                                     </div>
@@ -123,7 +123,7 @@ async function loadAuctionDetails() {
                                     <div class="form-group">
                                         <label>Descripción del trueque:</label>
                                         <br>
-                                        <textarea class="textarea" id="tradeDescription" rows="3" 
+                                        <textarea class="textarea" id="mixedTradeDescription" rows="3" 
                                                 placeholder="Describe el estado, accesorios incluidos, etc..." required></textarea>
                                     </div>
                                     <div class="form-group">
@@ -132,7 +132,7 @@ async function loadAuctionDetails() {
                                         <input class="input" id="mixedImageLink" 
                                                 placeholder="Proporciona un enlace a la imagen del producto" required></input>
                                     </div>
-                                    <button type="submit" class="btn btn-accent btn-full">
+                                    <button id="mixedSubmit" type="submit" class="btn btn-accent btn-full">
                                         💰🔄 Oferta Mixta
                                     </button>
                                 </form>
@@ -305,11 +305,56 @@ async function loadAuctionDetails() {
                     const originalText = submitBtn.textContent;
                     submitBtn.textContent = 'Enviando...';
                     submitBtn.disabled = true;
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    alert('¡Oferta enviada correctamente!');
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    form.reset();
+
+                    // Obtener datos según el formulario
+                    let offerData = {
+                        auction_id: auction.id,
+                        offer_type: null, // 1: Dinero, 2: Producto, 3: Mixta
+                        title: auction.title,
+                        descripcion: '',
+                        images_urls: '',
+                        mount: 0,
+                        auctioneer_id: auction.user_id, // subastador
+                        bidder_id: parseInt(sessionStorage.getItem('sesion_actual')),
+                        estado: 'Activa' // Estado por defecto
+                    };
+
+                    if (form.id === 'cashForm') {
+                        offerData.offer_type = 1;
+                        offerData.descripcion = 'Oferta en dinero';
+                        offerData.mount = parseFloat(form.querySelector('#cashAmount').value);
+                    } else if (form.id === 'tradeForm') {
+                        offerData.offer_type = 2;
+                        offerData.descripcion = form.querySelector('#tradeDescription').value;
+                        offerData.title = form.querySelector('#tradeItem').value;
+                        offerData.images_urls = form.querySelector('#tradeImageLink').value;
+                        offerData.mount = 0;
+                    } else if (form.id === 'mixedForm') {
+                        offerData.offer_type = 3;
+                        offerData.descripcion = form.querySelector('#mixedTradeDescription').value;
+                        offerData.title = form.querySelector('#mixedTrade').value;
+                        offerData.images_urls = form.querySelector('#mixedImageLink').value;
+                        offerData.mount = parseFloat(form.querySelector('#mixedCashAmount').value);
+                    }
+
+                    // Enviar POST a la API
+                    try {
+                        const response = await fetch('http://localhost:3030/api/v1/offers', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(offerData)
+                        });
+                        if (!response.ok) throw new Error('Error al enviar la oferta');
+                        alert('¡Oferta enviada correctamente!');
+                        form.reset();
+                        window.location.reload();
+                    } catch (err) {
+                        alert('Error al enviar la oferta');
+                        console.error(err);
+                    } finally {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
                 });
             });
 
