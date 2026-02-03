@@ -88,7 +88,7 @@ async function GetAuction(id) {
     
     // Consulta SQL para obtener la subasta por ID, incluyendo el nombre del tipo de oferta
     const querySQL = `
-        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id, ot.type as offer_type_name, count(o.id) AS count_offers
+        SELECT a.*, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id as user_id, u.image_url, ot.type as offer_type_name, count(o.id) AS count_offers
         FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
@@ -96,7 +96,7 @@ async function GetAuction(id) {
         LEFT JOIN offer_type ot ON a.offer_type = ot.id
         LEFT JOIN offers o ON o.auction_id = a.id
         WHERE a.id = $1
-        GROUP BY a.id, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id, ot.type;
+        GROUP BY a.id, c.auction_condition, s.status_name, u.username, u.email, u.firstname, u.lastname, u.id, u.image_url, ot.type;
     `;
 
     try {
