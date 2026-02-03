@@ -95,4 +95,13 @@ input.input, textarea.textarea {
     transform: scale(1.05);
 }
 
+#eliminar_perfil_button {
+    margin-left: 700px;
+    background-color: red;
+    color: white;
+}
 
+#eliminar_perfil_button:hover {
+    background-color: firebrick;
+    transform: scale(1.05);
+}

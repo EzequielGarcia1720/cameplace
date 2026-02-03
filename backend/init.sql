@@ -113,10 +113,46 @@ CREATE TABLE offers (
     estado VARCHAR(20) DEFAULT 'Activa' NOT NULL CHECK (estado IN ('Activa', 'Aceptada', 'Finalizada')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- Ajuste de Foreign Keys para eliminar en cascada usuarios relacionados
+--Auctions
+ALTER TABLE auctions
+DROP CONSTRAINT auctions_auctioneer_id_fkey;
 
+ALTER TABLE auctions
+ADD CONSTRAINT auctions_auctioneer_id_fkey
+FOREIGN KEY (auctioneer_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
 
+--Offers Auctioneer
+ALTER TABLE offers
+DROP CONSTRAINT offers_auctioneer_id_fkey;
 
+ALTER TABLE offers
+ADD CONSTRAINT offers_auctioneer_id_fkey
+FOREIGN KEY (auctioneer_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
 
+--Offers Bidder
+ALTER TABLE offers
+DROP CONSTRAINT offers_bidder_id_fkey;
+
+ALTER TABLE offers
+ADD CONSTRAINT offers_bidder_id_fkey
+FOREIGN KEY (bidder_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
+
+--Si se elimina una subasta, se eliminan las ofertas relacionadas
+ALTER TABLE offers
+DROP CONSTRAINT offers_auction_id_fkey;
+
+ALTER TABLE offers
+ADD CONSTRAINT offers_auction_id_fkey
+FOREIGN KEY (auction_id)
+REFERENCES auctions(id)
+ON DELETE CASCADE;
 
 
 -- Datos de ejemplo

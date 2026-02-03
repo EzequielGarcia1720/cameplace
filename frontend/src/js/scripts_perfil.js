@@ -8,6 +8,7 @@
     const btnEditar = document.getElementById('perfil_edit_button');
     const btnGuardar = document.getElementById('guardar_button');
     const btnCancelar = document.getElementById('cancelar_button');
+    const btnEliminarPerfil = document.getElementById("eliminar_perfil_button");
     const groupGuardarCancelar = document.getElementById('guardar_cancelar_group');
     const editarFotoForm = document.getElementById("editar_foto_form");
     const fotoUrlInput = document.getElementById("foto_url_input");
@@ -129,6 +130,37 @@ btnGuardar.addEventListener('click', async (e) => {
             alert("Error cargando perfil");
         }
     }
+
+    btnEliminarPerfil.addEventListener("click", async () => {
+    const confirmacion = confirm(
+        "¿Estás seguro de que querés eliminar tu perfil?\nEsta acción no se puede deshacer."
+    );
+
+    if (!confirmacion) return;
+
+    try {
+        const res = await fetch(`${API_URL}/${USER_ID}`, {
+            method: "DELETE"
+        });
+
+        if (!res.ok) {
+            throw new Error("No se pudo eliminar el perfil");
+        }
+
+        // Limpia sessionStorage
+        sessionStorage.clear();
+
+        alert("Perfil eliminado correctamente");
+
+        // Redirige al index
+        window.location.href = "index.html";
+
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo eliminar el perfil");
+    }
+});
+
 
     cargarPerfil(); 
 
