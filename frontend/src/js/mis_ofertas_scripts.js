@@ -76,10 +76,31 @@ async function GetOffers() {
                 htmlColumnaImagen = `
                 <div class="column is-narrow">
                     <figure class="image is-96x96">
-                        <img class="is-rounded" src="${offer.images_urls[0]}" alt="Producto" style="object-fit: cover; height: 100%;">
+                        <img class="is-rounded" src="${offer.images_urls}" alt="Producto" style="object-fit: cover; height: 100%;">
                     </figure>
                 </div>`;
             }
+
+            let htmlButtons = '';
+            if (offer.estado == 'Activa') {
+                htmlButtons += `
+                <button
+                    class="boton-reofertar button is-light is-small"
+                    onclick="openOfferModal(${offer.auction_id})">
+                    <span class="icon">
+                        <i class="fas fa-pen-to-square"></i>
+                    </span>
+                    <span>Mejorar</span>
+                </button>
+                <button onclick="DeleteOffer('${offer.id}')" class="boton-cancelar button is-light is-small">
+                    <span>Cancelar</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </button>
+                    `;
+            }
+
 
             // Generamos los tags de Dinero/Producto según corresponda
             let tagsHtml = '';
@@ -115,22 +136,7 @@ async function GetOffers() {
                     </h3>
                     
                     <div style="display: flex; gap: 5px;">
-                        <button
-                          class="boton-reofertar button is-light is-small"
-                          onclick="openOfferModal(${offer.auction_id})"
-                        >
-                            <span class="icon">
-                                <i class="fas fa-pen-to-square"></i>
-                            </span>
-                            <span>Mejorar</span>
-                        </button>
-
-                        <button onclick="DeleteOffer('${offer.id}')" class="boton-cancelar button is-light is-small">
-                            <span>Cancelar</span>
-                            <span class="icon is-small">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </button>
+                        ${htmlButtons}
                     </div>
                 </div>
 
@@ -318,6 +324,6 @@ async function submitOffer() {
 
 // Cerrar modal y recargar ofertas
     closeOfferModal();
-    GetOffers();
+
 
 
