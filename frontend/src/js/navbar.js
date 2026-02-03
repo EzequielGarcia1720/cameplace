@@ -112,7 +112,7 @@ const navbarloged = `
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
                         <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                        <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
+                        <a href="mis_subastas.html?user_id=${sessionStorage.getItem('sesion_actual')}" class="dropdown-item">Mis Subastas </a>
                         <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
                         <hr class="dropdown-divider" />
                         <a id="cerrar_sesion" class="dropdown-item"> Cerrar Sesión </a>
