@@ -63,6 +63,9 @@ async function GetOffers() {
         // Recorremos las ofertas y generamos el HTML correspondiente
         offers.forEach(offer => {
             
+            console.log("Oferta ID:", offer.id);
+            console.log("Raw images_urls:", offer.images_urls);
+            console.log("Tipo de dato:", typeof offer.images_urls);
             // LÓGICA DE FORMATO DE FECHA
             const fecha = new Date(offer.creation_date).toLocaleDateString('es-AR', {
                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -70,16 +73,46 @@ async function GetOffers() {
 
             // Generamos la columna de imagen solo si hay imágenes disponibles
             let htmlColumnaImagen = "";
-            
-            // Solo si hay imágenes en el array, llenamos la variable con el HTML
-            if (offer.images_urls && offer.images_urls.length > 0) {
+
+            let urlLimpia = "";
+
+            if (offer.images_urls) {
+                if (Array.isArray(offer.images_urls)) {
+                    urlLimpia = offer.images_urls[0] || ""; 
+                } else {
+                    urlLimpia = String(offer.images_urls).replace(/[\{}[\]"']/g, "").trim();
+                }
+            }
+            if (urlLimpia.length > 5 && urlLimpia !== "null" && urlLimpia !== "undefined") {
+                
                 htmlColumnaImagen = `
                 <div class="column is-narrow">
                     <figure class="image is-96x96">
-                        <img class="is-rounded" src="${offer.images_urls[0]}" alt="Producto" style="object-fit: cover; height: 100%;">
+                        <img src="${urlLimpia}" alt="Producto" style="object-fit: cover; height: 100%;">
                     </figure>
                 </div>`;
             }
+
+            let htmlButtons = '';
+            if (offer.estado == 'Activa') {
+                htmlButtons += `
+                <button
+                    class="boton-reofertar button is-light is-small"
+                    onclick="openOfferModal(${offer.auction_id})">
+                    <span class="icon">
+                        <i class="fas fa-pen-to-square"></i>
+                    </span>
+                    <span>Mejorar</span>
+                </button>
+                <button onclick="DeleteOffer('${offer.id}')" class="boton-cancelar button is-light is-small">
+                    <span>Cancelar</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </button>
+                    `;
+            }
+
 
             // Generamos los tags de Dinero/Producto según corresponda
             let tagsHtml = '';
@@ -115,18 +148,7 @@ async function GetOffers() {
                     </h3>
                     
                     <div style="display: flex; gap: 5px;">
-                        <button onclick="ReofferOffer('${offer.id}')" class="boton-reofertar button is-light is-small">
-                            <span class="icon">
-                                <i class="fas fa-pen-to-square"></i>
-                            </span>
-                            <span>Mejorar</span> 
-                        </button>
-                        <button onclick="DeleteOffer('${offer.id}')" class="boton-cancelar button is-light is-small">
-                            <span>Cancelar</span>
-                            <span class="icon is-small">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        </button>
+                        ${htmlButtons}
                     </div>
                 </div>
 
@@ -166,8 +188,7 @@ async function GetOffers() {
     }
 }
 
-
-// --- FUNCIONES DE FILTRADO (Tus otras funciones) ---
+// --- FUNCIONES DE FILTRADO ---
 
 function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis ofertas"]'); 
@@ -190,12 +211,133 @@ function FilterByStatus(estado, elementoHTML) {
     
     GetOffers();
 }
-
+// --- FUNCIÓN DE ELIMINAR OFERTA ---
 window.DeleteOffer = function (id) {
     if (!confirm("¿Estás seguro de que deseas cancelar esta oferta?")) {
         return; // Si el usuario cancela, no hacemos nada
     }
     const Backend_Offers = "http://localhost:3030/api/v1/offers/" + id
-    console.log(Backend_Offers)
+    console.log(Backend_Offers) 
     fetch(Backend_Offers, {method: 'DELETE'}).then(() => GetOffers())
 }
+// --- FUNCIONES MODAL REOFERTAR ---
+let currentAuctionId = null;
+
+function openOfferModal(auction_id) {
+    currentAuctionId = auction_id;
+
+    document.getElementById("offer_amount").value = "";
+    document.getElementById("offer_description").value = "";
+    document.getElementById("offer_image").value = "";
+
+    const offerTypeSelect = document.getElementById("offer_type");
+    offerTypeSelect.value = "2";
+
+    offerTypeSelect.dispatchEvent(new Event("change"));
+    
+    document.getElementById("offerModal").classList.add("is-active");
+}
+
+
+
+function closeOfferModal() {
+    document.getElementById("offerModal").classList.remove("is-active");
+}
+
+// --- MANEJO DEL TIPO DE OFERTA ---
+const offerTypeSelect = document.getElementById("offer_type");
+const mountField = document.getElementById("mount_field");
+
+const imageInput = document.getElementById("offer_image");
+const imageField = imageInput.closest(".field");
+
+const descriptionInput = document.getElementById("offer_description");
+const descriptionField = descriptionInput.closest(".field");
+
+if (offerTypeSelect) {
+    offerTypeSelect.addEventListener("change", () => {
+        const type = offerTypeSelect.value;
+
+        // --- MONTO ---
+        if (type === "1") {
+            mountField.style.display = "none";
+            document.getElementById("offer_amount").value = "";
+        } else {
+            mountField.style.display = "block";
+        }
+
+        // --- IMAGEN + DESCRIPCIÓN ---
+        if (type === "1" || type === "3") {
+            imageField.style.display = "block";
+            descriptionField.style.display = "block";
+        } else {
+            imageField.style.display = "none";
+            descriptionField.style.display = "none";
+
+            imageInput.value = "";
+            descriptionInput.value = "";
+        }
+    });
+}
+
+
+
+// --- FUNCION ENVIAR REOFERTA ---
+async function submitOffer() {
+    const offer_type = document.getElementById("offer_type").value;
+    const mount = document.getElementById("offer_amount").value;
+    const descripcion = document.getElementById("offer_description").value;
+    const imageUrl = document.getElementById("offer_image").value;
+    const title = document.getElementById("offer_title").value;
+
+    // Validaciones
+    if (!title) {
+        alert("El titulo es obligatorio");
+        return;
+    }
+
+    if ((offer_type == "1" || offer_type == "3") && !descripcion) {
+        alert("La descripción es obligatoria");
+        return;
+    }
+
+    if ((offer_type === "2" || offer_type === "3") && !mount) {
+        alert("Ingresá un monto");
+        return;
+    }
+
+    // if ((offer_type === "1" || offer_type === "3") && !imageUrl) {
+    // alert("La URL de la imagen es obligatoria para producto o mixta");
+    // return;
+    // }
+
+
+
+    const data = {
+        offer_type: Number(offer_type),
+        title,
+        descripcion,
+        images_urls: imageUrl ? [imageUrl] : [],
+        mount: offer_type === "1" ? 0 : Number(mount),
+        auctioneer_id: 1,
+        bidder_id: 2,       
+        auction_id: currentAuctionId
+    };
+    
+    await fetch("http://localhost:3030/api/v1/offers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    closeOfferModal();
+    GetOffers();
+}
+
+// Cerrar modal y recargar ofertas
+closeOfferModal();
+GetOffers();
+
+
+
+
