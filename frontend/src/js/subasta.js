@@ -353,71 +353,133 @@ async function loadAuctionDetails() {
 
 loadAuctionDetails();
 
+const auctionId = new URLSearchParams(window.location.search).get('id');
 
+// Función para formatear fechas en formato relativo
+function timeAgo(dateString) {
+    if (!dateString) return '';
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    if (diffDay > 0) return `Hace ${diffDay} día${diffDay > 1 ? 's' : ''}`;
+    if (diffHour > 0) return `Hace ${diffHour} hora${diffHour > 1 ? 's' : ''}`;
+    if (diffMin > 0) return `Hace ${diffMin} minuto${diffMin > 1 ? 's' : ''}`;
+    return 'Hace unos segundos';
+}
 
+async function getrecentBids(auctionId) {
+    const bidsContainer = document.querySelector('.bids-list');
+    bidsContainer.innerHTML = '';
+    try {
+        // Llama a la API para obtener las últimas 4 ofertas de la subasta
+        const response = await fetch(`http://localhost:3030/api/v1/offers/${auctionId}?limit=4`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.status === 404) {
+            bidsContainer.innerHTML = '<div class="no-offers-message">No hay ofertas.</div>';
+            return;
+        }
+        if (!response.ok) throw new Error('Error al obtener las ofertas recientes');
+        const recentBids = await response.json();
+        // Espera que recentBids sea un array de ofertas con las propiedades necesarias
+        if (!recentBids || recentBids.length === 0) {
+            bidsContainer.innerHTML = '<div class="no-offers-message">No hay ofertas.</div>';
+            return;
+        }
+        recentBids.forEach(bid => {
+            // Determina el tipo de oferta para la clase
+            let bidTypeClass = '';
+            if (bid.offer_type_id === 1) bidTypeClass = 'cash-bid';
+            else if (bid.offer_type_id === 2) bidTypeClass = 'trade-bid';
+            else if (bid.offer_type_id === 3) bidTypeClass = 'mixed-bid';
 
+            // Formatea el monto/descripcion según el tipo
+            let offer_title = '';
+            if (bid.offer_type_id === 1) offer_title = `$${Number(bid.offer_amount).toLocaleString()}`;
+            else if (bid.offer_type_id === 2) offer_title = bid.offer_title;
+            else if (bid.offer_type_id === 3) offer_title = `$${Number(bid.offer_amount).toLocaleString()} + ${bid.offer_title}`;
 
+            // Concatenar nombre y apellido del ofertante
+            let bidderName = '';
+            if (bid.name_user || bid.lastname_user) {
+                bidderName = `${bid.name_user || ''} ${bid.lastname_user || ''}`.trim();
+            } else {
+                bidderName = 'Usuario desconocido';
+            }
 
+            // Formatea el tiempo en formato relativo
+            let bidTime = timeAgo(bid.offer_date);
 
-
-
-
-
-
-
-
-
-
-
-
-// // Cambio de pestañas
-// document.querySelectorAll('.bid-tab').forEach(tab => {
-//     tab.addEventListener('click', () => {
-//         // Remover active de todas las pestañas
-//         document.querySelectorAll('.bid-tab').forEach(t => t.classList.remove('active'));
-//         document.querySelectorAll('.bid-form').forEach(f => f.classList.remove('active'));
-        
-//         // Activar pestaña clickeada
-//         tab.classList.add('active');
-//         const tabType = tab.getAttribute('data-tab');
-//         document.getElementById(tabType + 'Form').classList.add('active');
-//     });
-// });
-
-// //Deshabilitar tipos de oferta segun si la subasta es de tipo solo dinero, solo trueque o ambos
-// const offerTypeElement = auction.offer_type_name;
-// if (offerTypeElement) {
-//     const offerType = offerTypeElement.value;
-//     const bidTabs = document.querySelectorAll('.bid-tab');
-//     bidTabs.forEach(tab => {
-//         const tabType = tab.getAttribute('data-tab');
-//         if (offerType === 'Dinero' && tabType === 'trade') {
-//             tab.classList.add('disabled');
-//             tab.style.pointerEvents = 'none';
-//         } else if (offerType === 'Producto' && tabType === 'money') {
-//             tab.classList.add('disabled');
-//             tab.style.pointerEvents = 'none';
-//         }
-//     });
-// }
-
-// // Envío de ofertas
-// document.querySelectorAll('.bid-form').forEach(form => {
-//     form.addEventListener('submit', async (e) => {
-//         e.preventDefault();
-        
-//         //envío a la API
-//         const submitBtn = form.querySelector('button[type="submit"]');
-//         const originalText = submitBtn.textContent;
-//         submitBtn.textContent = 'Enviando...';
-//         submitBtn.disabled = true;
-
-        
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-        
-//         alert('¡Oferta enviada correctamente! El vendedor será notificado.');
-//         submitBtn.textContent = originalText;
-//         submitBtn.disabled = false;
-//         form.reset();
-//     });
-// });
+                        const bidDiv = document.createElement('div');
+                        bidDiv.classList.add('bid-item', bidTypeClass, 'recent-bid-horizontal');
+                        // Si es producto o mixta, el título es botón y abre modal
+                        if (bid.offer_type_id === 2 || bid.offer_type_id === 3) {
+                                const modalId = `modal-bid-${bid.offer_id || Math.random().toString(36).substr(2, 9)}`;
+                    bidDiv.innerHTML = `
+                            <button class="bid-amount" style="background:none;border:none;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left;font-weight:bold;" data-bid-modal="${modalId}">${offer_title}</button>
+                            <span class="bidder">${bidderName}</span>
+                            <span class="bid-time">${bidTime}</span>
+                            <div class="modal" id="${modalId}">
+                                <div class="modal-background" data-close-modal></div>
+                                <div class="modal-card">
+                                    <header class="modal-card-head">
+                                        <p class="modal-card-title">Detalle de la Oferta</p>
+                                        <button class="delete" aria-label="close" data-close-modal></button>
+                                    </header>
+                                    <section class="modal-card-body" style="color:#222;background:#fff;">
+                                        <figure class="image is-4by3">
+                                            <img class="auction_img" src="${bid.offer_images || ''}" alt="Imagen oferta" >
+                                        </figure>
+                                        <p class="title mt-2"> ${bid.offer_title || ''}</p>
+                                        ${bid.offer_type_id === 3 ? `<p class="subtitle"><strong>Dinero:</strong> $${Number(bid.offer_amount).toLocaleString()}</p>` : ''}
+                                        <div class="auctioneer-info">
+                                            <img src="${bid.image_user || `https://ui-avatars.com/api/?name=${bid.name_user || ''}+${bid.lastname_user || ''}`}" alt="Avatar del subastador" class="auctioneer-avatar">
+                                            <div>
+                                                <strong>${bid.name_user || ''} ${bid.lastname_user || ''}</strong>
+                                                <p class="text-grey"> @${bid.bidder}</p>
+                                            </div>
+                                        </div>
+                                        <div class="product-description">
+                                            <h3>Descripción</h3>
+                                            <p>${bid.offer_description || ''}</p>
+                                        </div>
+                                        <hr>
+                                        <p class="mt-2 text-grey">Ofertado hace ${bidTime}</p>
+                                    </section>
+                                    <footer class="modal-card-foot">
+                                        <button class="button is-link" data-close-modal>Cerrar</button>
+                                    </footer>
+                                </div>
+                            </div>
+                    `;
+                                bidsContainer.appendChild(bidDiv);
+                                // Listeners para abrir/cerrar el modal
+                                const btn = bidDiv.querySelector('[data-bid-modal]');
+                                const modal = bidDiv.querySelector(`#${modalId}`);
+                                btn.addEventListener('click', () => {
+                                        modal.classList.add('is-active');
+                                });
+                                modal.querySelectorAll('[data-close-modal]').forEach(el => {
+                                        el.addEventListener('click', () => {
+                                                modal.classList.remove('is-active');
+                                        });
+                                });
+                        } else {
+                                bidDiv.innerHTML = `
+                                        <span class="bid-amount">${offer_title}</span>
+                                        <span class="bidder">${bidderName}</span>
+                                        <span class="bid-time">${bidTime}</span>
+                                `;
+                                bidsContainer.appendChild(bidDiv);
+                        }
+        });
+    } catch (err) {
+        bidsContainer.innerHTML = '<div class="error-offers-message">Error al cargar ofertas recientes.</div>';
+        console.error(err);
+    }
+}
