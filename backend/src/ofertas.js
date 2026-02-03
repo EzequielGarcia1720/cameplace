@@ -46,9 +46,21 @@ async function GetAllOffers(querySQL, parameters) {
 }
 // Obtener las ofertas de acuerdo a la subasta
 async function GetOffersByAuction(id) {
-    const querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
-    console.log("id recibido:", id)
-    const response = await dbClient.query(querySQL, [id]);
+    // Permite un segundo parámetro opcional para el límite
+    let querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
+    let params = [id];
+    if (arguments.length > 1 && arguments[1]) {
+        const limit = parseInt(arguments[1]);
+        if (!isNaN(limit) && limit > 0) {
+            querySQL += ` ORDER BY o.creation_date DESC LIMIT $2`;
+            params.push(limit);
+        } else {
+            querySQL += ` ORDER BY o.creation_date DESC`;
+        }
+    } else {
+        querySQL += ` ORDER BY o.creation_date DESC`;
+    }
+    const response = await dbClient.query(querySQL, params);
     if (response.rows.length === 0)
         return undefined
     return response.rows

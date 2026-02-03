@@ -119,7 +119,9 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    const offers = await GetOffersByAuction(req.params.id);
+    // Lee el parámetro de query 'limit' si existe
+    const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+    const offers = await GetOffersByAuction(req.params.id, limit);
     if (offers === undefined)
         return res.sendStatus(404)
     res.json(offers);
