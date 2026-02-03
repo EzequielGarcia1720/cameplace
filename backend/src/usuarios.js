@@ -73,7 +73,7 @@ async function newUser(username, psswd, email, firstname, lastname, tel, biograp
 
 
 //UpdateUser
-async function updateUser(userID, username, firstname, lastname, biography, image_url) {
+async function updateUser(userID, username, firstname, lastname, biography, image_url, tel) {
     // Obtener el usuario actual
     const currentUser = await getUser(userID);
     if (!currentUser) {
@@ -90,8 +90,8 @@ async function updateUser(userID, username, firstname, lastname, biography, imag
     }
 
     const response = await dbClient.query(
-        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4, image_url = $5 WHERE id = $6 RETURNING *',
-        [username, firstname, lastname, biography, image_url, userID]
+        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4, image_url = $5, tel = $6 WHERE id = $7 RETURNING *',
+        [username, firstname, lastname, biography, image_url, tel, userID]
     );
 
     if (response.rowCount === 0) {

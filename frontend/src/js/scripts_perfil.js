@@ -21,7 +21,8 @@
             apellido: document.getElementById('apellido_input').value,
             usuario: document.getElementById('usuario_input').value,
             bio: document.getElementById('biografia_textarea').value,
-            image_url: document.getElementById('foto_url_input').value
+            image_url: document.getElementById('foto_url_input').value,
+            tel: document.getElementById('telefono_input').value
             };
 
         fieldset.disabled = false;
@@ -50,7 +51,8 @@ btnGuardar.addEventListener('click', async (e) => {
         firstname: document.getElementById('nombre_input').value,
         lastname: document.getElementById('apellido_input').value,
         biography: document.getElementById('biografia_textarea').value,
-        image_url: document.getElementById('foto_url_input').value
+        image_url: document.getElementById('foto_url_input').value,
+        tel: document.getElementById('telefono_input').value
     };
 
     try {
@@ -91,6 +93,7 @@ btnGuardar.addEventListener('click', async (e) => {
         document.getElementById('usuario_input').value = valoresOriginales.usuario;
         document.getElementById('biografia_textarea').value = valoresOriginales.bio;
         document.getElementById('foto_url_input').value = valoresOriginales.image_url;
+        document.getElementById('telefono_input').value = valoresOriginales.tel;
 
         modoLectura();
     });
@@ -122,6 +125,7 @@ btnGuardar.addEventListener('click', async (e) => {
             document.getElementById("biografia_textarea").value = user.biography ?? "";
             document.getElementById("foto_url_input").value = user.image_url ?? "";
             document.getElementById("perfil_img").src = user.image_url
+            document.getElementById("telefono_input").value = user.tel ?? "";
             if(user.image_url === null || user.image_url === '') {
                 document.getElementById("perfil_img").src = sessionStorage.getItem('image_url');
             }

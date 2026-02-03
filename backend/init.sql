@@ -66,7 +66,7 @@ CREATE TABLE users (
     lastname VARCHAR(255),
     tel INT,
     biography TEXT,
-    image_url TYPE TEXT,
+    image_url TEXT,
     ubication VARCHAR(255),
     registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modificationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
