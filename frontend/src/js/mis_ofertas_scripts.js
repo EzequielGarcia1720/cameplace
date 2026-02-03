@@ -63,6 +63,9 @@ async function GetOffers() {
         // Recorremos las ofertas y generamos el HTML correspondiente
         offers.forEach(offer => {
             
+            console.log("Oferta ID:", offer.id);
+            console.log("Raw images_urls:", offer.images_urls);
+            console.log("Tipo de dato:", typeof offer.images_urls);
             // LÓGICA DE FORMATO DE FECHA
             const fecha = new Date(offer.creation_date).toLocaleDateString('es-AR', {
                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -70,13 +73,22 @@ async function GetOffers() {
 
             // Generamos la columna de imagen solo si hay imágenes disponibles
             let htmlColumnaImagen = "";
-            
-            // Solo si hay imágenes en el array, llenamos la variable con el HTML
-            if (offer.images_urls && offer.images_urls.length > 0) {
+
+            let urlLimpia = "";
+
+            if (offer.images_urls) {
+                if (Array.isArray(offer.images_urls)) {
+                    urlLimpia = offer.images_urls[0] || ""; 
+                } else {
+                    urlLimpia = String(offer.images_urls).replace(/[\{}[\]"']/g, "").trim();
+                }
+            }
+            if (urlLimpia.length > 5 && urlLimpia !== "null" && urlLimpia !== "undefined") {
+                
                 htmlColumnaImagen = `
                 <div class="column is-narrow">
                     <figure class="image is-96x96">
-                        <img class="is-rounded" src="${offer.images_urls}" alt="Producto" style="object-fit: cover; height: 100%;">
+                        <img src="${urlLimpia}" alt="Producto" style="object-fit: cover; height: 100%;">
                     </figure>
                 </div>`;
             }
@@ -176,9 +188,6 @@ async function GetOffers() {
     }
 }
 
-// Llamada inicial para cargar los datos al entrar
-GetOffers();
-
 // --- FUNCIONES DE FILTRADO ---
 
 function ApplySearch() {
@@ -222,7 +231,7 @@ function openOfferModal(auction_id) {
     offerTypeSelect.value = "2";
 
     offerTypeSelect.dispatchEvent(new Event("change"));
-
+    
     document.getElementById("offerModal").classList.add("is-active");
 }
 
@@ -284,7 +293,7 @@ async function submitOffer() {
         return;
     }
 
-    if (!descripcion) {
+    if ((offer_type == "1" || offer_type == "3") && !descripcion) {
         alert("La descripción es obligatoria");
         return;
     }
@@ -294,16 +303,16 @@ async function submitOffer() {
         return;
     }
 
-    if ((offer_type === "1" || offer_type === "3") && !imageUrl) {
-    alert("La URL de la imagen es obligatoria para canje o mixto");
-    return;
-    }
+    // if ((offer_type === "1" || offer_type === "3") && !imageUrl) {
+    // alert("La URL de la imagen es obligatoria para producto o mixta");
+    // return;
+    // }
 
 
 
     const data = {
         offer_type: Number(offer_type),
-        title: "Mejora de oferta",
+        title,
         descripcion,
         images_urls: imageUrl ? [imageUrl] : [],
         mount: offer_type === "1" ? 0 : Number(mount),
@@ -311,7 +320,7 @@ async function submitOffer() {
         bidder_id: 2,       
         auction_id: currentAuctionId
     };
-
+    
     await fetch("http://localhost:3030/api/v1/offers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -323,7 +332,9 @@ async function submitOffer() {
 }
 
 // Cerrar modal y recargar ofertas
-    closeOfferModal();
+closeOfferModal();
+GetOffers();
+
 
 
 
