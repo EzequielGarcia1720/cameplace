@@ -209,74 +209,76 @@ async function loadAuctionDetails() {
                 </div>
             `;
             auctionContainer.appendChild(cardDiv);
+    // Llamar a la función de ofertas recientes solo después de renderizar el HTML
+    getrecentBids(auction.id);
 
-            
+            // --- Lógica de Formularios y Pestañas ---
             if (auction.auction_status == 1) {
-            // --- Alternancia de formularios y mensaje ---
-            const bidTabs = cardDiv.querySelectorAll('.bid-tab');
-            const bidForms = cardDiv.querySelectorAll('.bid-form');
-            const selectOfferMsg = cardDiv.querySelector('#selectOfferMsg');
+                // --- Alternancia de formularios y mensaje ---
+                const bidTabs = cardDiv.querySelectorAll('.bid-tab');
+                const bidForms = cardDiv.querySelectorAll('.bid-form');
+                const selectOfferMsg = cardDiv.querySelector('#selectOfferMsg');
 
-            bidTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabType = tab.getAttribute('data-tab');
-                    const form = cardDiv.querySelector(`#${tabType}Form`);
-                    // Alternar visibilidad del formulario
-                    const isActive = form.style.display === '';
-                    // Ocultar formularios
-                    bidForms.forEach(form => form.style.display = 'none');
-                    // Si estaba activo, mostrar mensaje; si no, mostrar el formulario
-                    if (isActive) {
-                        selectOfferMsg.style.display = '';
-                    } else {
-                        form.style.display = '';
-                        selectOfferMsg.style.display = 'none';
-                    }
-                });
-            });
-
-            // Al cargar, mostrar solo el mensaje
-            bidForms.forEach(f => f.style.display = 'none');
-            selectOfferMsg.style.display = '';
-
-            // Deshabilitar tipos de oferta segun si la subasta es de tipo solo dinero, solo trueque o ambos
-            const offerTypeElement = auction.offer_type_name;
-            if (offerTypeElement) {
-                const offerType = offerTypeElement;
                 bidTabs.forEach(tab => {
-                    const tabType = tab.getAttribute('data-tab');
-                    if (offerType === 'Dinero' && (tabType === 'trade' || tabType === 'mixed')) {
-                        tab.classList.add('disabled');
-                        tab.style.pointerEvents = 'none';
-                    } else if (offerType === 'Producto' && (tabType === 'cash' || tabType === 'mixed')) {
-                        tab.classList.add('disabled');
-                        tab.style.pointerEvents = 'none';
-                    } else if (offerType === 'Mixta') {
-                        // No deshabilitar ningún tab
-                        tab.classList.remove('disabled');
-                        tab.style.pointerEvents = '';
-                    }
+                    tab.addEventListener('click', () => {
+                        const tabType = tab.getAttribute('data-tab');
+                        const form = cardDiv.querySelector(`#${tabType}Form`);
+                        // Alternar visibilidad del formulario
+                        const isActive = form.style.display === '';
+                        // Ocultar formularios
+                        bidForms.forEach(form => form.style.display = 'none');
+                        // Si estaba activo, mostrar mensaje; si no, mostrar el formulario
+                        if (isActive) {
+                            selectOfferMsg.style.display = '';
+                        } else {
+                            form.style.display = '';
+                            selectOfferMsg.style.display = 'none';
+                        }
+                    });
                 });
-            }
+
+                // Al cargar, mostrar solo el mensaje
+                bidForms.forEach(f => f.style.display = 'none');
+                selectOfferMsg.style.display = '';
+
+                // Deshabilitar tipos de oferta segun si la subasta es de tipo solo dinero, solo trueque o ambos
+                const offerTypeElement = auction.offer_type_name;
+                if (offerTypeElement) {
+                    const offerType = offerTypeElement;
+                    bidTabs.forEach(tab => {
+                        const tabType = tab.getAttribute('data-tab');
+                        if (offerType === 'Dinero' && (tabType === 'trade' || tabType === 'mixed')) {
+                            tab.classList.add('disabled');
+                            tab.style.pointerEvents = 'none';
+                        } else if (offerType === 'Producto' && (tabType === 'cash' || tabType === 'mixed')) {
+                            tab.classList.add('disabled');
+                            tab.style.pointerEvents = 'none';
+                        } else if (offerType === 'Mixta') {
+                            // No deshabilitar ningún tab
+                            tab.classList.remove('disabled');
+                            tab.style.pointerEvents = '';
+                        }
+                    });
+                }
 
 
-            // --- Listeners de pestañas ---
-            cardDiv.querySelectorAll('.bid-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabType = tab.getAttribute('data-tab');
-                    const form = cardDiv.querySelector(`#${tabType}Form`);
-                    if (!form) return; // Evita error si el formulario no existe
-                    const isActive = tab.classList.contains('active');
-                    // Quitar 'active' de todos los tabs y formularios
-                    cardDiv.querySelectorAll('.bid-tab').forEach(t => t.classList.remove('active'));
-                    cardDiv.querySelectorAll('.bid-form').forEach(f => f.classList.remove('active'));
-                    if (!isActive) {
-                        tab.classList.add('active');
-                        form.classList.add('active');
-                    }
+                // --- Listeners de pestañas ---
+                cardDiv.querySelectorAll('.bid-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabType = tab.getAttribute('data-tab');
+                        const form = cardDiv.querySelector(`#${tabType}Form`);
+                        if (!form) return; // Evita error si el formulario no existe
+                        const isActive = tab.classList.contains('active');
+                        // Quitar 'active' de todos los tabs y formularios
+                        cardDiv.querySelectorAll('.bid-tab').forEach(t => t.classList.remove('active'));
+                        cardDiv.querySelectorAll('.bid-form').forEach(f => f.classList.remove('active'));
+                        if (!isActive) {
+                            tab.classList.add('active');
+                            form.classList.add('active');
+                        }
+                    });
                 });
-            });
-        };
+            };
 
             // --- Envío de ofertas ---
             cardDiv.querySelectorAll('.bid-form').forEach(form => {
