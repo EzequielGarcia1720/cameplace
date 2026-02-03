@@ -67,7 +67,7 @@ async function GetAuctions() {
                         <div class="card-content">
                             <div class="media">
                                 <div class="media-content">
-                                    <p class="title is-4">${auction.title}</p>
+                                    <a href="subasta.html?id=${auction.id}" class="title is-4">${auction.title}</a>
                                     <p class="title is-5">$${auction.initial_price}</p>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ async function GetAuctions() {
                             <div class="card-content">
                                 <div class="media">
                                     <div class="media-content">
-                                        <p class="title is-4">${auction.title}</p>
+                                        <a href="subasta.html?id=${auction.id}" class="title is-4">${auction.title}</a>
                                         <p class="title is-5">$${auction.initial_price}</p>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@ async function GetAuctions() {
                         <div class="card-content">
                             <div class="media">
                                 <div class="media-content">
-                                    <p class="title is-4">${auction.title}</p>
+                                    <a href="subasta.html?id=${auction.id}" class="title is-4">${auction.title}</a>
                                     <p class="title is-5">$${auction.initial_price}</p>
                                 </div>
                             </div>
