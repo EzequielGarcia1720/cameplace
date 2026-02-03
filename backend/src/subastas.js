@@ -8,7 +8,7 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null, user_id = null) {
     // Construimos la consulta base  
     let querySQL = `
         SELECT 
@@ -34,6 +34,10 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
         whereClauses.push(`a.auction_status = $${params.length}`);
     }
 
+    if (user_id && user_id !== '') {
+        params.push(user_id);
+        whereClauses.push(`a.auctioneer_id = $${params.length}`);
+    }
 
     // Filtro de búsqueda en título y descripción
     if (filterSearch && filterSearch !== '') {

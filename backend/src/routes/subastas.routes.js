@@ -13,6 +13,7 @@ const {
 router.get("/", async (req, res) => {
     try {
         // Obtener el parámetro de consulta 'status' si está presente
+        const filterUserId = req.query.user_id;
         const filterStatus = req.query.status; 
         const filterSearch = req.query.search;
         const filterTypeOffer = req.query.type_offer;
@@ -29,7 +30,7 @@ router.get("/", async (req, res) => {
 
         filterCategory = filterCategory.map(id => parseInt(id)).filter(id => !isNaN(id));
         // Llamamos a la función pasándole el filtro directamente
-        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory, sortParam);
+        const auctions = await GetAllAuctions(filterStatus, filterSearch, filterTypeOffer, filterCategory, sortParam, filterUserId);
         res.json(auctions);
     } catch (error) {
         console.error("Error al obtener subastas:", error);
