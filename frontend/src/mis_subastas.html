@@ -80,30 +80,6 @@
                         <p class="menu-label">Filtro</p>
                         <ul class="menu-list category-scroll">
                             <li>
-                                <a class="is-active">Estados de la subastas</a>
-                                <ul>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Activas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Vendidas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="checkbox">
-                                            <input type="checkbox"/>
-                                            Inactivas/pausadas
-                                        </label>
-                                    </li>
-                                    
-                                </ul>
-                            </li>
-                            <li>
                                 <a class="is-active">Tipo de oferta</a>
                                 <ul>
                                     <li>
@@ -320,11 +296,19 @@
                         </div>
                         <!-- Botones de paginacion -->
                         <nav class="pagination" role="navigation" aria-label="pagination">
-                        <div class="navbar-end"> 
-                            <a href="#" class="pagination-previous">Previous</a>
-                            <a href="#" class="pagination-next">Next page</a>
-                        </div>
+                            <div class="navbar-end"> 
+                                <a href="#" class="pagination-previous">Previous</a>
+                                <a href="#" class="pagination-next">Next page</a>
+                            </div>
                         </nav>
+                        <div class="tabs is-centered">
+                            <ul>
+                                <li class="is-active"><a onclick="FilterByStatus('', this)">Todo</a></li>
+                                <li><a onclick="FilterByStatus('activas', this)">Activas</a></li>
+                                <li><a onclick="FilterByStatus('aceptadas', this)">Pausadas</a></li>
+                                <li><a onclick="FilterByStatus('finalizadas', this)">Finalizadas</a></li>
+                            </ul>
+                        </div>
                         
                         <!-- Subastas -->
                         <div class="grid is-col-min-12" id="my_auctions">

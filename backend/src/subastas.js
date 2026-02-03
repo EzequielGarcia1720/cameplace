@@ -16,7 +16,7 @@ async function GetAllAuctions() {
 
 async function GetAuction(id) {
     const response = await dbClient.query(
-        "SELECT * FROM auctions WHERE id = $1", 
+        "SELECT a.*, o.type, count(of.id) AS count_offers FROM auctions a LEFT JOIN offer_type o ON a.offer_type = o.id LEFT JOIN offers of ON a.id = of.auction_id WHERE a.id = $1 GROUP BY a.id, o.type", 
         [id]
     )
     if (response.rows.length === 0)
