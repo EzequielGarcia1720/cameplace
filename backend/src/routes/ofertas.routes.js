@@ -14,6 +14,7 @@ router.get("/", async (req, res) => {
     const filterStatus = req.query.status; 
     const filterOrder = req.query.order;
     const filterSearch = req.query.search;
+    const bidder_id = req.query.user_id;
 
     // Construir la consulta SQL con filtros
     let querySQL = `
@@ -29,6 +30,15 @@ router.get("/", async (req, res) => {
     if (filterStatus) {
         querySQL += ' WHERE estado = $1'; 
         parameters.push(filterStatus);
+    }
+    if (bidder_id) {
+        const paramIndex = parameters.length + 1;
+        if (parameters.length > 0) {
+            querySQL += ` AND o.bidder_id = $${paramIndex}`;
+        } else {
+            querySQL += ` WHERE o.bidder_id = $${paramIndex}`;
+        }
+        parameters.push(bidder_id);
     }
 
     // Filtro de búsqueda en título y descripción

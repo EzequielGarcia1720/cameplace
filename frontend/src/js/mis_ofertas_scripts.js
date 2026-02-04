@@ -44,6 +44,10 @@ async function GetOffers() {
     try {
         // --- CONSTRUCCIÓN DE URL DINÁMICA ---
         const params = new URLSearchParams();
+        const user_id = sessionStorage.getItem('sesion_actual');
+        if (user_id) {
+            params.append('user_id', user_id);
+        }
         
         // Agregamos parámetros solo si tienen valor
         if (currentFilters.status) params.append('status', currentFilters.status);
