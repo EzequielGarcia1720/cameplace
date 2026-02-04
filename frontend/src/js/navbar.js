@@ -86,8 +86,8 @@ const navbarloged = `
                 <div class="navbar-item">
                     <div class="buttons">
                     <!-- Boton de crear subasta -->
-                    <a class="button crear_subasta is-primary" href="crear_subasta.html">
-                        <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
+                    <a class="button crear_subasta is-primary" id="button_create_auction">
+                        <strong onclick="OpenCreateAuction()">Crear Subasta</strong>
                     </a>
                     </div>
                 </div>
@@ -123,6 +123,7 @@ const navbarloged = `
             </div>
         </div>
     </nav>
+    <div id="CreateAuctionModal" class="modal"></div>
     `;
 
 function loadNavbar() {
@@ -179,3 +180,175 @@ function spawnbtns() {
         });
     }
 };
+
+function OpenCreateAuction() {
+    const modal = document.getElementById("CreateAuctionModal");
+    
+    const create_auction = `
+        <div class="modal-background" onclick="CloseCreateAuctionModal()"></div>
+
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title is-center" style="color: darkolivegreen">Crear subasta</p>
+                <button class="delete" aria-label="close" onclick="CloseCreateAuctionModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Título</label>
+                    <div class="control">
+                        <input class="input" type="text" id="auction_title" placeholder="Escriba el título de la subasta">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Precio Inicial</label>
+                    <div class="control">
+                        <input class="input" type="number" id="auction_initial_price" placeholder="Ingrese el precio inicial" min="0" step="0.01">
+                    </div>
+                </div>
+                    
+                <div class="field">
+                    <label class="label">Categoría</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="select_categories">
+                                <option value="" disabled selected>Selecciona una Categoría</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Condición</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="select_conditions">
+                                <option value="" disabled selected>Selecciona una Condición</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Tipo de canje</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="select_offers_type">
+                                <option value="" disabled selected>Selecciona un Tipo de canje</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Imagen</label>
+                    <div class="control">
+                        <input class="input" type="link" id="auction_image" placeholder="Ingrese el link de la imagen">
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Descripción</label>
+                    <div class="control">
+                        <textarea class="textarea" id="auction_description" placeholder="Ingrese una descripción"></textarea>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="control">
+                    <button class="button is-primary" onclick="CreateAuction()">Crear subasta</button>
+                </div>
+                <div class="control">
+                    <a class="button is-primary" onclick="CloseCreateAuctionModal()">Cancelar</a>
+                </div>
+            </footer>
+        </div>`
+        // Appendeo el formulario de edición al contenedor
+        modal.innerHTML = create_auction;
+
+        modal.classList.add("is-active");
+
+        // Relleno cada dropdown con su respectivo contenido
+        const backend_categories = "http://localhost:3030/api/v1/categories"
+        fetch(backend_categories).then((response) => {
+            return response.json()
+        }).then((categories) => {
+            const dropdown_categories = document.getElementById("select_categories")
+            categories.forEach(category => {
+                const NewCategory = document.createElement("option")
+                NewCategory.value = category.id
+                NewCategory.innerText = category.name_category
+
+                dropdown_categories.appendChild(NewCategory)
+            });
+            
+        })
+
+        const backend_offers_type = "http://localhost:3030/api/v1/offers_type"
+        fetch(backend_offers_type).then((response) => {
+            return response.json()
+        }).then((offers_type) => {
+            const dropdown_offers_type = document.getElementById("select_offers_type")
+            offers_type.forEach(offer_type => {
+                const NewOfferType = document.createElement("option")
+                NewOfferType.value = offer_type.id
+                NewOfferType.innerText = offer_type.type
+                
+                dropdown_offers_type.appendChild(NewOfferType)
+            });
+        })
+
+        const backend_conditions = "http://localhost:3030/api/v1/conditions"
+        fetch(backend_conditions).then((response) => {
+            return response.json()
+        }).then((conditions) => {
+            const dropdown_conditions = document.getElementById("select_conditions")
+            conditions.forEach(condition => {
+                const NewCondition = document.createElement("option")
+                NewCondition.value = condition.id
+                NewCondition.innerText = condition.auction_condition
+                
+                dropdown_conditions.appendChild(NewCondition)
+            });
+        })
+        
+    window.CreateAuction = function() {
+        data_auction = {
+            title: document.getElementById("auction_title").value,
+            descripcion: document.getElementById("auction_description").value,
+            initial_price: document.getElementById("auction_initial_price").value,
+            category_id: document.getElementById("select_categories").value,
+            condition: document.getElementById("select_conditions").value,
+            images_urls: document.getElementById("auction_image").value,
+            auctioneer_id: sessionStorage.getItem("sesion_actual"),
+            offer_type: document.getElementById("select_offers_type").value,
+            auction_status: 1,
+            location_id: 1
+        }
+
+        if (data_auction.title.length === 0 || data_auction.initial_price <= 0 || data_auction.images_urls.length === 0 || data_auction.descripcion.length === 0 || data_auction.category_id.length === 0 || data_auction.condition.length === 0 || data_auction.offer_type.length === 0) {
+            alert("Todos los campos son obligatorios y el precio inicial debe ser mayor a 0")
+        } else {
+            fetch("http://localhost:3030/api/v1/auctions", {
+            headers: { 'Content-Type': 'application/json' }, 
+            method: 'POST',
+            body: JSON.stringify(data_auction),
+            }).then(response => {
+                if(!response.ok) {
+                    console.log(auctioneer_id)
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                
+                }
+                return response.json()
+            }).then(data => {
+                console.log("Success", data)
+                window.location.replace("index.html")
+            }).catch(error => {
+                console.error("Error", error)
+            })
+        }
+    }
+ 
+
+
+}
+
+function CloseCreateAuctionModal() { 
+    document.getElementById("CreateAuctionModal").classList.remove("is-active");     
+}
