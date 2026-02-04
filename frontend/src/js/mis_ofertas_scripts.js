@@ -143,7 +143,7 @@ async function GetOffers() {
 
                     <h3 style="flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 10px;">
                         <a style="color: inherit; text-decoration: none;">
-                            ${offer.title}
+                            ${offer.auction_title}
                         </a>
                     </h3>
                     

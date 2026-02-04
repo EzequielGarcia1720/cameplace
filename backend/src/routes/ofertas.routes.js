@@ -16,7 +16,13 @@ router.get("/", async (req, res) => {
     const filterSearch = req.query.search;
 
     // Construir la consulta SQL con filtros
-    let querySQL = 'SELECT * FROM offers';
+    let querySQL = `
+    SELECT 
+    o.*, 
+    a.title AS auction_title
+    FROM offers o
+    LEFT JOIN auctions a ON o.auction_id = a.id
+    `;
     let parameters = [];
     
     // Aplicar filtros si existen
