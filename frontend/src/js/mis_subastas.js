@@ -7,15 +7,6 @@ let currentFilters = {
 const find_button = document.querySelector("#buscar_boton")
 const searchbar = document.querySelector("#barra_busqueda")
 
-find_button.addEventListener("click", () => {
-    search = "http://localhost:3030/api/v1/auctions/search"
-    const search_text = searchbar.value;
-    if (!search_text || search_text.lenght == 0) {
-        alert("No se pueden realizar búsquedas vacías")
-        return;
-    }
-})
-
 // Mis subastas
 async function GetAuctions() {
 
@@ -30,9 +21,16 @@ async function GetAuctions() {
 
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
-
-        // Construimos la URL (UNA SOLA VEZ)
-        const URL = `http://localhost:3030/api/v1/auctions?${params.toString()}`;
+        if (find_button) {
+            find_button.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Evita que se recargue la página si está dentro de un form
+                ApplySearch(); // Llama a tu función de búsqueda
+            }
+        });
+}
+        // Construimos la URL con los parámetros de consulta
+        const URL = "http://localhost:3030/api/v1/auctions?user_id=" + sessionStorage.getItem("sesion_actual") + "&" + params.toString();
         
         // Hacemos el fetch (UNA SOLA VEZ)
         const response = await fetch(URL);
@@ -243,6 +241,15 @@ function ApplySearch() {
         currentFilters.search = input.value;
         GetAuctions();
     }
+}
+
+if (searchbar) {
+    searchbar.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Evita que se recargue la página si está dentro de un form
+            ApplySearch(); // Llama a tu función de búsqueda
+        }
+    });
 }
 function FilterByStatus(estado, elementoHTML) {
     currentFilters.status = estado;
