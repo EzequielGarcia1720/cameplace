@@ -127,7 +127,7 @@ async function GetOffers() {
             }
 
             // --- Si es tipo Producto o Mixto ---
-            if (offer.offer_type === 1 || offer.offer_type === 3) {
+            if (offer.offer_type === 2 || offer.offer_type === 3) {
                 tagsHtml += `
                     <span class="tag is-warning">
                         <span class="icon"><i class="fas fa-box-open"></i></span>
@@ -142,7 +142,7 @@ async function GetOffers() {
                     <span class="tag is-link is-light mr-2">${fecha}</span>
 
                     <h3 style="flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 10px;">
-                        <a style="color: inherit; text-decoration: none;">
+                        <a href="./subasta.html?id=${offer.auction_id}"style="color: inherit; text-decoration: none;">
                             ${offer.auction_title}
                         </a>
                     </h3>
