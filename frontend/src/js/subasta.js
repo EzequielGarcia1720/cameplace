@@ -111,7 +111,7 @@ async function loadAuctionDetails() {
                                     <div class="form-group">
                                         <label for="mixedCash">Monto en dinero:</label>
                                         <div class="field">
-                                            <input class="input" type="number" id="mixedCashAmount" min="${auction.initial_price}" step="1000" 
+                                            <input class="input" type="number" id="mixedCashAmount" min="${auction.initial_price}" 
                                                 placeholder="${auction.initial_price}" required>
                                         </div>
                                     </div>
