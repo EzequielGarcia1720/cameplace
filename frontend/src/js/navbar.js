@@ -95,13 +95,7 @@ const navbarunloged = `
 const navbarloged = `
             <!-- Lado derecho -->
             <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                    <!-- Boton de crear subasta -->
-                    <a id="crear_subasta_btn" class="button crear_subasta is-primary" >
-                        <strong href="frontend/crear_subasta.html">Crear Subasta</strong>
-                    </a>
-                    </div>
+                <div id="navbar-item-crear-subasta" class="navbar-item">
                 </div>
 
                 <div class="navbar-item">
