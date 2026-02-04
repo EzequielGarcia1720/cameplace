@@ -114,12 +114,13 @@
                     let contenido_tags = offer.auction_offer_type
                     let amount = offer.offer_amount
                     let image_offer = ""
+                    let padding = ""
                     const image = offer.offer_images
                     // Si no hay imagen en la oferta, no se coloca
                     if (image && image.length > 0) {
                         image_offer = `
                         <div class="column is-narrow">
-                            <figure class="image is-256x256" style="padding-top: 40px">
+                            <figure class="image is-128x128 is-1by1" style="padding-top: 40px">
                                 <img src=${offer.offer_images} class="fixed-image">
                             </figure>
                         </div>`
@@ -133,6 +134,7 @@
                             <span class="icon"><i class="fas fa-box-open"></i></span>
                             <span>Producto de Canje</span>
                         </span>`
+                        padding = `style="padding-left: 40px"`
                     }
                     if (contenido_tags === 1) {
                         amount = `<p class="title is-5">$${offer.offer_amount}</p>`
@@ -141,6 +143,7 @@
                             <span class="icon"><i class="fas fa-dollar-sign"></i></span>
                             <span>Dinero</span>
                         </span>`
+                        
                         
                     }
                     if (contenido_tags === 3) {
@@ -154,6 +157,7 @@
                             <span class="icon"><i class="fas fa-box-open"></i></span>
                             <span>Producto de Canje</span>
                         </span>`
+                        padding = `style="padding-left: 40px"`
                         
                     }
                     // Estructura HTML de la oferta
@@ -177,11 +181,11 @@
                             <div class="message-body">
                                 <div class="columns is-vcentered">
                                     ${image_offer}
-                                    <div class="column" style="padding-left: 40px">
+                                    <div class="column" ${padding}>
                                         <div class="card-content">
                                             <div class="media">
                                                 <div class="media-left">
-                                                    <figure class="image is-96x96">
+                                                    <figure class="image is-64x64">
                                                         <img
                                                             src=${offer.image_user}
                                                             alt="Placeholder image"
