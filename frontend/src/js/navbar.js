@@ -95,7 +95,6 @@ const navbarunloged = `
 const navbarloged = `
             <!-- Lado derecho -->
             <div class="navbar-end">
-<<<<<<< HEAD
                 <div class="navbar-item">
                     <div class="buttons">
                     <!-- Boton de crear subasta -->
@@ -103,9 +102,6 @@ const navbarloged = `
                         <strong onclick="OpenCreateAuction()">Crear Subasta</strong>
                     </a>
                     </div>
-=======
-                <div id="navbar-item-crear-subasta" class="navbar-item">
->>>>>>> a9c6a299b0cbb174f02a1105fb124ba873667baa
                 </div>
 
                 <div class="navbar-item">
