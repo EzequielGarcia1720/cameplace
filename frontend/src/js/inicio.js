@@ -79,7 +79,6 @@ async function GetAuctions() {
 
 
         auctions.forEach(auction => {
-            const userImageUrl = auction.image_url || 'https://bulma.io/images/placeholders/48x48.png';
 
             const card = `
                 <div class="cell card">
@@ -95,16 +94,18 @@ async function GetAuctions() {
                         <div class="media">
                             <div class="media-left">
                                 <figure class="image is-48x48">
-                                    <img src="${userImageUrl}" alt="User image"/>
+                                    <img src="${auction.image_url || `https://ui-avatars.com/api/?name=${auction.firstname || ''}+${auction.lastname || ''}`}" alt="User image"/>
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <a href="subasta.html?id=${auction.id}" class="title is-5">${auction.title}</a>
-                                <p class="title is-6">$${auction.initial_price}</p>
+                                <p class="subtitle is-6">@${auction.username}</p>
+                                
                             </div>
                         </div>
 
                         <div class="content">
+                            ${auction.offer_type === 1 ? `<p class="title is-5" class="title is-6">Precio inicial: $${auction.initial_price}</p>` : ''}
                             ${auction.descripcion}
                             <br>
                             <p style="font-weight: bold; color: black"> Última Modificación: ${auction.modification_date.slice(0,10)} </p>
