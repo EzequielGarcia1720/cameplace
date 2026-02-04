@@ -62,7 +62,9 @@ function initregisterForm() {
 
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        
+        const register_firstname = document.getElementById('register_firstname').value;
+        const register_lastname = document.getElementById('register_lastname').value;
         const register_email = document.getElementById('register_email').value;
         const register_username = document.getElementById('register_username').value;
         const register_password = document.getElementById('register_password').value;
@@ -76,7 +78,10 @@ function initregisterForm() {
                 body: JSON.stringify({ 
                     email: register_email, 
                     username: register_username, 
-                    psswd: register_password 
+                    psswd: register_password,
+                    firstname: register_firstname,
+                    lastname: register_lastname,
+                    image_url: `https://ui-avatars.com/api/?name=${register_firstname}+${register_lastname}`
                 })
             });
 
@@ -117,6 +122,7 @@ function cerrarSesion() {
     cerrarSesionBtn.addEventListener('click', () => {
         sessionStorage.removeItem('sesion_actual');
         sessionStorage.removeItem('username');
+        sessionStorage.removeItem('image_url');
 
         window.location.href = 'index.html';
     });

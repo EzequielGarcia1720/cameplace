@@ -50,6 +50,18 @@ const navbarunloged = `
                             <div class="dropdown-content">
                                 <form id="registerForm" class="p-4">
                                     <div class="field">
+                                        <label class="label">Nombre</label>
+                                        <div class="control">
+                                            <input id="register_firstname" class="input" type="text" placeholder="tu nombre" required>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Apellido</label>
+                                        <div class="control">
+                                            <input id="register_lastname" class="input" type="text" placeholder="tu apellido" required>
+                                        </div>
+                                    </div>
+                                    <div class="field">
                                         <label class="label">Username</label>
                                         <div class="control">
                                             <input id="register_username" class="input" type="text" placeholder="nombre de usuario" required>
@@ -83,6 +95,7 @@ const navbarunloged = `
 const navbarloged = `
             <!-- Lado derecho -->
             <div class="navbar-end">
+<<<<<<< HEAD
                 <div class="navbar-item">
                     <div class="buttons">
                     <!-- Boton de crear subasta -->
@@ -90,13 +103,16 @@ const navbarloged = `
                         <strong onclick="OpenCreateAuction()">Crear Subasta</strong>
                     </a>
                     </div>
+=======
+                <div id="navbar-item-crear-subasta" class="navbar-item">
+>>>>>>> a9c6a299b0cbb174f02a1105fb124ba873667baa
                 </div>
 
                 <div class="navbar-item">
                     <!-- dropdown -->
                     <span class="dropdown is-right is-hoverable">
-                        <figure class="image is-32x32">
-                            <img id="foto_perfil_navbar" class="is-rounded" src="${sessionStorage.getItem('image_url')}" />
+                        <figure class="mt-1 is-48x48">
+                            <img id="foto_perfil_navbar" style="border-radius: 50%;" src="${sessionStorage.getItem('image_url')}" />
                         </figure>
                     
                     <div class="dropdown-trigger">
