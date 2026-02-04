@@ -122,6 +122,7 @@ function cerrarSesion() {
     cerrarSesionBtn.addEventListener('click', () => {
         sessionStorage.removeItem('sesion_actual');
         sessionStorage.removeItem('username');
+        sessionStorage.removeItem('image_url');
 
         window.location.href = 'index.html';
     });
