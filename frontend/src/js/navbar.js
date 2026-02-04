@@ -113,7 +113,7 @@ const navbarloged = `
                         <div class="dropdown-content">
                         <a href="perfil.html" class="dropdown-item">Mi perfil</a>
                         <a href="mis_subastas.html?user_id=${sessionStorage.getItem('sesion_actual')}" class="dropdown-item">Mis Subastas </a>
-                        <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
+                        <a href="mis_ofertas.html?user_id=${sessionStorage.getItem('sesion_actual')}" class="dropdown-item">Mis Ofertas</a>
                         <hr class="dropdown-divider" />
                         <a id="cerrar_sesion" class="dropdown-item"> Cerrar Sesión </a>
                         </div>
@@ -133,14 +133,15 @@ function loadNavbar() {
         if (sesion_actual) {
             // Usuario logueado
             navbarend.innerHTML = navbarloged;
+            if (typeof cerrarSesion === 'function') cerrarSesion();
         } else {
             // Usuario no logueado
             navbarend.innerHTML = navbarunloged;
             spawnbtns();
         }
-        
     }
-};
+    }
+
 
 // Esperar a que el DOM esté completamente cargado
 if (document.readyState === 'loading') {
