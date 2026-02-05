@@ -150,7 +150,7 @@ async function GetOffers() {
                 if (Array.isArray(offer.images_urls)) {
                     urlLimpia = offer.images_urls[0] || ""; 
                 } else {
-                    urlLimpia = String(offer.images_urls).replace(/[\{}[\]"']/g, "").trim();
+                    urlLimpia = String(offer.images_urls).replace(/[\{}[\]"']/, "").trim();
                 }
             }
             if (urlLimpia.length > 5 && urlLimpia !== "null" && urlLimpia !== "undefined") {
@@ -326,6 +326,9 @@ const imageField = imageInput.closest(".field");
 const descriptionInput = document.getElementById("offer_description");
 const descriptionField = descriptionInput.closest(".field");
 
+const titleInput = document.getElementById("offer_title");
+const titleField = titleInput.closest(".field");
+
 if (offerTypeSelect) {
     offerTypeSelect.addEventListener("change", () => {
         const type = offerTypeSelect.value;
@@ -336,6 +339,13 @@ if (offerTypeSelect) {
             document.getElementById("offer_amount").value = "";
         } else {
             mountField.style.display = "block";
+        }
+
+        if (type === "2") {
+            titleField.style.display = "none";
+            titleInput.value = ""; 
+        } else {
+            titleField.style.display = "block";
         }
 
         // --- IMAGEN + DESCRIPCIÓN ---
@@ -363,7 +373,7 @@ async function submitOffer() {
     const title = document.getElementById("offer_title").value;
 
     // Validaciones
-    if (!title) {
+    if ((offer_type == "1" || offer_type == "3") && !title) {
         alert("El titulo es obligatorio");
         return;
     }
