@@ -8,7 +8,7 @@ const dbClient = new Pool({
 });
 
 // API
-async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null, user_id = null) {
+async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null, user_id = null, pags = null) {
     // Construimos la consulta base  
     let querySQL = `
         SELECT 
@@ -77,6 +77,17 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
         case 'recientes':
         default:
             querySQL += ' ORDER BY a.creation_date DESC';
+    }
+
+    if (pags && pags > 0) {
+        const limite = 18; 
+        const offset = (parseInt(pags) - 1) * limite;
+
+        params.push(limite);
+        querySQL += ` LIMIT $${params.length}`;
+
+        params.push(offset);
+        querySQL += ` OFFSET $${params.length}`;
     }
 
     try {

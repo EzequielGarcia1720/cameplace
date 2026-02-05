@@ -3,7 +3,8 @@ let currentFilters = {
     sort: 'recientes',  // Orden por defecto
     category: [],  // Categoría seleccionada
     type_offer: '',  // Tipo de oferta seleccionado
-    search: ''  // Tipo de oferta seleccionado  
+    search: '',  // Tipo de oferta seleccionado 
+    page: 1 
 };
 
 // // Selección de botones de ordenamiento
@@ -52,6 +53,8 @@ async function GetAuctions() {
         if (currentFilters.type_offer) queryParams.append('type_offer', currentFilters.type_offer);
         if (currentFilters.search) queryParams.append('search', currentFilters.search);
         if (currentFilters.sort) queryParams.append('sort', currentFilters.sort);
+        
+        queryParams.append('page', currentFilters.page)
 
         currentFilters.category.forEach(catId => {
             queryParams.append('category', catId);
@@ -184,29 +187,44 @@ if (inputBusqueda) {
 document.addEventListener("DOMContentLoaded", () => {
     
     
+    
     const aplicarOrden = (boton, tipoOrden) => {
         
         document.querySelectorAll('.menu-list a').forEach(a => a.style.fontWeight = 'normal');
         if(boton) boton.style.fontWeight = 'bold';
-
+        
         currentFilters.sort = tipoOrden;
         console.log("Cambiando orden a:", tipoOrden);
         GetAuctions();
     };
-
+    
     
     const btnRecientes = document.getElementById("boton_recientes");
     if(btnRecientes) btnRecientes.addEventListener("click", () => aplicarOrden(btnRecientes, 'recientes'));
-
+    
     const btnAntiguas = document.getElementById("boton_masantiguas");
     if(btnAntiguas) btnAntiguas.addEventListener("click", () => aplicarOrden(btnAntiguas, 'antiguas'));
-
+    
     const btnMayor = document.getElementById("boton_mayor_cant_ofertas");
     if(btnMayor) btnMayor.addEventListener("click", () => aplicarOrden(btnMayor, 'mayor_ofertas'));
-
+    
     const btnMenor = document.getElementById("boton_menor_cant_ofertas");
     if(btnMenor) btnMenor.addEventListener("click", () => aplicarOrden(btnMenor, 'menor_ofertas'));
-
-    // Cargar subastas al inicio
     
+    
+    const changePage = (direction) => {
+        if (direction === -1 && currentFilters.page === 1) return;
+        currentFilters.page += direction;
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        GetAuctions()
+    }
+    const btnsPrev = document.querySelectorAll(".pagination-previous");
+    const btnsNext = document.querySelectorAll(".pagination-next");
+    
+    btnsPrev.forEach(button => {
+        button.addEventListener("click", () => changePage(-1))
+    });
+    btnsNext.forEach(button => {
+        button.addEventListener("click", () => changePage(1))
+    });
 });
