@@ -1,8 +1,14 @@
 # CameBastas
 TP Final 
 
-## Ideas
-    1. Que el subastador tenga la opción de ponerle un tiempo límite a la publicación en caso de ver una oferta que le interese.
+## Instrucciones para levantar el sistema
+
+    Colocarse en el directorio raiz del proyecto: cd cameplace/
+
+    Buildear el contenedor de docker : Docker compose build
+
+    Levantar el contenedor : Docker compose up (-d en caso de si se quiere detached)    
+
 
 ## Objetivo
     Es una página de subastas donde se pueden publicar artículos, las ofertas pueden ser productos, dinero o mixtas. Estas no tienen un tiempo límite, sino que el subastador selecciona la oferta que el quiera. 
@@ -14,8 +20,10 @@ TP Final
         -- Nombre de usuario --> u.username
         -- Correo electrónico --> u.email
         -- Contraseña --> u.password
-        -- Nombre completo --> u.name
+        -- Nombre y Apellido--> u.name
         -- Teléfono --> u.tel
+        --Biografia --> u.bio
+        --Foto de Perfil --> u.foto
         -- Ubicación --> u.ubi
         -- Fecha de registro --> u.reg_date
         -- Fecha de modificación --> u.mod_date
@@ -45,6 +53,7 @@ TP Final
         -- Id de vendedor <-- (FK de users)
         -- Id de ofertador <-- (FK de users)
         -- Id de subasta <-- (FK de subastas)
+        --Estado (FK de status)
         -- Fecha de creación
         -- Fecha de modificación
 
@@ -62,9 +71,12 @@ TP Final
     ¿Qué contiene?
         Lado izquierdo: 
             -Logo (botón de inicio) 
-        Lado derecho:  
-            -Botón de crear subasta
-            -Foto del perfil con dropdown que contenga "Mi perfil" "Mis subastas" "Cerrar sesión"
+        Lado derecho:
+            Sin Logearse:
+                Botones de "Iniciar Sesion" "Registro"   
+            Logeado: 
+                -Botón de crear subasta
+                -Foto del perfil con dropdown que contiene "Mi perfil" "Mis subastas" "Mis Ofertas" "Cerrar sesión"
 
 
 ## Paginas
@@ -82,29 +94,23 @@ TP Final
                 -Nombre completo
                 -Username
                 -Foto de perfil
-                -Correo electrónico
                 -Número de teléfono
-                -Ubicación aproximada
-                -Mis ofertas
-                -Grilla con tus ofertas
-                -Botón de eliminar 
-                -Imagen
-                -Título
-                -Tipo de oferta
-                -Monto/canje
-                -Categoría
-                -Filtro
+                -Botón de eliminar perfil
+                -Botones para modificar perfil
+                -Modal para cambiar contraseña
+
     
-    -- Mis subastas (dentro de Perfil)
-        Grilla con tus subastas (activas e inactivas)
+    -- Mis subastas
+        Grilla con tus subastas y Filtro entre activas, inactivas y finalizadas
             -Título
             -Botón de editar(cambiar estado, precio base)
+            -Boton de pausar subasta
             -Botón de eliminar 
             -Imagen
             -Tipo de oferta
             -Precio inicial
             -Categoría
-            -Filtro
+            -Ultima modificacion
 
     -- Subasta
         -título
@@ -126,6 +132,7 @@ TP Final
             -Imagenes
             -Dropdown (tipo de canje)
             -Botón de crear subasta
+            -Boton de cancelar
     
     -- Inicio de sesión
         Formulario
@@ -138,10 +145,7 @@ TP Final
         Formulario:
             -Nombre completo
             -Username
-            -Foto de perfil
-            -Correo electrónico
-            -Número de teléfono
-            -Ubicación aproximada 
+            -Correo electrónico 
             -Contraseña
 
         
