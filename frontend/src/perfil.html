@@ -106,15 +106,64 @@
                     <div class="control" style="display: none;">
                         <button id="cancelar_button" class="button is-danger">Cancelar</button>
                     </div>
-                
-                <button id="eliminar_perfil_button" class="button is-danger">
-                Eliminar perfil
-                </button>
-                </div>
+                    
+                    <div class="control">
+                        <button id="eliminar_perfil_button" class="button is-danger">Eliminar perfil</button>
+                    </div>
+                    <div class="control">
+                        <button id="cambiar_password_button" class="button is-primary">Cambiar contraseña </button>
+                    </div>
+                </div>    
             </div>
 
         </div>
     </div>
+    <!-- Modal para cambiar la contraseña -->
+    <div class="modal" id="password_modal">
+    <div class="modal-background"></div>
+
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Cambiar contraseña</p>
+            <button class="delete" aria-label="close" id="cerrar_password_modal"></button>
+        </header>
+
+        <section class="modal-card-body">
+            <div class="field">
+                <label class="label">Contraseña actual</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="password"
+                        id="actual_password"
+                        placeholder="Contraseña actual"
+                    />
+                </div>
+            </div>
+            
+            <div class="field">
+                <label class="label">Nueva contraseña</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="password"
+                        id="nueva_password"
+                        placeholder="Nueva contraseña"
+                    />
+                </div>
+            </div>
+            <p class="has-text-danger" id="password_error"></p>
+            <p class="has-text-success" id="password_exito"></p>
+        </section>
+
+        <footer class="modal-card-foot">
+            <button class="button is-primary" id="guardar_password_button">
+                Guardar
+            </button>
+        </footer>
+    </div>
+</div>
+
     <script src="js/scripts_perfil.js" defer></script>
     <script src="js/navbar.js"></script>
     <script src="js/login.js"></script>
