@@ -1,6 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const navbar_item_crear_subasta = document.getElementById('navbar-item-crear-subasta');
+    if (!navbar_item_crear_subasta) return;
     const crear_subasta_btn = document.createElement('div');
     crear_subasta_btn.innerHTML = `
         <div class="buttons">
