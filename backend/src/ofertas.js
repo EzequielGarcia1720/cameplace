@@ -26,7 +26,8 @@ const OffersByAuction = `
         u.image_url AS image_user,
         u.firstname AS name_user,
         u.lastname AS lastname_user,
-        of.type AS offer_type_auction
+        of.type AS offer_type_auction,
+        COUNT(*) OVER() as total_resultados
         
     FROM offers o 
     LEFT JOIN auctions a ON o.auction_id = a.id 
@@ -34,36 +35,65 @@ const OffersByAuction = `
     LEFT JOIN offer_type of ON o.offer_type = of.id`
 
 // Obtener todas las ofertas, con opción de filtro
-async function GetAllOffers(querySQL, parameters) {
+async function GetAllOffers(querySQL, parameters = [],pags = null) {
     try {
-        const response = await dbClient.query(querySQL, parameters);
-        return response.rows; 
+        let params = parameters || [];
+        if (pags && pags > 0) {
+            const limite = 18; 
+            const offset = (parseInt(pags) - 1) * limite;
 
+            params.push(limite);
+            querySQL += ` LIMIT $${params.length}`;
+
+            params.push(offset);
+            querySQL += ` OFFSET $${params.length}`;
+        }
+        const response = await dbClient.query(querySQL, params);
+        return response.rows; 
     } catch (err) {
         console.error("Error en GetAllOffers:", err); 
         return undefined;
     }
 }
 // Obtener las ofertas de acuerdo a la subasta
-async function GetOffersByAuction(id) {
+async function GetOffersByAuction(id, page = null) {
     // Permite un segundo parámetro opcional para el límite
     let querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
     let params = [id];
-    if (arguments.length > 1 && arguments[1]) {
-        const limit = parseInt(arguments[1]);
-        if (!isNaN(limit) && limit > 0) {
-            querySQL += ` ORDER BY o.creation_date DESC LIMIT $2`;
-            params.push(limit);
-        } else {
-            querySQL += ` ORDER BY o.creation_date DESC`;
-        }
-    } else {
-        querySQL += ` ORDER BY o.creation_date DESC`;
+
+    // if (arguments.length > 1 && arguments[1]) {
+    //     const limit = parseInt(arguments[1]);
+    //     if (!isNaN(limit) && limit > 0) {
+    //         querySQL += ` ORDER BY o.creation_date DESC LIMIT $2`;
+    //         params.push(limit);
+    //     } else {
+    //         querySQL += ` ORDER BY o.creation_date DESC`;
+    //     }
+    // } else {
+    //     querySQL += ` ORDER BY o.creation_date DESC`;
+    // }
+
+    if (page && page > 0) {
+        const limite = 18; // Cantidad de ofertas por página
+        const offset = (parseInt(page) - 1) * limite;
+
+        params.push(limite);
+        querySQL += ` LIMIT $${params.length}`;
+
+        params.push(offset);
+        querySQL += ` OFFSET $${params.length}`;
     }
-    const response = await dbClient.query(querySQL, params);
-    if (response.rows.length === 0)
-        return undefined
-    return response.rows
+    try {
+        const response = await dbClient.query(querySQL, params);
+        
+        // Si no hay ofertas, retornamos array vacío en lugar de undefined para facilitar el frontend
+        if (response.rows.length === 0) return [];
+        
+        return response.rows;
+    } catch (error) {
+        console.error("Error obteniendo ofertas por subasta:", error);
+        return [];
+    }
 
 }
 // Obtener una oferta por ID

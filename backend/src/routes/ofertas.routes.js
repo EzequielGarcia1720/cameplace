@@ -15,12 +15,14 @@ router.get("/", async (req, res) => {
     const filterOrder = req.query.order;
     const filterSearch = req.query.search;
     const bidder_id = req.query.user_id;
+    const page = req.query.page || 1
 
     // Construir la consulta SQL con filtros
     let querySQL = `
     SELECT 
     o.*, 
-    a.title AS auction_title
+    a.title AS auction_title,
+    COUNT(*) OVER() as total_resultados
     FROM offers o
     LEFT JOIN auctions a ON o.auction_id = a.id
     `;
@@ -61,7 +63,7 @@ router.get("/", async (req, res) => {
     
     // Ejecutar la consulta
     try {
-        const result = await GetAllOffers(querySQL, parameters);
+        const result = await GetAllOffers(querySQL, parameters, page);
         if (result) {
             res.json(result);
         } else {
@@ -134,10 +136,14 @@ router.delete("/:id", async (req, res) => {
     return res.json(offert);
 });
 
+// Get /api/v1/offers/auction/:id
 router.get("/:id", async (req, res) => {
-    // Lee el parámetro de query 'limit' si existe
-    const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-    const offers = await GetOffersByAuction(req.params.id, limit);
+
+    const aucrionId = req.params.id;
+
+    const page = req.query.page || 1;
+
+    const offers = await GetOffersByAuction(aucrionId, page);
     if (offers === undefined)
         return res.sendStatus(404)
     res.json(offers);

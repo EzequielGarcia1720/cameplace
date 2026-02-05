@@ -2,8 +2,67 @@
 let currentFilters = {
     status: '',    // '' significa todos
     search: '',    // Texto del buscador
-    order: 'DESC'  // Orden por defecto
+    order: 'DESC',  // Orden por defecto
+    page: 1
 };
+
+//Paginacion
+const changePage = (direction) => {
+    if (direction === -1 && currentFilters.page === 1) return;
+    
+    currentFilters.page += direction;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Subir al inicio
+    GetOffers();
+};
+const actualizarBotonesPaginacion = (totalResultados) => {
+    const limitePorPagina = 18; 
+    const totalPaginas = Math.ceil(totalResultados / limitePorPagina);
+    const paginaActual = currentFilters.page;
+
+    const botonesAnterior = document.querySelectorAll(".pagination-previous");
+    const botonesSiguiente = document.querySelectorAll(".pagination-next");
+
+
+    botonesAnterior.forEach(btn => {
+        if (paginaActual === 1) {
+            btn.setAttribute("disabled", true); // Para que se vea gris
+            btn.style.pointerEvents = "none";   // Para que no se pueda clickear
+            btn.style.opacity = "0.5";          // Efecto visual
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+    botonesSiguiente.forEach(btn => {
+        // Si la página actual es mayor o igual al total, apagamos
+        if (paginaActual >= totalPaginas || totalResultados === 0) {
+            btn.setAttribute("disabled", true);
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "0.5";
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+};
+
+const find_button = document.querySelector("#buscar_boton"); 
+const searchbar = document.querySelector("#barra_busqueda"); 
+
+if (find_button) {
+    find_button.addEventListener("click", () => ApplySearch());
+}
+
+if (searchbar) {
+    searchbar.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            ApplySearch();
+        }
+    });
+}
 
 // --- CONFIGURACIÓN DE BOTONES ---
 // Referencias a los botones
@@ -38,22 +97,24 @@ if (button_older) {
 // --- FUNCIÓN PRINCIPAL (SOLO CARGA DATOS) ---
 async function GetOffers() {
     // Referencia al contenedor de ofertas
-    const container = document.getElementById("my_offers");
+    const container = document.getElementById("my_offers") || document.getElementById("auctions");
+    if(!container) return;
+
     container.innerHTML = ""; 
     
     try {
-        // --- CONSTRUCCIÓN DE URL DINÁMICA ---
         const params = new URLSearchParams();
+        
+        // Agregamos parámetros solo si tienen valor
+        if (currentFilters.page) params.append('page', currentFilters.page)
+        if (currentFilters.status) params.append('status', currentFilters.status);
+        if (currentFilters.search) params.append('search', currentFilters.search);
+        if (currentFilters.order) params.append('order', currentFilters.order);
+        
         const user_id = sessionStorage.getItem('sesion_actual');
         if (user_id) {
             params.append('user_id', user_id);
         }
-        
-        // Agregamos parámetros solo si tienen valor
-        if (currentFilters.status) params.append('status', currentFilters.status);
-        if (currentFilters.search) params.append('search', currentFilters.search);
-        if (currentFilters.order) params.append('order', currentFilters.order);
-
         const URL = `http://localhost:3030/api/v1/offers?${params.toString()}`;
         
         const response = await fetch(URL);
@@ -63,6 +124,11 @@ async function GetOffers() {
         }
         // Parseamos la respuesta JSON
         const offers = await response.json();
+        let total = 0
+        if(offers.length > 0 && offers[0].total_resultados){
+            total = parseInt(offers[0].total_resultados)
+        }
+        actualizarBotonesPaginacion(total);
 
         // Recorremos las ofertas y generamos el HTML correspondiente
         offers.forEach(offer => {
@@ -198,12 +264,14 @@ function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis ofertas"]'); 
     if (input) {
         currentFilters.search = input.value;
+        currentFilters.page = 1;
         GetOffers();
     }
 }
 
 function FilterByStatus(estado, elementoHTML) {
     currentFilters.status = estado;
+    currentFilters.page = 1;
     
     // Actualizar visualmente la clase is-active en los tabs
     const tabs = document.querySelectorAll('.tabs li');
@@ -338,9 +406,28 @@ async function submitOffer() {
     GetOffers();
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const btnsPrev = document.querySelectorAll(".pagination-previous");
+    const btnsNext = document.querySelectorAll(".pagination-next");
+
+    
+    btnsPrev.forEach(btn => {
+        btn.addEventListener("click", () => changePage(-1));
+    });
+
+    btnsNext.forEach(btn => {
+        btn.addEventListener("click", () => changePage(1));
+    });
+
+    GetOffers();
+});
+
+
+
+
 // Cerrar modal y recargar ofertas
 closeOfferModal();
-GetOffers();
 
 
 
