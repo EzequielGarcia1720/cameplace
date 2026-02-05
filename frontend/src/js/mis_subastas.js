@@ -1,11 +1,68 @@
 let currentFilters = {
     status: '',    // '' significa todos
     search: '',  // Texto del buscador
+    page: 1
 };
+//Paginacion
+const changePage = (direction) => {
+    if (direction === -1 && currentFilters.page === 1) return;
+    
+    currentFilters.page += direction;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Subir al inicio
+    GetAuctions();
+};
+
+const actualizarBotonesPaginacion = (totalResultados) => {
+    const limitePorPagina = 18; 
+    const totalPaginas = Math.ceil(totalResultados / limitePorPagina);
+    const paginaActual = currentFilters.page;
+
+    const botonesAnterior = document.querySelectorAll(".pagination-previous");
+    const botonesSiguiente = document.querySelectorAll(".pagination-next");
+
+
+    botonesAnterior.forEach(btn => {
+        if (paginaActual === 1) {
+            btn.setAttribute("disabled", true); // Para que se vea gris
+            btn.style.pointerEvents = "none";   // Para que no se pueda clickear
+            btn.style.opacity = "0.5";          // Efecto visual
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+    botonesSiguiente.forEach(btn => {
+        // Si la página actual es mayor o igual al total, apagamos
+        if (paginaActual >= totalPaginas || totalResultados === 0) {
+            btn.setAttribute("disabled", true);
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "0.5";
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+};
+
 
 //Barra de busqueda
 const find_button = document.querySelector("#buscar_boton")
 const searchbar = document.querySelector("#barra_busqueda")
+
+if (find_button) {
+    find_button.addEventListener("click", () => ApplySearch());
+}
+
+if (searchbar) {
+    searchbar.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            ApplySearch();
+        }
+    });
+}
 
 // Mis subastas
 async function GetAuctions() {
@@ -16,9 +73,10 @@ async function GetAuctions() {
     
     try {
 
+        const userId = sessionStorage.getItem("sesion_actual")
         // Preparamos los parámetros (Filtros)
         const params = new URLSearchParams();
-
+        if (currentFilters.page) params.append('page', currentFilters.page)
         if (currentFilters.status) params.append('status', currentFilters.status);
         if (currentFilters.search) params.append('search', currentFilters.search);
         if (find_button) {
@@ -30,7 +88,7 @@ async function GetAuctions() {
         });
 }
         // Construimos la URL con los parámetros de consulta
-        const URL = "http://localhost:3030/api/v1/auctions?user_id=" + sessionStorage.getItem("sesion_actual") + "&" + params.toString();
+        const URL = `http://localhost:3030/api/v1/auctions?user_id=${userId}&${params.toString()}`;
         
         // Hacemos el fetch (UNA SOLA VEZ)
         const response = await fetch(URL);
@@ -42,6 +100,12 @@ async function GetAuctions() {
 
         // Parseamos la respuesta JSON
         const auctions = await response.json();
+
+        let total = 0
+        if(auctions.length > 0 && auctions[0].total_resultados){
+            total = parseInt(auctions[0].total_resultados)
+        }
+        actualizarBotonesPaginacion(total);
 
         // Construimos las tarjetas
         auctions.forEach(auction => {
@@ -222,6 +286,7 @@ async function GetAuctions() {
 
 function FilterByCategory(categoryId) {
     currentFilters.category = categoryId;
+    currentFilters.page = 1;
     GetAuctions();
 }
 
@@ -232,6 +297,7 @@ function FilterByTypeOffer(id, elementoHTML) {
     } else {
         currentFilters.offer_type = id;
     }
+    currentFilters.page = 1;
     GetAuctions();
 }
 
@@ -239,20 +305,14 @@ function ApplySearch() {
     const input = document.querySelector('input[placeholder="Buscar entre mis subastas"]'); 
     if (input) {
         currentFilters.search = input.value;
+        currentFilters.page = 1;
         GetAuctions();
     }
 }
 
-if (searchbar) {
-    searchbar.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Evita que se recargue la página si está dentro de un form
-            ApplySearch(); // Llama a tu función de búsqueda
-        }
-    });
-}
 function FilterByStatus(estado, elementoHTML) {
     currentFilters.status = estado;
+    currentFilters.page = 1;
     
     const tabs = document.querySelectorAll('.tabs li');
     tabs.forEach(tab => tab.classList.remove('is-active'));
@@ -365,3 +425,12 @@ window.FinishAuction = async function(id) {
         alert("Ocurrió un error de conexión.");
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnsPrev = document.querySelectorAll(".pagination-previous");
+    const btnsNext = document.querySelectorAll(".pagination-next");
+
+    btnsPrev.forEach(btn => btn.addEventListener("click", () => changePage(-1)));
+    btnsNext.forEach(btn => btn.addEventListener("click", () => changePage(1)));
+
+});
