@@ -1,31 +1,49 @@
 const express = require('express');
 const router = express.Router();
-
-// Importamos las funciones. 
-// IMPORTANTE: "../ofertas" asume que ofertas.js está una carpeta atrás. 
-// Si tu estructura es diferente, ajusta la ruta.
 const {
+    GetOffer,
     GetAllOffers,
-    GetOffert,
     CreateOffert,
     RemoveOffer,
     GetOffersByAuction,
 } = require("../ofertas");
 
-// GET
+// GET /api/v1/offers
 router.get("/", async (req, res) => {
+    // Filtros de consulta
     const filterStatus = req.query.status; 
     const filterOrder = req.query.order;
     const filterSearch = req.query.search;
+    const bidder_id = req.query.user_id;
+    const page = req.query.page || 1
 
-    let querySQL = 'SELECT * FROM offers';
+    // Construir la consulta SQL con filtros
+    let querySQL = `
+    SELECT 
+    o.*, 
+    a.title AS auction_title,
+    COUNT(*) OVER() as total_resultados
+    FROM offers o
+    LEFT JOIN auctions a ON o.auction_id = a.id
+    `;
     let parameters = [];
-
+    
+    // Aplicar filtros si existen
     if (filterStatus) {
         querySQL += ' WHERE estado = $1'; 
         parameters.push(filterStatus);
     }
+    if (bidder_id) {
+        const paramIndex = parameters.length + 1;
+        if (parameters.length > 0) {
+            querySQL += ` AND o.bidder_id = $${paramIndex}`;
+        } else {
+            querySQL += ` WHERE o.bidder_id = $${paramIndex}`;
+        }
+        parameters.push(bidder_id);
+    }
 
+    // Filtro de búsqueda en título y descripción
     if (filterSearch) {
         const paramIndex = parameters.length + 1;
         if (parameters.length > 0) {
@@ -36,14 +54,16 @@ router.get("/", async (req, res) => {
         parameters.push(`%${filterSearch}%`);
     }
 
+    // Ordenar resultados
     let sortDirection = 'DESC'; 
     if (filterOrder && filterOrder.toUpperCase() === 'ASC') {
         sortDirection = 'ASC';
     }
     querySQL += ` ORDER BY creation_date ${sortDirection}`;
-
+    
+    // Ejecutar la consulta
     try {
-        const result = await GetAllOffers(querySQL, parameters);
+        const result = await GetAllOffers(querySQL, parameters, page);
         if (result) {
             res.json(result);
         } else {
@@ -55,36 +75,80 @@ router.get("/", async (req, res) => {
     }
 });
 
-// POST
+// POST /api/v1/offers
 router.post("/", async (req, res) => {
-    if (!req.body) return res.status(400).send("No body provided");
-    const { 
-        offer_type, title, descripcion, images_urls, mount, 
-        auctioneer_id, bidder_id, auction_id 
-    } = req.body;
+    // Validar que se haya proporcionado un cuerpo
+    if (req.body === undefined)
+        return res.status(400).send("No body was provided");
+    
+    // Extraer los campos del cuerpo de la solicitud
+    const offer_type = req.body.offer_type;
+    const title = req.body.title;
+    const descripcion = req.body.descripcion;
+    const images_urls = req.body.images_urls;
+    const mount = req.body.mount;
+    const auctioneer_id = req.body.auctioneer_id;
+    const bidder_id = req.body.bidder_id;
+    const auction_id = req.body.auction_id;
+    const estado = req.body.estado
 
-    try {
-        const newOffer = await CreateOffert(
-            offer_type, title, descripcion, images_urls || [], mount, 
-            auctioneer_id, bidder_id, auction_id
-        );
-        res.status(201).json(newOffer);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error creando oferta");
-    }
+    // Validaciones mínimas: solo los campos realmente obligatorios
+    if (offer_type === undefined || offer_type === null)
+        return res.status(400).send("Type of offer not provided");
+    if (title === undefined || title === null)
+        return res.status(400).send("Title not provided");
+    if (descripcion === undefined || descripcion === null)
+        return res.status(400).send("Descripcion not provided");
+    if (mount === undefined || mount === null)
+        return res.status(400).send("Mount not provided");
+    if (auctioneer_id === undefined || auctioneer_id === null)
+        return res.status(400).send("Auctioneer ID not provided");
+    if (bidder_id === undefined || bidder_id === null)
+        return res.status(400).send("Bidder ID not provided");
+    if (auction_id === undefined || auction_id === null)
+        return res.status(400).send("Auction ID not provided");
+    // images_urls y estado pueden ser string vacío
+    // Si no vienen, poner string vacío por defecto
+    const safe_images_urls = images_urls !== undefined && images_urls !== null ? images_urls : "";
+    const safe_estado = estado !== undefined && estado !== null ? estado : "Activa";
+
+    // Crear la oferta
+    const offert = await CreateOffert(offer_type, title, descripcion, safe_images_urls, mount, auctioneer_id, bidder_id, auction_id, safe_estado)
+    // Verificar si la creación fue exitosa
+    if (offert === undefined)
+        res.sendStatus(500);
+    res.status(201).json(offert);
 });
 
-// DELETE
+// DELETE /api/v1/offers/:id
 router.delete("/:id", async (req, res) => {
-    const deleted = await RemoveOffer(req.params.id);
-    if (deleted) res.json({ message: "Eliminado" });
-    else res.status(404).send("No encontrado");
+    // Verificar si la oferta existe
+    const offert = await GetOffer(req.params.id);
+
+    // Si no existe, devolver 404
+    if (offert === undefined)
+        return res.sendStatus(404);
+
+    // Intentar eliminar la oferta
+    if (!(await RemoveOffer(req.params.id))) {
+        return res.sendStatus(500);
+    }
+    return res.json(offert);
 });
 
-router.get("/:by_auction", async (req, res) => {
-    const offers = await GetOffersByAuction(req.params.by_auction);
+// Get /api/v1/offers/auction/:id
+router.get("/:id", async (req, res) => {
+
+    const aucrionId = req.params.id;
+
+    const page = req.query.page || 1;
+
+    const offers = await GetOffersByAuction(aucrionId, page);
+    if (offers === undefined)
+        return res.sendStatus(404)
     res.json(offers);
 });
+
+
 // Exportar el router
 module.exports = router;

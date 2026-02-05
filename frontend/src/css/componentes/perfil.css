@@ -95,4 +95,23 @@ input.input, textarea.textarea {
     transform: scale(1.05);
 }
 
+#eliminar_perfil_button {
+    margin-left: 470px;
+    background-color: red;
+    color: white;
+}
 
+#eliminar_perfil_button:hover {
+    background-color: firebrick;
+    transform: scale(1.05);
+}
+
+#guardar_password_button {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+#guardar_password_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}

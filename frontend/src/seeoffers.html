@@ -64,16 +64,20 @@
         </nav>
     </body>
     <!--Index-->
-    <div class="index container" id="form_auction_by_ID" style="min-height: 100vh;">       
-        <!-- Formulario de creación de subasta -->
+    <!-- Data de la subasta -->
+    <div class="index container" id="form_auction_by_ID" style="min-height: 100vh;">   
+        <div class="container" id="auction_container"></div>
         <script>
+            // Obtengo los datos de la subasta de acuerdo al ID
             const urlParams = new URLSearchParams(window.location.search)
             const id = urlParams.get('id')
+            console.log("antes de llamar get offers id", id)
+            GetOffers(id)
             const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id
             fetch(Backend_Auctions).then((response) => {
                 return response.json();
             }).then((data) => {
-                const form = `
+                const auction_data = `
                         <div class="columns is-vcentered" style="padding-top: 20px">
                             <div class="column">
                                 <h1 class="title">${data.title}</h1>
@@ -87,64 +91,21 @@
                                 </figure>
                             </div>
                         </div>`
+                    // Appendeo la data de la subasta a su contenedor correspondiente
+                    let auction_by_ID = document.getElementById("auction_container")
+                    let auction_db = document.createElement("div")
+                    auction_db.innerHTML = auction_data
+                    auction_by_ID.appendChild(auction_db)
                     
-                    /*const backend_categories = "http://localhost:3030/api/v1/categories"
-                    fetch(backend_categories).then((response) => {
-                        return response.json()
-                    }).then((categories) => {
-                        const dropdown_categories = document.getElementById("select_categories")
-                        categories.forEach(category => {
-                            const NewCategory = document.createElement("option")
-                            NewCategory.value = category.id
-                            NewCategory.innerText = category.name
-                            if (category.id == data.category_id)
-                                NewCategory.selected = true
-
-                            dropdown_categories.appendChild(NewCategory)
-                        });
-                        
-                    })
-
-                    const backend_offers_type = "http://localhost:3030/api/v1/offers_type"
-                    fetch(backend_offers_type).then((response) => {
-                        return response.json()
-                    }).then((offers_type) => {
-                        const dropdown_offers_type = document.getElementById("select_offers_type")
-                        offers_type.forEach(offer_type => {
-                            const NewOfferType = document.createElement("option")
-                            NewOfferType.value = offer_type.id
-                            NewOfferType.innerText = offer_type.type
-                            if (offer_type.id == data.offer_type)
-                                NewOfferType.selected = true
-                            dropdown_offers_type.appendChild(NewOfferType)
-                        });
-                    })
-
-                    const backend_conditions = "http://localhost:3030/api/v1/conditions"
-                    fetch(backend_conditions).then((response) => {
-                        return response.json()
-                    }).then((conditions) => {
-                        const dropdown_conditions = document.getElementById("select_conditions")
-                        conditions.forEach(condition => {
-                            const NewCondition = document.createElement("option")
-                            NewCondition.value = condition.id
-                            NewCondition.innerText = condition.auction_condition
-                            if (condition.id == data.condition)
-                                NewCondition.selected = true
-                            dropdown_conditions.appendChild(NewCondition)
-                        });
-                    }) */
-
-                    let form_by_ID = document.getElementById("form_auction_by_ID")
-                    let auction_edit = document.createElement("div")
-                    auction_edit.classname = "form"
-                    auction_edit.innerHTML = form
-                    form_by_ID.appendChild(auction_edit)
-                    GetOffers(data.id)
             });
-            
+            // Obtengo las oferta de cada subasta
             async function GetOffers(id) {
+                console.log("en la funcion get offers", id)
+                if (id === undefined) {
+                    return
+                }
                 const URL = "http://localhost:3030/api/v1/offers/" + id
+                console.log("url",URL)
                 const response = await fetch(URL)
                 const offers = await response.json();
                 console.log(offers)
@@ -152,21 +113,37 @@
                 offers.forEach(offer => {
                     let contenido_tags = offer.auction_offer_type
                     let amount = offer.offer_amount
-                    if (contenido_tags === 1) {
+                    let image_offer = ""
+                    let padding = ""
+                    const image = offer.offer_images
+                    // Si no hay imagen en la oferta, no se coloca
+                    if (image && image.length > 0) {
+                        image_offer = `
+                        <div class="column is-narrow">
+                            <figure class="image is-128x128 is-1by1" style="padding-top: 40px">
+                                <img src=${offer.offer_images} class="fixed-image">
+                            </figure>
+                        </div>`
+                    }
+
+                    // Dependiendo del tipo de oferta, se colocan los tags
+                    if (contenido_tags === 2) {
                         amount = `<p class="title is-5"></p>`
                         contenido_tags = `
                         <span class="tag is-warning">
                             <span class="icon"><i class="fas fa-box-open"></i></span>
                             <span>Producto de Canje</span>
                         </span>`
+                        padding = `style="padding-left: 40px"`
                     }
-                    if (contenido_tags === 2) {
+                    if (contenido_tags === 1) {
                         amount = `<p class="title is-5">$${offer.offer_amount}</p>`
                         contenido_tags = `
                         <span class="tag is-success">
                             <span class="icon"><i class="fas fa-dollar-sign"></i></span>
                             <span>Dinero</span>
                         </span>`
+                        
                         
                     }
                     if (contenido_tags === 3) {
@@ -180,9 +157,10 @@
                             <span class="icon"><i class="fas fa-box-open"></i></span>
                             <span>Producto de Canje</span>
                         </span>`
+                        padding = `style="padding-left: 40px"`
                         
                     }
-    
+                    // Estructura HTML de la oferta
                     const offers_from_db = `
                     <div class="container" style="padding-top: 40px;">
                         <article class="message is-link">
@@ -190,57 +168,50 @@
                                 <span class="tag is-link is-light">${offer.offer_date.slice(0,10)}, ${offer.offer_date.slice(11,16)}</span>
                                 <h3>${offer.offer_title}</h3>
                                 <div>
-                                    <button class="boton-reofertar button is-light">
+                                    <a class="boton-reofertar button is-light" onclick="AcceptOffert(${offer.offer_id})">
                                         <span class="icon">
                                             <i class="fas fa-pen-to-square"></i>
                                         </span>
                                         <span>Aceptar oferta</span> 
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
 
                             <!-- Cuerpo de la oferta -->
                             <div class="message-body">
                                 <div class="columns is-vcentered">
-                                
-                                    <div class="column is-narrow">
-                                        <figure class="image is-128x128" style="padding-top: 15px">
-                                            <img src=${offer.offer_images} alt="Producto de canje">
-                                        </figure>
-                                    </div>
-                                    
-                                    <div class="column" style="padding-left: 40px">
+                                    ${image_offer}
+                                    <div class="column" ${padding}>
                                         <div class="card-content">
                                             <div class="media">
                                                 <div class="media-left">
-                                                    <figure class="image is-48x48">
+                                                    <figure class="image is-64x64">
                                                         <img
                                                             src=${offer.image_user}
                                                             alt="Placeholder image"
+                                                            class="fixed-image-user"
                                                         />
                                                     </figure>
                                                 </div>
                                                 <div class="media-content">
-                                                    <p class="title is-4">${offer.name_user} ${offer.lastname_user}</p>
+                                                    <p class="title is-4">${offer.name_user} ${offer.lastname_user} ${contenido_tags}</p>
                                                     <p class="subtitle is-6">@${offer.bidder}</p>
                                                     ${amount}
                                                 </div>
                                             </div>
-                                        
-                                            <div class="tags mb-2" id="tags">
-                                                ${contenido_tags}
+                                            <div style="margin-top: -25px">
+                                                <p class="is-size-6 correct-text">
+                                                    ${offer.offer_description}
+                                                </p>
                                             </div>
-                                            <p class="is-size-6">
-                                                ${offer.offer_description}
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </article>
                     </div>`
-                   
-                    let container_offers = document.getElementById("form_auction_by_ID")
+                    // Appendeo las distintas ofertas a su correspondiente contenedor
+                    let container_offers = document.getElementById("offers_container")
                     console.log(container_offers)
                     let offer_db = document.createElement("div")
                     offer_db.innerHTML = offers_from_db
@@ -251,28 +222,58 @@
                 })
 
             }
-            /*
-                function EditAuction() {
-                    const data_auction = {
-                        title: document.getElementById("auction_title").value,
-                        initial_price: document.getElementById("auction_initial_price").value,
-                        category_id: document.getElementById("select_categories").value,
-                        condition: document.getElementById("select_conditions").value,
-                        offer_type: document.getElementById("select_offers_type").value,
-                        images_urls: document.getElementById("auction_image").value,
-                        descripcion: document.getElementById("auction_description").value,
-                        auctioneer_id: document.getElementById("auction_IDAuctioneer").value,
-                        auction_status: document.getElementById("auction_status").value,
-                        location_id: document.getElementById("auction_location_id").value
-                        
+            // Acepta cierta oferta haciendo que las otras Finalicen y se finaliza la subasta
+            window.AcceptOffert = function(id) {
+                const backend_offers = "http://localhost:3030/api/v1/offers_id/" + id
+                fetch(backend_offers).then((response) => {
+                    return response.json();
+                }).then((offer) => {
+                    let status_offer = offer.offer_status
+                    const data_offer = {
+                        offer_status: status_offer
                     }
-                    if (data_auction.title.length === 0 || data_auction.initial_price <= 0 || data_auction.images_urls.length === 0 || data_auction.descripcion.length === 0 || data_auction.category_id.length === 0 || data_auction.condition.length === 0 || data_auction.offer_type.length === 0) {
-                        alert("Todos los campos son obligatorios y el precio inicial debe ser mayor a 0")
-                    } else {
-                        fetch('http://localhost:3030/api/v1/auctions/' + id, {
-                        headers: { 'Content-Type': 'application/json' }, 
-                        method:'PUT',
+                    console.log(data_offer.offer_status)
+                
+                    fetch('http://localhost:3030/api/v1/offers_id/' + id, {
+                    headers: { 'Content-Type': 'application/json' }, 
+                    method:'PATCH',
+                    body: JSON.stringify(data_offer),
+                    }).then(response => {
+                        if(!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`)
+                        }
+                        return response.json()
+                    }).then(data => {
+                        console.log("Success", data)
+                        
+                    }).catch(error => {
+                        console.error("Error", error)
+                    })
+                    const urlParams_auction = new URLSearchParams(window.location.search)
+                    const id_auction = urlParams.get('id')
+                    const Backend_Auctions = "http://localhost:3030/api/v1/auctions/" + id_auction;
+
+                    fetch(Backend_Auctions).then((response_auctions) => {
+                        return response_auctions.json()
+                    }).then((auction) => {
+                        const data_auction = {
+                            title: auction.title,
+                            initial_price: auction.initial_price,
+                            category_id: auction.category_id,
+                            condition: auction.condition,
+                            offer_type: auction.offer_type,
+                            images_urls: auction.images_urls,
+                            descripcion: auction.descripcion,
+                            auctioneer_id: auction.auctioneer_id,
+                            auction_status: 3, 
+                            location_id: auction.location_id
+                        };
+
+                        fetch(Backend_Auctions, {
+                        headers: { 'Content-Type': 'application/json' },
+                        method: 'PUT',
                         body: JSON.stringify(data_auction),
+                   
                         }).then(response => {
                             if(!response.ok) {
                                 throw new Error(`HTTP error! status: ${response.status}`)
@@ -285,17 +286,18 @@
                         }).catch(error => {
                             console.error("Error", error)
                         })
-                        
-                    }
-
-                } 
-            */
+                    })
+                })
+            }
+                            
         </script>
-        <div class="container" style="flex-grow: 1;">
+        <!-- Data de las ofertas -->
+        <div class="container" style="flex-grow: 1;" id="offers_container">
             <script>GetOffers()</script>
         </div>
 
     </div>
+    <!-- Pie de página -->
     <footer>
         <div class="footer-index">
             <div class="columns">

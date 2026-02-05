@@ -8,63 +8,30 @@
         <link rel="stylesheet" href="css/componentes/perfil.css">
     </head>
     <body>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
-            <!-- Logo/boton de inicio -->
-            <div class="navbar-brand">
-                <a class="navbar-item" href="index.html">
-                <strong>CameBastas</strong>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <!-- Logo/boton de inicio -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+            <strong>CameBastas</strong>
 
-                </a>
+            </a>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        <!--Menu del navbar-->
+        <div id="navbarBasicExample" class="navbar-menu">
+
+            <!-- Lado derecho -->
+            <div id="navbar-end" class="navbar-end">
             </div>
-
-            <!--Menu del navbar-->
-            <div id="navbarBasicExample" class="navbar-menu">
-
-                <!-- Lado derecho -->
-                <div class="navbar-end">
-
-                    <div class="navbar-item">
-                        <!-- dropdown -->
-                        <span class="dropdown is-right is-hoverable">
-                            <figure class="image is-32x32">
-                                <img 
-                                id="foto_perfil_navbar"
-                                class="is-rounded" 
-                                src="https://avatars.githubusercontent.com/u/231128308?v=4" 
-                                />
-                            </figure>
-                        
-                        <div class="dropdown-trigger">
-
-                            <!-- Imagen -->
-                            <span>
-
-                            </span>
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                            <div class="dropdown-content">
-                            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
-                            <a href="mis_subastas.html" class="dropdown-item">Mis Subastas </a>
-                            <a href="mis_ofertas.html" class="dropdown-item">Mis Ofertas</a>
-                            <hr class="dropdown-divider" />
-                            <a class="dropdown-item"> Cerrar Sesión </a>
-                            </div>
-                        </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        </div>
+    </nav>
     
     <!--Index-->
     <div class="index container">
@@ -96,22 +63,35 @@
                 <div class="field"> 
                     <label class="label">Nombre de Usuario</label>
                     <div class="control">
-                        <input id="usuario_input" class="input" type="text" placeholder="Escriba su usuario aquí" value="ZekiiYF">
+                        <input id="usuario_input" class="input" type="text" placeholder="Escriba su usuario aqui" value="ZekiiYF">
                     </div>
                 </div>
+                <div class="field">
+                    <label class="label">Numero Telefonico</label>
+                <div class="control">
+                    <input id="telefono_input" class="input" type="tel" placeholder="Escriba su Telefono aqui" value="1151620864">
+                </div>
+                </div>
+
+
                 <div class="field">
                     <label class="label">Biografía</label>
                     <div class="control">
                         <textarea id="biografia_textarea" class="textarea" placeholder="Escriba su biografía aquí"></textarea>
                     </div>
                 </div>
+                <input 
+                    class="input"
+                    type="text"
+                    id="foto_url_input"
+                    placeholder="Pegá la URL de tu foto de perfil (puede ser cualquier enlace)">
             </fieldset>
-        </div>
+             </div>
 
         <!-- Imagen de perfil -->
         <div class="column is-one-third has-text-centered">
             <figure class="image" style="margin:auto;">
-                <img id="perfil_img" class="image is-large" src="https://avatars.githubusercontent.com/u/231128308?v=4"  alt="Imagen de perfil">
+                <img id="perfil_img" class="image is-large" src=""  alt="Imagen de perfil">
             </figure>
         </div>
     </div>
@@ -126,27 +106,69 @@
                     <div class="control" style="display: none;">
                         <button id="cancelar_button" class="button is-danger">Cancelar</button>
                     </div>
-                    <div class="control" id="editar_foto_group" style="display: none;">
-                    <button id="editar_foto_button" class="button is-info"> Editar Foto de Perfil</button>
+                    
+                    <div class="control">
+                        <button id="eliminar_perfil_button" class="button is-danger">Eliminar perfil</button>
                     </div>
-                    <div class="control" id="editar_foto_form" style="display: none;">
-                        <input 
-                            class="input"
-                            type="url"
-                            id="foto_url_input"
-                            placeholder="Pegá la URL de tu foto de perfil">
-                                <button type="button" 
-                                class="button is-primary mt-2" 
-                                id="guardar_foto_button">
-                                Guardar foto
-                                </button>
+                    <div class="control">
+                        <button id="cambiar_password_button" class="button is-primary">Cambiar contraseña </button>
                     </div>
                 </div>    
             </div>
-        </section>
-    </div>
-    <script src="js/scripts_perfil.js" defer></script>
 
+        </div>
+    </div>
+    <!-- Modal para cambiar la contraseña -->
+    <div class="modal" id="password_modal">
+    <div class="modal-background"></div>
+
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Cambiar contraseña</p>
+            <button class="delete" aria-label="close" id="cerrar_password_modal"></button>
+        </header>
+
+        <section class="modal-card-body">
+            <div class="field">
+                <label class="label">Contraseña actual</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="password"
+                        id="actual_password"
+                        placeholder="Contraseña actual"
+                    />
+                </div>
+            </div>
+            
+            <div class="field">
+                <label class="label">Nueva contraseña</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="password"
+                        id="nueva_password"
+                        placeholder="Nueva contraseña"
+                    />
+                </div>
+            </div>
+            <p class="has-text-danger" id="password_error"></p>
+            <p class="has-text-success" id="password_exito"></p>
+        </section>
+
+        <footer class="modal-card-foot">
+            <button class="button is-primary" id="guardar_password_button">
+                Guardar
+            </button>
+        </footer>
+    </div>
+</div>
+
+    <script src="js/scripts_perfil.js" defer></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/login.js"></script>
+    
+    </body>
     <footer>
         <div class="footer-index">
             <div class="columns">

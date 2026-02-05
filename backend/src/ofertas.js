@@ -1,26 +1,6 @@
-const { Pool } = require("pg");
-
 // Configuración de base de datos
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
-
-async function GetAllOffers(querySQL, parameters) {
-    try {
-        const response = await dbClient.query(querySQL, parameters);
-        return response.rows; 
-    } catch (err) {
-        console.error("Error en GetAllOffers:", err); 
-        return undefined;
-    }
-}
-// Obtener las ofertas de acuerdo a la subasta
-async function GetOffersByAuction(id) {
-    const querySQL = `
+const dbClient = require("./db");
+const OffersByAuction = `
     SELECT 
         o.id AS offer_id,
         o.title AS offer_title,           
@@ -38,59 +18,105 @@ async function GetOffersByAuction(id) {
         u.image_url AS image_user,
         u.firstname AS name_user,
         u.lastname AS lastname_user,
-        of.type AS offer_type_auction
+        of.type AS offer_type_auction,
+        COUNT(*) OVER() as total_resultados
         
     FROM offers o 
     LEFT JOIN auctions a ON o.auction_id = a.id 
     LEFT JOIN users u ON o.bidder_id = u.id
-    LEFT JOIN offer_type of ON o.offer_type = of.id
+    LEFT JOIN offer_type of ON o.offer_type = of.id`
 
-    WHERE o.auction_id = $1`
-
-    const response = await dbClient.query(querySQL, [id]);
-    return response.rows;
-}
-// Obtener una oferta por ID
-async function GetOffert(id) {
-    const response = await dbClient.query(
-        "SELECT * FROM offers WHERE id = $1", 
-        [id]
-    )
-    if (response.rows.length === 0)
-        return undefined
-    return response.rows[0]
-}
-
-async function GetOffert(id) {
+// Obtener todas las ofertas, con opción de filtro
+async function GetAllOffers(querySQL, parameters = [],pags = null) {
     try {
-        const response = await dbClient.query("SELECT * FROM offers WHERE id = $1", [id]);
-        return response.rows.length > 0 ? response.rows[0] : undefined;
+        let params = parameters || [];
+        if (pags && pags > 0) {
+            const limite = 18; 
+            const offset = (parseInt(pags) - 1) * limite;
+
+            params.push(limite);
+            querySQL += ` LIMIT $${params.length}`;
+
+            params.push(offset);
+            querySQL += ` OFFSET $${params.length}`;
+        }
+        const response = await dbClient.query(querySQL, params);
+        return response.rows; 
     } catch (err) {
-        console.error("Error en GetOffert:", err);
+        console.error("Error en GetAllOffers:", err); 
         return undefined;
     }
 }
+// Obtener las ofertas de acuerdo a la subasta
+async function GetOffersByAuction(id, page = null) {
+    // Permite un segundo parámetro opcional para el límite
+    let querySQL = `${OffersByAuction} WHERE o.auction_id = $1`;
+    let params = [id];
 
-async function CreateOffert(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id) {
+    // if (arguments.length > 1 && arguments[1]) {
+    //     const limit = parseInt(arguments[1]);
+    //     if (!isNaN(limit) && limit > 0) {
+    //         querySQL += ` ORDER BY o.creation_date DESC LIMIT $2`;
+    //         params.push(limit);
+    //     } else {
+    //         querySQL += ` ORDER BY o.creation_date DESC`;
+    //     }
+    // } else {
+    //     querySQL += ` ORDER BY o.creation_date DESC`;
+    // }
+
+    if (page && page > 0) {
+        const limite = 18; // Cantidad de ofertas por página
+        const offset = (parseInt(page) - 1) * limite;
+
+        params.push(limite);
+        querySQL += ` LIMIT $${params.length}`;
+
+        params.push(offset);
+        querySQL += ` OFFSET $${params.length}`;
+    }
     try {
-        const query = `
-            INSERT INTO offers 
-            (offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-            RETURNING *
-        `;
-        const values = [offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id];
-        const result = await dbClient.query(query, values);
+        const response = await dbClient.query(querySQL, params);
+        
+        // Si no hay ofertas, retornamos array vacío en lugar de undefined para facilitar el frontend
+        if (response.rows.length === 0) return [];
+        
+        return response.rows;
+    } catch (error) {
+        console.error("Error obteniendo ofertas por subasta:", error);
+        return [];
+    }
+
+}
+// Obtener una oferta por ID
+async function GetOffer(id) {
+    const querySQL = `${OffersByAuction} WHERE o.id = $1` 
+    const response = await dbClient.query(querySQL, [id]);
+    if (response.rows.length === 0)
+        return undefined
+    return response.rows[0] 
+}
+
+// Mejorar oferta (crear nueva oferta)
+async function CreateOffert(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) {
+    try {
+        const result = await dbClient.query(
+            "INSERT INTO offers(offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+            [offer_type, title, descripcion, images_urls, mount, auctioneer_id, bidder_id, auction_id, estado]
+        )
+        if (result.rowCount === 0) {
+            return undefined
+        }
         return result.rows[0];
-    } catch (err) {
-        console.error("Error en CreateOffert:", err);
-        throw err;
+    } catch (e) {
+        console.log(e)
+        return undefined
     }
 }
 
 async function RemoveOffer(id) {
     try {
-        const result = await dbClient.query("DELETE FROM offers WHERE id = $1", [id]);
+        const result = await dbClient.query("DELETE FROM offers WHERE id = $1", [id])
         return result.rowCount === 1;
     } catch (err) {
         console.error("Error en RemoveOffer:", err);
@@ -98,11 +124,33 @@ async function RemoveOffer(id) {
     }
 }
 
-// --- ESTA PARTE ES CRÍTICA: SI FALTA ESTO, TUS RUTAS FALLAN ---
+// Editar estado de una subasta
+
+async function UpdateStateOfTheOffer(id) {
+
+    try {
+        QuerySQL = `
+        UPDATE offers o SET estado = CASE WHEN o.id = $1 
+        THEN 'Aceptada' ELSE 'Finalizada' END 
+        FROM auctions a WHERE a.id = o.auction_id 
+        AND o.auction_id = (SELECT o.auction_id FROM offers o WHERE o.id = $1);`
+        const result = await dbClient.query(QuerySQL,[id])
+        if (result.rowCount === 0) {
+            return undefined
+        }
+        return id
+        
+    } catch {
+        return undefined
+    }
+}
+
+// Exportamos las funciones para usarlas en otras partes de la aplicación
 module.exports = {
     GetAllOffers,
-    GetOffert,
+    GetOffer,
     CreateOffert,
     RemoveOffer,
-    GetOffersByAuction
+    GetOffersByAuction,
+    UpdateStateOfTheOffer
 }

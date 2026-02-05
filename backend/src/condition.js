@@ -1,12 +1,4 @@
-const { Pool } = require("pg");
-
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
+const dbClient = require("./db");
 
 async function GetAllConditions() {
     const result = await dbClient.query("SELECT * FROM condition")

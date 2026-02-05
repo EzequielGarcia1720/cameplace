@@ -1,14 +1,14 @@
-const { Pool } = require("pg");
-
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
+const dbClient = require("./db");
 
 //Verificar si el usuario existe
+async function checkEmailExists(email) {
+    const res = await dbClient.query(
+        'SELECT 1 FROM users WHERE email = $1',
+        [email]
+    );
+    return res.rowCount > 0;
+}
+
 async function checkUsernameExists(username) {
     const res = await dbClient.query(
         'SELECT 1 FROM users WHERE username = $1',
@@ -18,10 +18,10 @@ async function checkUsernameExists(username) {
 }
 
 //GetUserID
-async function getUserID(username) {
+async function getUserID(email) {
     const response = await dbClient.query(
-        "SELECT id from users where username = $1",
-        [username]
+        "SELECT id from users where email = $1",
+        [email]
     )
     return response.rows[0];
 }
@@ -49,8 +49,8 @@ async function getUser(id) {
 
 //NewUser
 async function newUser(username, psswd, email, firstname, lastname, tel, biography, image_url, ubication) {
-    if (await checkUsernameExists(username)) {
-        const err = new Error('Username already exists');
+    if (await checkEmailExists(email)) {
+        const err = new Error('Email already in use');
         err.status = 409;
         throw err;
     }
@@ -65,7 +65,7 @@ async function newUser(username, psswd, email, firstname, lastname, tel, biograp
 
 
 //UpdateUser
-async function updateUser(userID, username, firstname, lastname, biography) {
+async function updateUser(userID, username, firstname, lastname, biography, image_url, tel) {
     // Obtener el usuario actual
     const currentUser = await getUser(userID);
     if (!currentUser) {
@@ -82,8 +82,8 @@ async function updateUser(userID, username, firstname, lastname, biography) {
     }
 
     const response = await dbClient.query(
-        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4 WHERE id = $5 RETURNING *',
-        [username, firstname, lastname, biography, userID]
+        'UPDATE users SET username = $1, firstname = $2, lastname = $3, biography = $4, image_url = $5, tel = $6 WHERE id = $7 RETURNING *',
+        [username, firstname, lastname, biography, image_url, tel, userID]
     );
 
     if (response.rowCount === 0) {
@@ -107,10 +107,60 @@ async function deleteUser(userID){
     return { message: 'Usuario eliminado', id: userID };
 };
 
+//Login User
+async function loginUser(email, psswd) {
+    const response = await dbClient.query(
+        'SELECT id, username, email, image_url FROM users WHERE email = $1 AND psswd = $2',
+        [email, psswd]
+    );
+
+    if (response.rowCount === 0) {
+        const err = new Error('Email o contraseña incorrectos');
+        err.status = 401;
+        throw err;
+    }
+
+    if (!response.rows[0].image_url || response.rows[0].image_url === null || response.rows[0].image_url === '') {
+        response.rows[0].image_url = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    }
+    return response.rows[0];
+};
+
+async function updatePassword(userID, actualPassword, nuevaPassword) {
+    //verificar la contraseña actual
+    const userRes = await dbClient.query(
+        "SELECT psswd FROM users WHERE id = $1",
+        [userID]
+    );
+
+    if (userRes.rowCount === 0) {
+        const err = new Error("Usuario no encontrado");
+        err.status = 404;
+        throw err;
+    }
+    //comparar contraseñas
+    if (userRes.rows[0].psswd !== actualPassword) {
+        const err = new Error("La contraseña actual es incorrecta");
+        err.status = 401;
+        throw err;
+    }
+    //actualizar la contraseña
+    await dbClient.query(
+        "UPDATE users SET psswd = $1 WHERE id = $2",
+        [nuevaPassword, userID]
+    );
+
+    return { message: "Contraseña actualizada correctamente" };
+}
+
+
 module.exports = {
     getAllUsers,
     getUser,
     newUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserID,
+    loginUser,
+    updatePassword
 };

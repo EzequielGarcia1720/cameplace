@@ -5,7 +5,10 @@ const {
     getUser,
     newUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserID,
+    loginUser,
+    updatePassword
 } = require('../usuarios');
 
 // GET /api/v1/users
@@ -14,13 +17,42 @@ router.get("/", async (req, res) => {
     res.json(users);
 });
 
-// GET /api/v1/users/:id
-router.get("/:id", async (req, res) => {
-    const user = await getUser(req.params.id);
-    if (user) {
-        res.json(user);
-    } else {
-        res.status(404).json({ error: "Usuario no encontrado" });
+// GET /api/v1/users/:param (busca por ID o email)
+router.get("/:param", async (req, res) => {
+    const param = req.params.param;
+    let user;
+    
+    try {
+        // Si es un número, buscar por ID; si no, por email
+        if (!isNaN(param)) {
+            user = await getUser(param);
+        } else {
+            user = await getUserID(param);
+        }
+        
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: "Usuario no encontrado" });
+        }
+    } catch (error) {
+        console.error("Error al buscar usuario:", error);
+        res.status(500).json({ error: "Error al buscar usuario" });
+    }
+});
+
+
+// POST /api/v1/users/login
+router.post("/login", async (req, res) => {
+    const { email, psswd } = req.body;
+    try {
+        const user = await loginUser(email, psswd);
+        res.json({ message: "Inicio de sesión exitoso", user });
+    } catch (error) {
+        console.error("Error al iniciar sesión:", error);
+        const status = (error && error.status) ? error.status : 500;
+        const message = (error && error.message) ? error.message : 'Error al iniciar sesión';
+        res.status(status).json({ error: message });
     }
 });
 
@@ -41,13 +73,26 @@ router.post("/", async (req, res) => {
 // PUT /api/v1/users/:id
 router.put("/:id", async (req, res) => {
     const userID = req.params.id;
-    const { username, firstname, lastname, biography } = req.body;
+    const { username, firstname, lastname, biography, image_url, tel } = req.body;
     try {
-        const updatedUser = await updateUser(userID, username, firstname, lastname, biography);
+        const updatedUser = await updateUser(userID, username, firstname, lastname, biography, image_url, tel);
         if (!updatedUser) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
         res.json(updatedUser);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ error: error.message });
+    }
+});
+
+router.put("/:id/password", async (req, res) => {
+    const userID = req.params.id;
+    const { actual_password, nueva_password } = req.body;
+
+    try {
+        const result = await updatePassword(userID, actual_password, nueva_password);
+        res.json(result);
     } catch (error) {
         const status = error.status || 500;
         res.status(status).json({ error: error.message });

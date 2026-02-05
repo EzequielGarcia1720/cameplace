@@ -66,7 +66,7 @@ CREATE TABLE users (
     lastname VARCHAR(255),
     tel INT,
     biography TEXT,
-    image_url VARCHAR(255),
+    image_url TEXT,
     ubication VARCHAR(255),
     registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modificationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -102,243 +102,108 @@ CREATE TABLE offers (
     FOREIGN KEY (offer_type) REFERENCES offer_type(id),
     title varchar(80) NOT NULL,
     descripcion TEXT NOT NULL,
-    images_urls TEXT NOT NULL,
+    images_urls TEXT,
     mount DECIMAL(10,2) NOT NULL,
     auctioneer_id INT NOT NULL,
     FOREIGN KEY (auctioneer_id) REFERENCES users(id),
+    bidder_id INT NOT NULL,
+    FOREIGN KEY (bidder_id) REFERENCES users(id),
     auction_id INT NOT NULL,
     FOREIGN KEY (auction_id) REFERENCES auctions(id),
     estado VARCHAR(20) DEFAULT 'Activa' NOT NULL CHECK (estado IN ('Activa', 'Aceptada', 'Finalizada')),
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- Ajuste de Foreign Keys para eliminar en cascada usuarios relacionados
+--Auctions
+ALTER TABLE auctions
+DROP CONSTRAINT auctions_auctioneer_id_fkey;
 
+ALTER TABLE auctions
+ADD CONSTRAINT auctions_auctioneer_id_fkey
+FOREIGN KEY (auctioneer_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
 
+--Offers Auctioneer
+ALTER TABLE offers
+DROP CONSTRAINT offers_auctioneer_id_fkey;
 
+ALTER TABLE offers
+ADD CONSTRAINT offers_auctioneer_id_fkey
+FOREIGN KEY (auctioneer_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
 
+--Offers Bidder
+ALTER TABLE offers
+DROP CONSTRAINT offers_bidder_id_fkey;
+
+ALTER TABLE offers
+ADD CONSTRAINT offers_bidder_id_fkey
+FOREIGN KEY (bidder_id)
+REFERENCES users(id)
+ON DELETE CASCADE;
+
+--Si se elimina una subasta, se eliminan las ofertas relacionadas
+ALTER TABLE offers
+DROP CONSTRAINT offers_auction_id_fkey;
+
+ALTER TABLE offers
+ADD CONSTRAINT offers_auction_id_fkey
+FOREIGN KEY (auction_id)
+REFERENCES auctions(id)
+ON DELETE CASCADE;
 
 
 -- Datos de ejemplo
 
-INSERT INTO users (username, psswd, email, firstname, lastname, tel, ubication) VALUES
-('juan_perez', 'hashed_password_123', 'juan@email.com', 'Juan', 'Pérez', 1122334455, 'Buenos Aires, Argentina'),
-('maria_gomez', 'hashed_password_456', 'maria@email.com', 'María', 'Gómez', 1122334466, 'Córdoba, Argentina'),
-('carlos_lopez', 'hashed_password_789', 'carlos@email.com', 'Carlos', 'López', 1122334477, 'Mendoza, Argentina'),
-('ana_ramirez', 'hashed_password_101', 'ana@email.com', 'Ana', 'Ramírez', 1122334488, 'Rosario, Argentina'),
-('luis_martinez', 'hashed_password_202', 'luis@email.com', 'Luis', 'Martínez', 1122334499, 'Salta, Argentina'),
-('sofia_torres', 'hashed_password_303', 'sofia@email.com', 'Sofía', 'Torres', 1122334500, 'Tucumán, Argentina')
 
-ON CONFLICT DO NOTHING;
+-- Usuarios de ejemplo
+INSERT INTO users (username, psswd, email, firstname, lastname, tel, image_url) VALUES
+('CeratiLover<3', 'soyunacontraseña', 'zeki@email.com', 'Ezequiel', 'Garcia', 1125748730, 'https://i.pinimg.com/736x/f0/dd/b6/f0ddb6c973a34cae1ee9d9ac93c00fa1.jpg'),
+('alexespindola', 'clave123', 'alex@email.com', 'Alex', 'Espíndola', 1123456789, 'https://avatars.githubusercontent.com/u/229040527?v=4'),
+('felipetorres', 'clave123', 'felipe@email.com', 'Felipe', 'Torres', 1134567890, 'https://avatars.githubusercontent.com/u/175356733?v=4'),
+('leandrocejas', 'clave123', 'leandro@email.com', 'Leandro', 'Cejas', 1145678901, 'https://avatars.githubusercontent.com/u/239258884?v=4');
 
--- 
-INSERT INTO auctions (
-    title,
-    descripcion,
-    initial_price,
-    category_id,
-    condition,
-    images_urls,
-    auctioneer_id,
-    offer_type,
-    auction_status,
-    location_id,
-    creation_date,
-    modification_date
-) VALUES
-(
-    'iPhone 15 Pro Max 256GB',
-    'iPhone 15 Pro Max en perfecto estado, con todos sus accesorios originales. Incluye cargador, cable y funda de regalo. Comprado hace 3 meses, con garantía oficial Apple vigente.',
-    120000.00,
-    (SELECT id FROM categories WHERE name_category = 'Celulares y Telefonía' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
-    'https://i.blogs.es/f15f0b/img_2033/650_1200.jpeg',
-    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
-    1,
-    CURRENT_TIMESTAMP - INTERVAL '5 days',
-    CURRENT_TIMESTAMP - INTERVAL '1 day'
-),
-(
-    'PlayStation 5 + 2 Juegos',
-    'Consola PlayStation 5 edición digital, con 2 mandos DualSense y juegos Spider-Man 2 y God of War Ragnarök. Perfecto funcionamiento, poco uso.',
-    85000.00,
-    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://hips.hearstapps.com/hmg-prod/images/esq240112-digital-ecomm-playstationps5-0305-679133a09328d.jpg?crop=0.509xw:0.763xh;0.262xw,0.0765xh&resize=640:*',
-    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
-    2,
-    CURRENT_TIMESTAMP - INTERVAL '3 days',
-    CURRENT_TIMESTAMP
-),
-(
-    'Colección de Videojuegos Retro',
-    'Lote de 15 videojuegos retro para diversas consolas. Incluye títulos clásicos de Nintendo, Sega y PlayStation 1. Todos en buen estado, algunos con sus cajas originales.',
-    35000.00,
-    (SELECT id FROM categories WHERE name_category = 'Juegos, Juguetes y Bebés' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Reacondicionado' LIMIT 1),
-    'https://i.redd.it/e2i0bz33to061.jpg',
-    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Finalizada' LIMIT 1),
-    3,
-    CURRENT_TIMESTAMP - INTERVAL '1 day',
-    CURRENT_TIMESTAMP
-),
-(
-    'Samsung Galaxy S23 Ultra 512GB',
-    'Samsung Galaxy S23 Ultra en excelente estado. Pantalla sin rayones, batería en buen estado. Viene con cargador rápido y funda protectora.',
-    95000.00,
-    (SELECT id FROM categories WHERE name_category = 'Celulares y Telefonía' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://http2.mlstatic.com/D_NQ_NP_895048-MLU69664239579_052023-O.webp',
-    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
-    4,
-    CURRENT_TIMESTAMP - INTERVAL '4 days',
-    CURRENT_TIMESTAMP - INTERVAL '2 days'
-),
-(
-    'Nintendo Switch OLED',
-    'Nintendo Switch modelo OLED, con pantalla de 7 pulgadas y almacenamiento interno de 64GB. Incluye dos juegos: The Legend of Zelda: Breath of the Wild y Mario Kart 8 Deluxe.',
-    60000.00,
-    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
-    'https://m.media-amazon.com/images/I/61-PblYntsL._AC_SL1500_.jpg',
-    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
-    5,
-    CURRENT_TIMESTAMP - INTERVAL '2 days',
-    CURRENT_TIMESTAMP
-),
-(
-    'Xbox Series X 1TB',
-    'Xbox Series X con 1TB de almacenamiento. Incluye un mando inalámbrico y sus cables originales. Estado impecable, apenas usado.',
-    75000.00,
-    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://www.cordobadigital.net/wp-content/uploads/2023/11/Xbox-Serie-X-3.webp',
-    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Pausada' LIMIT 1),
-    6,
-    CURRENT_TIMESTAMP - INTERVAL '6 days',
-    CURRENT_TIMESTAMP - INTERVAL '3 days'
-),
-(
-    'iPad Pro 11" 2021',
-    'iPad Pro de 11 pulgadas, modelo 2021, con 256GB de almacenamiento. Incluye Apple Pencil y funda protectora. En excelente estado.',
-    90000.00,
-    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Usado' LIMIT 1),
-    'https://i5.walmartimages.com/asr/2acfc07e-09b1-4df0-8850-e9ffbac41678.d0e2825da1356ded69ab52c3c68ac05e.jpeg',
-    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Activa' LIMIT 1),
-    7,
-    CURRENT_TIMESTAMP - INTERVAL '3 days',
-    CURRENT_TIMESTAMP - INTERVAL '1 day'
-),
-(
-    'Auriculares Sony WH-1000XM4',
-    'Auriculares inalámbricos Sony WH-1000XM4 con cancelación de ruido. Estado casi nuevo, con caja y accesorios originales.',
-    25000.00,
-    (SELECT id FROM categories WHERE name_category = 'Electrónica, Audio y Video' LIMIT 1),
-    (SELECT id FROM condition WHERE auction_condition = 'Nuevo' LIMIT 1),
-    'https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg',
-    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    (SELECT id FROM status WHERE status_name = 'Finalizada' LIMIT 1),
-    8,
-    CURRENT_TIMESTAMP - INTERVAL '5 days',
-    CURRENT_TIMESTAMP - INTERVAL '2 days'
-);
-
---
-INSERT INTO offers (
-    offer_type,
-    title,
-    descripcion,
-    images_urls,
-    mount,
-    auctioneer_id,
-    bidder_id,
-    auction_id,
-    estado,
-    creation_date
-) VALUES
-(
-    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
-    'Oferta por iPhone',
-    'Te ofrezco $110,000 en efectivo por el iPhone',
-    '',
-    110000.00,
-    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%iPhone%' LIMIT 1),
-    'Aceptada',
-    CURRENT_TIMESTAMP - INTERVAL '2 days'
-),
-(
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    'Cambio por Xbox Series X',
-    'Te ofrezco mi Xbox Series X más $20,000 por la PS5',
-    'https://www.digitaltrends.com/tachyon/2023/11/ps5-on-table.jpg?resize=1200%2C720',
-    20000.00,
-    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'Activa',
-    CURRENT_TIMESTAMP - INTERVAL '1 day'
-),
-(
-    (SELECT id FROM offer_type WHERE type = 'Mixto' LIMIT 1),
-    'Oferta por Nintendo Switch',
-    'Te ofrezco $50,000 más mi colección de juegos retro por la Nintendo Switch',
-    'https://media.istockphoto.com/id/1403098902/es/foto/gamepads-anticuados.jpg?s=612x612&w=0&k=20&c=XdX17uPUYALlol2qLY8EWQAuHrPsvVkY--TngRfJYOI=',
-    50000.00,
-    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%Nintendo Switch%' LIMIT 1),
-    'Finalizada',
-    CURRENT_TIMESTAMP - INTERVAL '3 days'
-),
-(
-    (SELECT id FROM offer_type WHERE type = 'Dinero' LIMIT 1),
-    'Oferta por Samsung Galaxy S23',
-    'Te ofrezco $90,000 en efectivo por el Samsung Galaxy S23 Ultra',
-    '',
-    90000.00,
-    (SELECT id FROM users WHERE username = 'luis_martinez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'ana_ramirez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%Samsung Galaxy S23%' LIMIT 1),
-    'Activa',
-    CURRENT_TIMESTAMP - INTERVAL '2 days'
-),
-(
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    'Cambio por iPad Pro',
-    'Te ofrezco mi tablet Samsung Galaxy Tab S7 por el iPad Pro',
-    'https://http2.mlstatic.com/D_669050-MLA88640534447_072025-O.jpg',
-    0.00,
-    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'maria_gomez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%iPad Pro%' LIMIT 1),
-    'Aceptada',
-    CURRENT_TIMESTAMP - INTERVAL '4 days'
-),
-(
-    (SELECT id FROM offer_type WHERE type = 'Producto' LIMIT 1),
-    'Cambio por Xbox Series X',
-    'Te ofrezco mi Xbox Series X más $10,000 por la PS5',
-    'https://www.digitaltrends.com/tachyon/2023/11/ps5-on-table.jpg?resize=1200%2C720',
-    20000.00,
-    (SELECT id FROM users WHERE username = 'carlos_lopez' LIMIT 1),
-    (SELECT id FROM users WHERE username = 'juan_perez' LIMIT 1),
-    (SELECT id FROM auctions WHERE title LIKE '%PlayStation%' LIMIT 1),
-    'Activa',
-    CURRENT_TIMESTAMP - INTERVAL '1 day'
-);
+-- Subastas mezcladas aleatoriamente con imágenes reales
+INSERT INTO auctions (title, descripcion, initial_price, category_id, condition, images_urls, auctioneer_id, offer_type, auction_status, location_id) VALUES
+('Auriculares Gamer RGB', 'Auriculares con luces LED y sonido envolvente, perfectos para largas sesiones de juego.', 100, 1, 1, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop', 3, 1, 1, 1),
+('Teclado Mecánico Retroiluminado', 'Teclado mecánico con switches azules y retroiluminación personalizable.', 110, 2, 2, 'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w-800&auto=format&fit=crop', 1, 2, 1, 1),
+('Mouse Inalámbrico Ergonómico', 'Mouse inalámbrico con diseño ergonómico y batería de larga duración.', 120, 3, 3, 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=800&auto=format&fit=crop', 4, 3, 1, 1),
+('Monitor UltraWide 29"', 'Monitor UltraWide ideal para multitarea y edición de video.', 130, 4, 1, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&auto=format&fit=crop', 2, 1, 1, 1),
+('Camiseta Oficial de Fútbol', 'Camiseta original de la temporada 2023, talla L.', 140, 5, 2, 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800&auto=format&fit=crop', 3, 2, 1, 1),
+('Bicicleta de Montaña', 'Bicicleta con suspensión delantera y frenos a disco, poco uso.', 150, 6, 3, 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&auto=format&fit=crop', 1, 3, 1, 1),
+('Guitarra Criolla', 'Guitarra de madera maciza, excelente sonido y terminación.', 160, 7, 1, 'https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?w=800&auto=format&fit=crop', 4, 1, 1, 1),
+('Set de Herramientas 50 piezas', 'Completo set de herramientas para el hogar y el auto.', 170, 8, 2, 'https://images.unsplash.com/photo-1581235720706-9856d6d1c42a?w=800&auto=format&fit=crop', 2, 2, 1, 1),
+('Libro "Cien Años de Soledad"', 'Edición especial ilustrada del clásico de García Márquez.', 180, 9, 3, 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop', 3, 3, 1, 1),
+('Vinilo de Queen', 'Disco de vinilo original de Queen, edición coleccionista.', 190, 10, 1, 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&auto=format&fit=crop', 1, 1, 1, 1),
+('Cámara Reflex Canon', 'Cámara profesional Canon con lente 18-55mm, ideal para fotografía y video.', 200, 1, 1, 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&auto=format&fit=crop', 4, 1, 1, 1),
+('Smartwatch Deportivo', 'Reloj inteligente con GPS y monitor de ritmo cardíaco.', 210, 2, 2, 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop', 2, 2, 1, 1),
+('Silla Gamer Reclinable', 'Silla ergonómica con soporte lumbar y reposabrazos ajustables.', 220, 3, 3, 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop', 3, 3, 1, 1),
+('Cafetera Express', 'Cafetera para espresso y capuccino, poco uso.', 230, 4, 1, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop', 1, 1, 1, 1),
+('Zapatillas Running', 'Zapatillas deportivas para running, número 42.', 240, 5, 2, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop', 4, 2, 1, 1),
+('Raqueta de Tenis', 'Raqueta profesional de grafito, excelente estado.', 250, 6, 3, 'https://images.unsplash.com/photo-1554385499-9105d4a9978e?w=800&auto=format&fit=crop', 2, 3, 1, 1),
+('Set de Lego Star Wars', 'Set original de Lego Star Wars, edición limitada.', 260, 7, 1, 'https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=800&auto=format&fit=crop', 3, 1, 1, 1),
+('Colección de Comics Marvel', 'Lote de 20 comics originales de Marvel.', 270, 8, 2, 'https://images.unsplash.com/photo-1635805737707-575885ab0820?w=800&auto=format&fit=crop', 1, 2, 1, 1),
+('Libro "El Principito"', 'Edición de lujo ilustrada de El Principito.', 280, 9, 3, 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop', 4, 3, 1, 1),
+('Vinilo de The Beatles', 'Disco de vinilo original de The Beatles, edición especial.', 290, 10, 1, 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=800&auto=format&fit=crop', 2, 1, 1, 1),
+('Cámara GoPro Hero', 'Cámara de acción GoPro Hero, resistente al agua y golpes.', 300, 1, 1, 'https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800&auto=format&fit=crop', 1, 1, 1, 1),
+('Parlante Bluetooth JBL', 'Parlante portátil JBL con batería de 12 horas.', 310, 2, 2, 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&auto=format&fit=crop', 3, 2, 1, 1),
+('Tablet Samsung Galaxy', 'Tablet Samsung de 10 pulgadas, ideal para estudiar.', 320, 3, 3, 'https://images.unsplash.com/photo-1546054451-6f5be8d5f99b?w=800&auto=format&fit=crop', 4, 3, 1, 1),
+('Heladera No Frost', 'Heladera con freezer, tecnología No Frost, poco uso.', 330, 4, 1, 'https://images.unsplash.com/photo-1594736797933-d0b6c89d1c43?w=800&auto=format&fit=crop', 2, 1, 1, 1),
+('Campera de Cuero', 'Campera de cuero legítimo, talle M.', 340, 5, 2, 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&auto=format&fit=crop', 1, 2, 1, 1),
+('Bicicleta Urbana', 'Bicicleta urbana rodado 28, ideal para la ciudad.', 350, 6, 3, 'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=800&auto=format&fit=crop', 3, 3, 1, 1),
+('Pintura Acrílica', 'Obra original en acrílico sobre lienzo, firmada.', 360, 7, 1, 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&auto=format&fit=crop', 4, 1, 1, 1),
+('Set de Copas de Vino', 'Set de 6 copas de cristal para vino tinto.', 370, 8, 2, 'https://images.unsplash.com/photo-1511300636408-a63a89df3482?w=800&auto=format&fit=crop', 2, 2, 1, 1),
+('Libro "Rayuela"', 'Edición especial de Rayuela de Julio Cortázar.', 380, 9, 3, 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop', 1, 3, 1, 1),
+('Vinilo de Pink Floyd', 'Disco de vinilo original de Pink Floyd, The Wall.', 390, 10, 1, 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800&auto=format&fit=crop', 3, 1, 1, 1),
+('Guitarra Eléctrica Stratocaster', 'Guitarra eléctrica con estuche rígido y amplificador incluido.', 500, 1, 1, 'https://images.unsplash.com/photo-1558098329-a0cbd5c2b388?w=800&auto=format&fit=crop', 2, 1, 1, 1),
+('Notebook Lenovo i7', 'Notebook Lenovo con procesador i7, 16GB RAM y SSD de 512GB.', 600, 2, 2, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&auto=format&fit=crop', 4, 2, 1, 1),
+('Celular Samsung S22', 'Celular Samsung Galaxy S22, color negro, 128GB.', 700, 3, 3, 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&auto=format&fit=crop', 1, 3, 1, 1),
+('Cámara Nikon D3500', 'Cámara réflex Nikon D3500 con lente 18-55mm.', 800, 4, 1, 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&auto=format&fit=crop', 3, 1, 1, 1),
+('Bicicleta Fixie', 'Bicicleta urbana tipo fixie, color azul.', 900, 5, 2, 'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?w=800&auto=format&fit=crop', 2, 2, 1, 1),
+('Smart TV 50"', 'Smart TV 4K UHD de 50 pulgadas, WiFi y apps.', 1000, 6, 3, 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop', 4, 3, 1, 1),
+('Auriculares Sony WH-1000XM4', 'Auriculares inalámbricos con cancelación de ruido.', 1100, 7, 1, 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&auto=format&fit=crop', 1, 1, 1, 1),
+('Set de Maletas', 'Set de 3 maletas rígidas con ruedas giratorias.', 1200, 8, 2, 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop', 3, 2, 1, 1),
+('Libro "1984"', 'Edición especial de 1984 de George Orwell.', 1300, 9, 3, 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop', 2, 3, 1, 1),
+('Vinilo de Soda Stereo', 'Disco de vinilo original de Soda Stereo, Signos.', 1400, 10, 1, 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=800&auto=format&fit=crop', 4, 1, 1, 1);
