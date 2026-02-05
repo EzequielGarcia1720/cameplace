@@ -6,42 +6,81 @@ let currentFilters = {
     search: '',  // Tipo de oferta seleccionado 
     page: 1 
 };
+        
+const actualizarBotonesPaginacion = (totalResultados) => {
+    const limitePorPagina = 18; 
+    const totalPaginas = Math.ceil(totalResultados / limitePorPagina);
+    const paginaActual = currentFilters.page;
 
-// // Selección de botones de ordenamiento
-// const button_recently = document.querySelector("#boton_recientes");
-// const button_older = document.querySelector("#boton_masantiguas");
-// const button_greater_number_of_offers = document.querySelector("#boton_mayor_cant_ofertas")
-// const button_fewer_offers = document.querySelector("#boton_menor_cant_ofertas")
-
-// const ordenar_por = (botonActivo, botonInactivo, tipoOrden) => {
-//     if(botonActivo) botonActivo.classList.add('activo'); // Usamos add para asegurar que quede marcado
-//     if(botonInactivo) botonInactivo.classList.remove('activo');
-
-//     currentFilters.sort = tipoOrden;
-//     console.log("Ordenando por:", currentFilters.sort); 
-// } 
-
-// if(button_recently) {
-//     button_recently.addEventListener("click", () => ordenar_por(button_recently, button_older, 'recientes'));
-//     button_older.addEventListener("click", () => ordenar_por(button_older, button_recently, 'antiguas'));
-    
-//     button_greater_number_of_offers.addEventListener("click", () => ordenar_por(button_greater_number_of_offers, button_fewer_offers, 'mayor_ofertas'));
-//     button_fewer_offers.addEventListener("click", () => ordenar_por(button_fewer_offers, button_greater_number_of_offers, 'menor_ofertas'));
-    
-//     if(typeof button_higher_price !== 'undefined') {
-//         button_higher_price.addEventListener("click", () => ordenar_por(button_higher_price, button_lower_price, 'mayor_precio'));
-//         button_lower_price.addEventListener("click", () => ordenar_por(button_lower_price, button_higher_price, 'menor_precio'));
-//     }
-// }
+    const botonesAnterior = document.querySelectorAll(".pagination-previous");
+    const botonesSiguiente = document.querySelectorAll(".pagination-next");
 
 
-// GET a todas las subastas
+    botonesAnterior.forEach(btn => {
+        if (paginaActual === 1) {
+            btn.setAttribute("disabled", true); // Para que se vea gris
+            btn.style.pointerEvents = "none";   // Para que no se pueda clickear
+            btn.style.opacity = "0.5";          // Efecto visual
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+    botonesSiguiente.forEach(btn => {
+        // Si la página actual es mayor o igual al total, apagamos
+        if (paginaActual >= totalPaginas || totalResultados === 0) {
+            btn.setAttribute("disabled", true);
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "0.5";
+        } else {
+            btn.removeAttribute("disabled");
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    });
+};
+
+function FilterByCategory(id, elementoHTML) {
+    const categoryId = parseInt(id);
+
+    if (elementoHTML.checked) {
+        if (!currentFilters.category.includes(categoryId)) {
+            currentFilters.category.push(categoryId);
+        }
+    } else {
+        currentFilters.category = currentFilters.category.filter(catId => catId !== categoryId);
+    }
+    currentFilters.page = 1;
+    GetAuctions()
+}
+
+function ApplySearch() {
+    const input = document.querySelector('#search_input'); 
+    if (input) {
+        currentFilters.search = input.value;
+        currentFilters.page = 1;
+        GetAuctions();
+    } else {
+        console.error("Search input element not found.");
+    }
+}
+
+function FilterByTypeOffer(typeOfferId) {
+    if (currentFilters.type_offer === typeOfferId) {
+        currentFilters.type_offer = '';
+        elementoHTML.checked = false;
+    } else {
+        currentFilters.type_offer = typeOfferId;
+    }
+    GetAuctions();
+}
+
 async function GetAuctions() {
-
-    console.log("EJECUTANDO GET AUCTIONS");
+    
     const auctions_container = document.getElementById("auctions");
     if (!auctions_container) return;
-
+    
     auctions_container.innerHTML = "";
 
     try {
@@ -53,26 +92,31 @@ async function GetAuctions() {
         if (currentFilters.type_offer) queryParams.append('type_offer', currentFilters.type_offer);
         if (currentFilters.search) queryParams.append('search', currentFilters.search);
         if (currentFilters.sort) queryParams.append('sort', currentFilters.sort);
-        
-        queryParams.append('page', currentFilters.page)
+        if (currentFilters.page) queryParams.append('page', currentFilters.page);
 
         currentFilters.category.forEach(catId => {
             queryParams.append('category', catId);
         });
-
-
+        
+        
         // Construimos la URL con los parámetros de consulta
         const URL = "http://localhost:3030/api/v1/auctions?" + queryParams.toString()
-
+        
         // Realizamos la solicitud fetch
         const response = await fetch(URL)
-
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         // Parseamos la respuesta JSON
         const auctions = await response.json();
+
+        let total = 0
+        if(auctions.length > 0 && auctions[0].total_resultados){
+            total = parseInt(auctions[0].total_resultados)
+        }
+        actualizarBotonesPaginacion(total);
 
         if (auctions.length === 0) {
             auctions_container.innerHTML = 
@@ -134,44 +178,12 @@ async function GetAuctions() {
     }
 
 }
-function ApplySearch() {
-    const input = document.querySelector('#search_input'); 
-    if (input) {
-        currentFilters.search = input.value;
-        console.log("Search applied:", currentFilters.search);
-        GetAuctions();
-    } else {
-        console.error("Search input element not found.");
-    }
-}
 
-function FilterByCategory(id, elementoHTML) {
-    const categoryId = parseInt(id);
 
-    if (elementoHTML.checked) {
-        if (!currentFilters.category.includes(categoryId)) {
-            currentFilters.category.push(categoryId);
-        }
-    } else {
-        currentFilters.category = currentFilters.category.filter(catId => catId !== categoryId);
-    }
-    console.log("Categorías filtradas:", currentFilters.category);
-    GetAuctions()
-}
 
-function FilterByTypeOffer(typeOfferId) {
-    if (currentFilters.type_offer === typeOfferId) {
-        currentFilters.type_offer = '';
-        elementoHTML.checked = false;
-    } else {
-        currentFilters.type_offer = typeOfferId;
-    }
-    GetAuctions();
-}
 
 // Event listener para buscar al presionar Enter
 const inputBusqueda = document.getElementById('search_input');
-
 if (inputBusqueda) {
     inputBusqueda.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
@@ -186,15 +198,13 @@ if (inputBusqueda) {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    
-    
     const aplicarOrden = (boton, tipoOrden) => {
         
         document.querySelectorAll('.menu-list a').forEach(a => a.style.fontWeight = 'normal');
         if(boton) boton.style.fontWeight = 'bold';
         
         currentFilters.sort = tipoOrden;
-        console.log("Cambiando orden a:", tipoOrden);
+        currentFilters.page = 1;
         GetAuctions();
     };
     
@@ -218,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         GetAuctions()
     }
+
     const btnsPrev = document.querySelectorAll(".pagination-previous");
     const btnsNext = document.querySelectorAll(".pagination-next");
     
@@ -227,4 +238,5 @@ document.addEventListener("DOMContentLoaded", () => {
     btnsNext.forEach(button => {
         button.addEventListener("click", () => changePage(1))
     });
+
 });

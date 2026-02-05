@@ -16,7 +16,9 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
             c.auction_condition, 
             s.status_name, 
             u.username, u.email, u.firstname, u.lastname, u.image_url,
-            COUNT(o.id) as cantidad_ofertas
+            COUNT(o.id) as cantidad_ofertas,
+            COUNT(*) OVER() as total_resultados
+
         FROM auctions a
         LEFT JOIN condition c ON a.condition = c.id 
         LEFT JOIN status s ON a.auction_status = s.id
