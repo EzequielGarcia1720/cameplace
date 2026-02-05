@@ -7,7 +7,8 @@ const {
     updateUser,
     deleteUser,
     getUserID,
-    loginUser
+    loginUser,
+    updatePassword
 } = require('../usuarios');
 
 // GET /api/v1/users
@@ -79,6 +80,19 @@ router.put("/:id", async (req, res) => {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
         res.json(updatedUser);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ error: error.message });
+    }
+});
+
+router.put("/:id/password", async (req, res) => {
+    const userID = req.params.id;
+    const { actual_password, nueva_password } = req.body;
+
+    try {
+        const result = await updatePassword(userID, actual_password, nueva_password);
+        res.json(result);
     } catch (error) {
         const status = error.status || 500;
         res.status(status).json({ error: error.message });

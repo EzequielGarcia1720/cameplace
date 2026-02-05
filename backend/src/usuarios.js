@@ -134,6 +134,34 @@ async function loginUser(email, psswd) {
     return response.rows[0];
 };
 
+async function updatePassword(userID, actualPassword, nuevaPassword) {
+    //verificar la contraseña actual
+    const userRes = await dbClient.query(
+        "SELECT psswd FROM users WHERE id = $1",
+        [userID]
+    );
+
+    if (userRes.rowCount === 0) {
+        const err = new Error("Usuario no encontrado");
+        err.status = 404;
+        throw err;
+    }
+    //comparar contraseñas
+    if (userRes.rows[0].psswd !== actualPassword) {
+        const err = new Error("La contraseña actual es incorrecta");
+        err.status = 401;
+        throw err;
+    }
+    //actualizar la contraseña
+    await dbClient.query(
+        "UPDATE users SET psswd = $1 WHERE id = $2",
+        [nuevaPassword, userID]
+    );
+
+    return { message: "Contraseña actualizada correctamente" };
+}
+
+
 module.exports = {
     getAllUsers,
     getUser,
@@ -141,5 +169,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserID,
-    loginUser
+    loginUser,
+    updatePassword
 };
