@@ -105,3 +105,13 @@ input.input, textarea.textarea {
     background-color: firebrick;
     transform: scale(1.05);
 }
+
+#guardar_password_button {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+#guardar_password_button:hover {
+    background-color: green;
+    transform: scale(1.05);
+}
