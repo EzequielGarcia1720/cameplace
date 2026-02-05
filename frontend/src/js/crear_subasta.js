@@ -11,10 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     navbar_item_crear_subasta.appendChild(crear_subasta_btn);
 
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Contenedor del modal
+        // Contenedor del modal
     let modalContainer = document.getElementById('modalContainer');
     if (!modalContainer) {
         modalContainer = document.createElement('div');
