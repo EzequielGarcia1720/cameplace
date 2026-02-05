@@ -1,5 +1,3 @@
-
-
 async function loadAuctionDetails() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
@@ -29,6 +27,10 @@ async function loadAuctionDetails() {
             } else if (auction.auction_status === 3) {
                 statusBadge = `<div class="auction-status-badge status-ended">🔴 Subasta Finalizada</div>`;
             }
+            const sesion = sessionStorage.getItem('sesion_actual');
+            const userId = Number.parseInt(sesion, 10);
+            const isLoggedIn = Number.isInteger(userId);
+
             cardDiv.innerHTML = `
                 <div class="columns mt-5 auction_columns">
                     <div class="column auction_column is-two-thirds">
@@ -53,6 +55,11 @@ async function loadAuctionDetails() {
                                 <div class="auction-paused-message paused-message-style">
                                     <strong>SUBASTA PAUSADA</strong>
                                     <p class="text-grey">Las ofertas están temporalmente deshabilitadas.</p>
+                                </div>
+                            ` : !isLoggedIn ? `
+                                <div class="auction-paused-message paused-message-style">
+                                    <strong>INICIA SESIÓN</strong>
+                                    <p class="text-grey">Debes iniciar sesión para realizar ofertas.</p>
                                 </div>
                             ` : `
                                 <!-- Pestañas de Tipo de Oferta -->
@@ -213,7 +220,7 @@ async function loadAuctionDetails() {
     getrecentBids(auction.id);
     
             // --- Lógica de Formularios y Pestañas ---
-            if (auction.auction_status == 1 || auction) {
+            if (auction.auction_status == 1 && isLoggedIn) {
                 // --- Alternancia de formularios y mensaje ---
                 const bidTabs = cardDiv.querySelectorAll('.bid-tab');
                 const bidForms = cardDiv.querySelectorAll('.bid-form');
@@ -261,7 +268,7 @@ async function loadAuctionDetails() {
                     });
                 }
 
-                if(auction.auctioneer_id === parseInt(sessionStorage.getItem('sesion_actual'))) {
+                if (auction.auctioneer_id === userId) {
                     // Si el usuario es el subastador, deshabilitar todos los tabs y formularios
                     bidTabs.forEach(tab => {
                         tab.classList.add('disabled');
@@ -279,7 +286,6 @@ async function loadAuctionDetails() {
                     `;
                     bidSection.appendChild(ownAuctionMsg);
                 }
-
 
                 // --- Listeners de pestañas ---
                 cardDiv.querySelectorAll('.bid-tab').forEach(tab => {
@@ -317,7 +323,7 @@ async function loadAuctionDetails() {
                         images_urls: '',
                         mount: 0,
                         auctioneer_id: auction.user_id, // subastador
-                        bidder_id: parseInt(sessionStorage.getItem('sesion_actual')),
+                        bidder_id: userId,
                         estado: 'Activa' // Estado por defecto
                     };
 
