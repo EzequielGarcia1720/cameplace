@@ -211,14 +211,14 @@ async function loadAuctionDetails() {
             auctionContainer.appendChild(cardDiv);
     // Llamar a la función de ofertas recientes solo después de renderizar el HTML
     getrecentBids(auction.id);
-
+    
             // --- Lógica de Formularios y Pestañas ---
-            if (auction.auction_status == 1) {
+            if (auction.auction_status == 1 || auction) {
                 // --- Alternancia de formularios y mensaje ---
                 const bidTabs = cardDiv.querySelectorAll('.bid-tab');
                 const bidForms = cardDiv.querySelectorAll('.bid-form');
                 const selectOfferMsg = cardDiv.querySelector('#selectOfferMsg');
-
+                
                 bidTabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         const tabType = tab.getAttribute('data-tab');
@@ -259,6 +259,25 @@ async function loadAuctionDetails() {
                             tab.style.pointerEvents = '';
                         }
                     });
+                }
+
+                if(auction.auctioneer_id === parseInt(sessionStorage.getItem('sesion_actual'))) {
+                    // Si el usuario es el subastador, deshabilitar todos los tabs y formularios
+                    bidTabs.forEach(tab => {
+                        tab.classList.add('disabled');
+                        tab.style.pointerEvents = 'none';
+                    });
+                    bidForms.forEach(form => form.style.display = 'none');
+                    selectOfferMsg.style.display = 'none';
+                    // Mostrar mensaje de que no puede ofertar en su propia subasta
+                    const bidSection = cardDiv.querySelector('.bid-section');
+                    const ownAuctionMsg = document.createElement('div');
+                    ownAuctionMsg.classList.add('own-auction-message', 'ended-message-style');
+                    ownAuctionMsg.innerHTML = `
+                        <strong>NO PUEDES OFERTAR EN TU PROPIA SUBASTA</strong>
+                        <p class="text-grey">Eres el subastador de esta subasta.</p>
+                    `;
+                    bidSection.appendChild(ownAuctionMsg);
                 }
 
 
