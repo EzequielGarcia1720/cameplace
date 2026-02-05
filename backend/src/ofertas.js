@@ -1,13 +1,5 @@
-const { Pool } = require("pg");
-
 // Configuración de base de datos
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
+const dbClient = require("./db");
 const OffersByAuction = `
     SELECT 
         o.id AS offer_id,

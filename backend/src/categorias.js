@@ -1,16 +1,8 @@
-const { Pool } = require("pg");
-
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
+const dbClient = require("./db");
 
 async function GetAllCategories() {
-    const result = await dbClient.query("SELECT * FROM categories")
-    return result.rows
+    const result = await dbClient.query("SELECT * FROM categories");
+    return result.rows;
 }
 
 module.exports = {

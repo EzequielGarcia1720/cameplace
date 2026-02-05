@@ -1,11 +1,4 @@
-const { Pool } = require("pg");
-const dbClient = new Pool({
-    user: "postgres",
-    password: "password",
-    host: "localhost",
-    port: 5432,
-    database: "cameplace"
-});
+const dbClient = require("./db");
 
 // API
 async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeOffer = null, filterCategory = null, sortParam = null, user_id = null, pags = null) {
