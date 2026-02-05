@@ -324,7 +324,7 @@ async function submitOffer() {
         images_urls: imageUrl ? [imageUrl] : [],
         mount: offer_type === "1" ? 0 : Number(mount),
         auctioneer_id: 1,
-        bidder_id: 2,       
+        bidder_id: Number(sessionStorage.getItem('sesion_actual')),       
         auction_id: currentAuctionId
     };
     
