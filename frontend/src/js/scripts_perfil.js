@@ -12,6 +12,17 @@
     const groupGuardarCancelar = document.getElementById('guardar_cancelar_group');
     const editarFotoForm = document.getElementById("editar_foto_form");
     const fotoUrlInput = document.getElementById("foto_url_input");
+    // Modal de cambio de contraseña
+    const passwordModal = document.getElementById("password_modal");
+    const abrirPasswordBtn = document.getElementById("cambiar_password_button");
+    const cerrarPasswordBtn = document.getElementById("cerrar_password_modal");
+    const cancelarPasswordBtn = document.getElementById("cancelar_password_button");
+    const guardarPasswordBtn = document.getElementById("guardar_password_button");
+    const PasswordActual = document.getElementById("actual_password");
+    const PasswordNueva = document.getElementById("nueva_password");
+
+    const passwordError = document.getElementById("password_error");
+    const passwordExito = document.getElementById("password_exito");
 
 
     function modoEditar() {
@@ -164,6 +175,59 @@ btnGuardar.addEventListener('click', async (e) => {
         alert("No se pudo eliminar el perfil");
     }
 });
+
+// Abrir modal
+abrirPasswordBtn.addEventListener("click", () => {
+    passwordModal.classList.add("is-active");
+    passwordError.textContent = "";
+    passwordExito.textContent = "";
+    PasswordActual.value = "";
+    PasswordNueva.value = "";
+});
+
+// Cerrar modal
+function closePasswordModal() {
+    passwordModal.classList.remove("is-active");
+}
+
+cerrarPasswordBtn.addEventListener("click", closePasswordModal);
+
+// Guardar contraseña
+guardarPasswordBtn.addEventListener("click", async () => {
+    passwordError.textContent = "";
+    passwordExito.textContent = "";
+
+    const actual_password = PasswordActual.value.trim();
+    const nueva_password = PasswordNueva.value.trim();
+
+    if (!actual_password || !nueva_password) {
+        passwordError.textContent = "Completá todos los campos";
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/${USER_ID}/password`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                actual_password,
+                nueva_password
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Error al cambiar la contraseña");
+        }
+
+        passwordExito.textContent = "Contraseña actualizada";
+
+    } catch (err) {
+        passwordError.textContent = err.message;
+    }
+});
+
 
 
     cargarPerfil(); 
