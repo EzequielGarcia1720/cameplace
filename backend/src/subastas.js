@@ -30,6 +30,11 @@ async function GetAllAuctions(status_id = null, filterSearch = null, filterTypeO
     let params = [];
     let whereClauses = [];
 
+    if (user_id && user_id !== '') {
+        params.push(user_id);
+        whereClauses.push(`a.auctioneer_id = $${params.length}`);
+    }
+
     // Agregamos el filtro si se proporcionó status_id
     if (status_id && status_id !== '') {
         params.push(status_id);
@@ -195,7 +200,7 @@ async function UpdateAuction(id, title, descripcion, initial_price, category_id,
 async function getAuctionsByUser(userID) {
     const response = await dbClient.query(
         `
-        SELECT * FROM auctions where auctioneer_id = $1
+        SELECT *,COUNT(*) OVER() as total_resultados FROM auctions where auctioneer_id = $1
         `,
         [userID]
     );
